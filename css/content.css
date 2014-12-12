@@ -1,0 +1,319 @@
+/*--------------------------------------------------
+* General notes:
+* # for id
+* . for class
+* Keep in mind borders are 1px so border + padding = 11px
+*--------------------------------------------------*/
+html * {
+  font-family: arial,helvetica,sans-serif;
+  font-size: 16px;
+}
+#wrapper {
+  width: 901px;
+  margin: 0px auto;
+  border: 1px solid #bbb;
+  padding: 10px;
+}
+#header {
+  border: 1px solid #bbb;
+  padding: 10px;
+  font-size: 20px;
+}
+/* Applies to specific divs within header div */
+#header div {
+  font-size: 16px;
+}
+#content {
+  margin-top: 10px;
+  padding-bottom: 10px;
+}
+/* Applies to all divs within the content div */
+/*--------------------------------------------------
+* PROBLEM HERE: #content div declaration interferes with jqueryui
+*--------------------------------------------------*/
+#interactive-interface {
+  width: 450px;
+  padding: 10px;
+}
+#content div {
+  border: 1px solid #bbb;
+  float: left;
+}
+#content div.content-center {
+  border-collapse: collapse;
+  border: 0px; /* To counteract 1px border from above */
+  width: 42px;
+}
+#content-right {
+  padding: 10px;
+  margin-left: 10px;
+  width: 396px;
+  height: 437px;
+}
+#content-right div {
+  border-collapse: collapse;
+  border: 0px; /* To counteract 1px border from above */
+  /* height and width of the graphs are defined in ajaxfun.js 
+   * where Protovis is defined */
+}
+/* These are made into classes because id 'drag' is needed for the drag and drop
+ * javascript. No longer relevant since drag and drag is no longer used, but
+ * will keep this CSS */
+#content div.interface-input-options {
+  display: none;
+  border: 1px dashed #bbb;
+  margin-bottom: 10px;
+  width: 42px;
+}
+a {
+  text-decoration: none;
+  color: gray;
+}
+a:link {
+  border-bottom: 1px dotted;
+}
+a:hover {
+  color: red;
+}
+a.img-input:link {
+  border-bottom: none;
+}
+a.header-buttons-link {
+}
+a.header-buttons-link:hover {
+  color: inherit;
+}
+a.header-buttons-link:link {
+  border-bottom: none;
+}
+#content div.interface-diagram {
+  padding: 10px;
+  margin-left: 10px;
+  width: 374px;
+  height: 415px;
+  background-image: url("../img/sim.png");
+  background-repeat: no-repeat;
+  border: 1px dashed #bbb;
+}
+/* Container for images */
+#content div.imgcontainer {
+  position: absolute;
+  border-collapse: collapse;
+  border: 0px; /* To counteract 1px border from #content */
+}
+.displaynone {
+  display: none;
+}
+/* Define location of the highlight images */
+#hilite1 {
+  top: 290px;
+  left: 158px;
+}
+#hilite2 {
+  top: 183px;
+  left: 114px;
+}
+#hilite3 {
+  top: 290px;
+  left: 178px;
+}
+#hilite4 {
+  display: none;
+  top: 175px;
+  left: 120px;
+}
+/* Define location of the swallow pill images */
+.spill {
+  top: 54px;
+  left: 24px;
+}
+/* Define location of the inject images */
+.inject {
+  top: 177px;
+  left: -3px;
+}
+/* Define location of the infuse images */
+.infuse {
+  top: 224px;
+  left: -3px;
+}
+/* This section deals with content-lower and what's in it */
+#content-lower {
+  float: left;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #bbb;
+  width: 878px;
+}
+.relative {
+  position: relative;
+}
+.adjuster {
+  float: left;
+  padding: 10px;
+  width: 199px;
+}
+.slidercontainer {
+  display: none;
+  margin-top: 10px;
+}
+.textaligntop {
+  vertical-align: text-top;
+}
+.textaligncenter {
+  text-align: center;
+}
+/* This section deals with footer and what's in it */
+#footer {
+  float: left;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #bbb;
+  width: 878px;
+}
+#ref {
+  float: left;
+  margin-top: 10px;
+  width: 878px;
+}
+#ref a {
+  font-size: 12px;
+}
+#bottom {
+  clear: both;
+  font-size: 13px;
+  text-align: center;
+}
+.padding-10 {
+  padding: 10px;
+}
+/* To be aesthetically pleasing, the delete input buttons should bank right */
+.bank-right {
+  float: right;
+}
+.bank-left {
+  float: left;
+}
+
+/* Alternating input row colors */
+/* row1 is not really needed b/c it's just a white background, but 
+ * included for consistency */
+.row1 {
+  display: block;
+  background-color: #ffffff;
+}
+.row0 {
+  display: block;
+  background-color: #e5e5e5;
+}
+/* Given to inputs in footer-input div, so JQuery can be used to easily select
+ * the elements to rename when deleting inputs */
+.inputs {
+}
+/* Added and removed by ajaxfun.js for invalid inputs */
+.error {
+  border: 2px solid red;
+}
+/* Given to the enable/disable span boxes.
+ * 'enable' gives a yellowgreen background, 
+ * 'disable' gives a pinkish-red background.
+ * Both get a dashed border */
+.enabledInput {
+  padding-left: 4px;
+  padding-right: 4px;
+  border: 1px dashed #bbb;
+  cursor: pointer;
+  background-color: #7CFC00;
+}
+.disabledInput {
+  padding-left: 4px;
+  padding-right: 4px;
+  border: 1px dashed #bbb;
+  cursor: pointer;
+  background-color: #FFA6C9;
+}
+/* A loading.gif that follows the cursor */
+/* loading.gif hidden at first */
+.follow {
+  display: none;
+  position: absolute;
+  background-color: #eeeeee;
+  border: 1px dashed #bbb;
+  padding: 4px 5px 1px;
+  z-index: 2;
+}
+.followimg {
+  display: inline;
+  float: left;
+}
+/* Info buttons for displaying information */
+.nonIEMsg {
+  border: 2px solid red;
+  background-color: #ffc0c0;
+  padding: 2px;
+}
+.infoButton {
+  border: 1px solid #5dacdf;
+  background-color: #e2ebf1;
+  margin-left: 10px;
+  padding: 2px;
+}
+.infoButton div {
+  position: absolute;
+  visibility: hidden;
+  z-index: 1;
+}
+.infoButton-clicked {
+  border: 1px solid white;
+  background-color: #696969;
+}
+.infoButton-clicked div {
+  visibility: visible;
+}
+.infoButton-close {
+  cursor: pointer;
+  color: blue;
+}
+.color-black {
+  color: black;
+}
+.color-white {
+  color: white;
+}
+.infoButton .popup-rollover {
+  border: 9px solid #696969;
+  background-color: #F0F8FF;
+  width: 500px;
+  padding: 0px 15px 0px 15px;
+  color: black;
+  margin-left: -2px;
+}
+.unselectable {
+  /* Makes text unselectable */
+  -moz-user-select: none; 
+  -khtml-user-select: none; 
+  -webkit-user-select: none; 
+  -o-user-select: none;
+}
+/*--------------------------------------------------
+* Styles for line graph
+*--------------------------------------------------*/
+/* Axes stroke affect both axes and tick labels so we have to */
+/* correct tick labels independently. */
+.tick text {
+  stroke: black;
+  stroke-width: 0px;
+  font: 11px sans-serif;
+}
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 90px;
+  height: 32px;
+  padding: 2px;
+  font: 14px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+}

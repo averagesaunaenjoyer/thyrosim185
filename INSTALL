@@ -1,0 +1,59 @@
+To install on a fresh copy of Ubuntu:
+
+I. Extract items in tar file to some location: /root/dir/path/to/thyrosim
+
+II. Install c compiler:
+$ sudo apt-get install linux-kernel-headers
+$ sudo apt-get install build-essential
+
+III. Install JSON::Syck
+$ sudo cpan
+cpan[1]>_ install JSON::Syck
+
+IV. Install odepkg (odepkg-0.8.2.tar.gz included in thyrosim/octave)
+$ octave --version
+GNU Octave, version 3.2.4
+Make sure to get the header that matches your octave version, although
+odepkg requires Octave ver. >= 3.2.0
+$ sudo apt-get install octave3.2-headers
+$ cd thyrosim/octave (where odepkg-0.8.2.tar.gz is)
+$ sudo octave
+octave:1> pkg install odepkg-0.8.2.tar.gz
+If there are permission issues, find where odepkg is install:
+octave:1> pkg list
+cd to the directory and make all m files executable
+sudo chmod +x *.m
+
+V. Setup Apache
+httpd.conf:
+For Ubuntu, /etc/apache2/httpd.conf
+
+NameVirtualHost *:80
+
+<VirtualHost *:80>
+        DocumentRoot /root/dir
+        ServerAdmin webmaster@example.com
+        ServerName example.com
+        ServerAlias *.example.com
+
+        <Directory /root/dir/>
+                Options FollowSymLinks -Indexes
+                AllowOverride All
+        </Directory>
+        <Directory /root/dir/path/to/thyrosim/>
+                Options FollowSymLinks -Indexes
+                AllowOverride None
+        </Directory>
+        <Directory /root/dir/path/to/thyrosim/cgi-bin>
+                Options ExecCGI
+                AddHandler cgi-script .cgi
+        </Directory>
+</VirtualHost>
+
+ports.conf:
+Add: Listen your.ip.xxx.xxx
+Comment out: Listen 80
+
+VI. Common Errors:
+Octave dies due to step size error: go into ~/octave/getinit.m and change
+'InitialStep' from 10 to 1.

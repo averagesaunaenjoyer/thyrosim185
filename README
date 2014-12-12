@@ -1,0 +1,103 @@
+Change log
+
+For next release:
+1. Changed SS IC to a that derived from a run using a Java-based ODE solver.
+   Octave apparently produces unstable results.
+2. Rounded execution time down to the nearest whole second.
+3. Turned on normal range by default.
+4. Fixed a bug where normal range turns off after a run.
+
+2014-09-01:
+1. Fixed a phenomenon where simulated values did not start at steady state.
+2. Added a "close" button within "About" and "Example".
+
+2014-02-23:
+1. VTSH to 4.3
+2. Tooltip now shows hormone values more prominently
+3. Added button to toggle normal range of each hormone
+
+2013-11-09:
+1. Updated graphing util from protovis to d3, for IE9+ support.
+2. Updated jQuery to 1.10.2.
+3. Tooltip showing both x and y values when hovering over a point.
+4. Hovered point is made more visible with a highlighting circle.
+5. Simplified the object handling server responses and made it more
+   general.
+6. y-axis uses SI units for large numbers, ie 1,200 -> 1.2k
+
+2013-07-25:
+1. Next run color is automatically changed
+
+2013-07-22:
+1. "DIRECTIONS" and "EXAMPLE" now work with touch devices
+2. "DIRECTIONS" and "EXAMPLE" are now unselectable
+3. Changed "DIRECTIONS" and "EXAMPLE" to be buttons
+
+2013-07-11:
+1. Added sbml file to sbml/thyrosim.xml.
+
+2013-05-22:
+1. Moved code from thyroid.js to content.js and deleted the former.
+2. Deleted duplicate code that initializes scrollbars.
+3. Deleted duplicate code that graphs Blue and Green lines.
+4. Deleted tables in the html that Show/Hide T3/T4 inputs.
+5. Removed Show/Hide Comparison Panel. These options show by default.
+6. Changed "Reset _color_ Line" to "Delete _color_ Run".
+7. Added a tooltip explaining how comparison works.
+8. Fixed a bug where simulation time wasn't correctly validated.
+9. Upper limit of simulation time is now 100 days.
+10. Properly uses jQuery's "prop" function to set properties like "disabled".
+
+2013-05-21:
+1. Added an option to (re)calculate initial conditions when making a run.
+
+2013-05-12:
+1. Checks userAgent for 'msie' and display not-for-IE message
+
+2013-04-30:
+1. The hack where body onload makes an ajax call to cgi-bin/getplot.cgi
+   to get the bare minimum JSON skeleton to graph an empty graph is gone.
+   Ability to graph an empty graph is now done in js/ajaxfun.js
+2. Overlay ability: User can choose to graph as Blue or Green line
+   (Default is Blue line). This is so the user can compare two simulations.
+
+2013-04-18:
+1. p47 was changed again to 3.2
+
+2013-03-07:
+1. getinit2.m and thysim2.m now only handles units in mols. Conversion to
+   displayed units is done at the end, in a THYSIM->postProcess().
+2. Value of p47 (estimated blood compartment volume) is now back to 3.
+
+2013-01-29:
+1. Some parameter values were changed, and the parameter changes are made
+   in getinit2.m and thysim2.m. These changes allowed steady state T4, T3, and
+   TSH values to be closer to the expected average.
+2. Protovis changes:
+ a. Loads an empty graph onload
+ b. Hovering over the graph shows the y-value. For very large datasets, this 
+    can lag the browser. Perhaps looking in limiting resolution, as in, the
+    number of points sent back from the server to the browser. If this can be
+    done in Octave, it would potentially decrease processing time, as Octave
+    result processing can take a while.
+
+2012-11-06
+1. UI:
+ a. This version added animation for when adding pill, IV, and infusion inputs.
+ b. Also created the framework for rollover info boxes.
+2. Server-side:
+ a. Created the framework for using pre-calculated initial conditions, at least for
+    default secretion/absorption values.
+
+2012-10-30
+1. This version does not have animation.
+2. This version also does not have pre-calculated starting values.
+
+2012-05-17
+1. We decided to move the secretion/absorption on hover scroll bars from within
+   the main diagram to its own little section. The subsequent change to CSS would
+   be major and justifies this move.
+
+2012-04-09
+1. This version was developed around REDIPS drag and drop, but we decided to no
+   longer do drag and drop.
