@@ -122,6 +122,9 @@ sub new {
     # Load parameter list. Currently doesn't do anything.
     $self->loadParams();
 
+    # Build $self->{IC}->{q0}. Only needed when recalculating IC.
+    $self->setInitialIC();
+
     return $self;
 }
 
@@ -448,6 +451,23 @@ sub setEVasIC {
 }
 
 #====================================================================
+# SUBROUTINE:   setInitialIC
+# DESCRIPTION:
+#   Take values from the default ICKEY and put it into the object that keeps
+#   initial conditions, for q0.
+#====================================================================
+sub setInitialIC {
+    my ($self) = @_;
+
+    my $defaultKey = $self->getICKey('default');
+    my $keyRef = $self->getLvl2('ICKey',$defaultKey);
+    # Loop through all compartments
+    foreach my $comp (sort {$a <=> $b} keys %$keyRef) {
+        $self->{'IC'}->{'q0'}->{$comp} = $keyRef->{$comp};
+    }
+}
+
+#====================================================================
 # SUBROUTINE:   setAdjustedIC
 # DESCRIPTION:
 #   Adjust IC with input quantity as appropriate.
@@ -719,10 +739,10 @@ sub getIntCount {
 #   sequence. For default dial values, the key would be '1000088010000880'.
 #====================================================================
 sub getICKey {
-    my ($self) = @_;
+    my ($self,$default) = @_;
 
     # If user selected to not recalculate IC, return default icKey
-    if (!$self->recalcIC()) {
+    if ($default || !$self->recalcIC()) {
         return "1000088010000880";
     }
 

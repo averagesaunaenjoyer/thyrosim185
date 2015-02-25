@@ -123,15 +123,18 @@ SRTSH = (p30+p31*fCIRC*sin(pi/12*t-p33))*exp(-q(9));
 fdegTSH = p34+p35/(p36+q(7));
 fLAG = p41+2*q(8)^11/(p42^11+q(8)^11);
 f4 = p37+5*p37/(1+exp(2*q(8)-7));
+NL = p13/(p14+q(2));
 
 %p17 = 4*p15;                                         %80:20 conversion ratio
 
 % ODEs
 q1dot = SR4+p3*q(2)+p4*q(3)-(p5+p6)*q1F+p11*q(11)+u1;           %T4dot
-q2dot = p6*q1F-(p3+p12+p13/(p14+q(2)))*q(2);                    %T4fast
+%q2dot = p6*q1F-(p3+p12+p13/(p14+q(2)))*q(2);                    %T4fast
+q2dot = p6*q1F-(p3+p12+NL)*q(2);                    %T4fast
 q3dot = p5*q1F-(p4+p15/(p16+q(3))+p17/(p18+q(3)))*q(3);         %T4slow
 q4dot = SR3+p20*q(5)+p21*q(6)-(p22+p23)*q4F+p28*q(13)+u4;       %T3pdot
-q5dot = p23*q4F+p13*q(2)/(p14+q(2))-(p20+p29)*q(5);             %T3fast
+%q5dot = p23*q4F+p13*q(2)/(p14+q(2))-(p20+p29)*q(5);             %T3fast
+q5dot = p23*q4F+NL*q(2)-(p20+p29)*q(5);             %T3fast
 q6dot = p22*q4F+p15*q(3)/(p16+q(3))+p17*q(3)/(p18+q(3))-p21*q(6);%T3slow
 q7dot = SRTSH-fdegTSH*q(7);                                     %TSHp
 q8dot = f4/p38*q(1)+p37/p39*q(4)-p40*q(8);                      %T3B
