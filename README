@@ -1,11 +1,12 @@
 Change log
 
-For next release:
+2015-02-25:
 1. Changed SS IC to a that derived from a run using a Java-based ODE solver.
    Octave apparently produces unstable results.
 2. Rounded execution time down to the nearest whole second.
 3. Turned on normal range by default.
 4. Fixed a bug where normal range turns off after a run.
+5. Fixed a bug where recalculating IC didn't work.
 
 2014-09-01:
 1. Fixed a phenomenon where simulated values did not start at steady state.
