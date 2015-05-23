@@ -69,9 +69,9 @@ function graphthis() {
 //     var TSH = new Hormone("TSH","q2","q2",".3" ,"4.7");
 //-------------------------------------------------- 
 
-    var T4  = new Hormone("T4" ,"q1","\u03BCg/L","45" ,"120");
-    var T3  = new Hormone("T3" ,"q4","\u03BCg/L",".75","1.8");
-    var TSH = new Hormone("TSH","q7","mU/L"     ,".3" ,"4.7");
+    var T4  = new Hormone("T4" ,"q1","\u03BCg/L","45" ,"105");
+    var T3  = new Hormone("T3" ,"q4","\u03BCg/L",".6","1.8");
+    var TSH = new Hormone("TSH","q7","mU/L"     ,".4" ,"4");
 
     // Need to initialize the graph?
     if (responseObjObj.initGraph) {

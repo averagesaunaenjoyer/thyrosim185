@@ -1,4 +1,8 @@
 Change log
+2015-05-22:
+1. Changed T4 normal range from 45 - 120 to 45 - 105.
+2. Changed T3 normal range from 0.75 - 1.8 to 0.6 - 1.8.
+3. Changed TSH normal range from 0.3 - 4.7 to 0.4 - 4.
 
 2015-02-25:
 1. Changed SS IC to a that derived from a run using a Java-based ODE solver.
