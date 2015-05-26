@@ -101,7 +101,7 @@ p46 = 0.12*d4;          %k3excrete; originally 0.118
 % is done in THYSIM->postProcess(), make sure you change p47 and p48 there if
 % you need to change these values.
 p47 = 3.2;              %Vp
-p48 = 4.3;              %VTSH
+p48 = 5.2;              %VTSH
 
 % Equations are in a separate function
 function [dqdt] = ODEss(t,q)

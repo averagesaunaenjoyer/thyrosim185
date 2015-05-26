@@ -69,9 +69,9 @@ function graphthis() {
 //     var TSH = new Hormone("TSH","q2","q2",".3" ,"4.7");
 //-------------------------------------------------- 
 
-    var T4  = new Hormone("T4" ,"q1","\u03BCg/L","45" ,"105");
+    var T4  = new Hormone("T4" ,"q1","\u03BCg/L","45","105");
     var T3  = new Hormone("T3" ,"q4","\u03BCg/L",".6","1.8");
-    var TSH = new Hormone("TSH","q7","mU/L"     ,".4" ,"4");
+    var TSH = new Hormone("TSH","q7","mU/L"     ,".4","4"  );
 
     // Need to initialize the graph?
     if (responseObjObj.initGraph) {
@@ -561,7 +561,7 @@ function getResponseObjObj() {
         if (maxY) {return maxY;}
 
         // Default Y values
-        if (comp == "q1") {return 80;} // Rounds to 90
+        if (comp == "q1") {return 110;} // Rounds to 120
         if (comp == "q4") {return 1; } // Rounds to 2
         if (comp == "q7") {return 4; } // Rounds to 5
 
@@ -573,20 +573,42 @@ function getResponseObjObj() {
     }
 
     // Get the "End" value by increasing the largest digit by 1
-    // 1.2 => 2
-    // 1.6 => 2
-    // 54  => 60
-    // 101 => 200
-    // 3.9 => 5
+    // 1.1 => 2
+    // 1.9 => 3
+    // 9.9 => 11
+    // 12.1 => 13
+    // 20 => 30
+    // 90 => 100
+    // 99 => 110
+    // 100 => 110
+    // 500 => 510
+    // 900 => 910
+    // 1000 => 1100
+    // 1100 => 1200
     this.getEndVal = getEndVal;
     function getEndVal(n) {
+        var roundRule = 8;
         var num1 = parseInt(n);
-        var numL = num1.toString().length;
-        var zero = this.repeat("0",numL-1);
+        var numL = parseInt(num1.toString().length);
+        if (num1 <= 15) { // Grow by 1
+            var zero = this.repeat("0",numL-1); // 0
+            var mFac = parseInt("1"+zero); // 1
+            var numR = this.roundX(n,roundRule);
+            numR = numR + 1;
+            return numR;
+        }
+        if (num1 <= 99) {
+            var zero = this.repeat("0",numL-1);
+            var mFac = parseInt("1"+zero);
+            var numR = this.roundX(n/mFac,roundRule)*mFac;
+            numR = numR + mFac;
+            return numR;
+        }
+        var zero = this.repeat("0",numL-2);
         var mFac = parseInt("1"+zero);
-        var numR = this.roundX(n/mFac,7)*mFac;
-        var numF = parseInt(numR)+parseInt("1"+zero);
-        return numF;
+        var numR = this.roundX(n/mFac,roundRule)*mFac;
+        numR = numR + mFac;
+        return numR;
     }
 
     // Function to repeat a string

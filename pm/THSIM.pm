@@ -553,7 +553,7 @@ sub postProcess {
     # For now, save conv factors here:
     my $convObj;
     my $p47 = 3.2;
-    my $p48 = 4.3;
+    my $p48 = 5.2;
     $convObj->{'q1'} = 777/$p47; # T4
     $convObj->{'q4'} = 651/$p47; # T3
     $convObj->{'q7'} = 5.6/$p48; # TSH
