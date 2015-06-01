@@ -2,6 +2,7 @@ Change log
 2015-06-01:
 1. Set Y-axis minimums so the default range is always visible:
    T4 = 120, T3 = 2, TSH = 5
+2. Updated version number to 1.2
 
 2015-05-25:
 1. Extended default T4 Y-axis to 120.
