@@ -60,15 +60,7 @@ function loadXMLDoc(e) {
 function graphthis() {
 
     // Create hormone objects
-    // Hormone, Compartment, Unit, Lower & Upper normal range
-    // 45,120
-    // TEST
-//--------------------------------------------------
-//     var T4  = new Hormone("T4" ,"q4","q4 plasma","45" ,"120");
-//     var T3  = new Hormone("T3" ,"q5","q5 fast","45" ,"120");
-//     var TSH = new Hormone("TSH","q2","q2",".3" ,"4.7");
-//-------------------------------------------------- 
-
+    // Hormone, Compartment, Unit Label, Lower & Upper normal range
     var T4  = new Hormone("T4" ,"q1","\u03BCg/L","45","105");
     var T3  = new Hormone("T3" ,"q4","\u03BCg/L",".6","1.8");
     var TSH = new Hormone("TSH","q7","mU/L"     ,".4","4"  );
@@ -549,7 +541,15 @@ function getResponseObjObj() {
     // Return max Y value
     this.getYVal = getYVal;
     function getYVal(comp) {
+        // Minimum Y values
+        var q1min = 110; // Rounds to 120
+        var q4min = 1;   // Rounds to 2
+        var q7min = 4;   // Rounds to 5
         var maxY = 0;
+        if (comp == "q1") {maxY = q1min;}
+        if (comp == "q4") {maxY = q4min;}
+        if (comp == "q7") {maxY = q7min;}
+
         $.each(colors,function(idx,type) {
             if (checkObjTypeExist(type)) {
                 if (parseFloat(objs[type].data[comp].max) > maxY) {
@@ -558,18 +558,7 @@ function getResponseObjObj() {
             }
         });
 
-        if (maxY) {return maxY;}
-
-        // Default Y values
-        if (comp == "q1") {return 110;} // Rounds to 120
-        if (comp == "q4") {return 1; } // Rounds to 2
-        if (comp == "q7") {return 4; } // Rounds to 5
-
-        // TEST
-        // if (comp == "q2") {return 1; } // Rounds to 5
-        // if (comp == "q3") {return 1; } // Rounds to 5
-        // if (comp == "q5") {return 1; } // Rounds to 5
-        // if (comp == "q6") {return 1; } // Rounds to 5
+        return maxY;
     }
 
     // Get the "End" value by increasing the largest digit by 1
