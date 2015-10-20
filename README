@@ -1,4 +1,8 @@
 Change log
+2015-10-19
+1. Removed password protection
+2. Added Google Analytics to index
+
 2015-06-01:
 1. Set Y-axis minimums so the default range is always visible:
    T4 = 120, T3 = 2, TSH = 5
