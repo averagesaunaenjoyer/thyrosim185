@@ -55,8 +55,8 @@
       <parameter id="p44" value="0.12" constant="true"/>
       <parameter id="p45" value="1.78" constant="true"/>
       <parameter id="p46" value="0.12" constant="true"/>
-      <parameter id="p47" value="3" constant="true"/>
-      <parameter id="p48" value="3.5" constant="true"/>
+      <parameter id="p47" value="3.2" constant="true"/>
+      <parameter id="p48" value="5.2" constant="true"/>
       <parameter id="q4F" value="NaN" constant="false"/>
       <parameter id="q1F" value="NaN" constant="false"/>
       <parameter id="SR3" value="NaN" constant="false"/>
@@ -67,25 +67,25 @@
       <parameter id="fLAG" value="NaN" constant="false"/>
       <parameter id="f4" value="NaN" constant="false"/>
       <!-- I suspect these should be species -->
-      <parameter id="q_1" value="0.320953667953668" constant="false"/>
-      <parameter id="q_2" value="0.2012" constant="false"/>
-      <parameter id="q_3" value="0.6418" constant="false"/>
-      <parameter id="q_4" value="0.0055815668202765" constant="false"/>
-      <parameter id="q_5" value="0.0114" constant="false"/>
-      <parameter id="q_6" value="0.0658" constant="false"/>
-      <parameter id="q_7" value="2.57775" constant="false"/>
-      <parameter id="q_8" value="7.0831" constant="false"/>
-      <parameter id="q_9" value="7.0847" constant="false"/>
+      <parameter id="q_1" value="0.322114215761171" constant="false"/>
+      <parameter id="q_2" value="0.201296960359917" constant="false"/>
+      <parameter id="q_3" value="0.638967411907560" constant="false"/>
+      <parameter id="q_4" value="0.00663104034826483" constant="false"/>
+      <parameter id="q_5" value="0.0112595761822961" constant="false"/>
+      <parameter id="q_6" value="0.0652960640300348" constant="false"/>
+      <parameter id="q_7" value="1.78829584764370" constant="false"/>
+      <parameter id="q_8" value="7.05727560072869" constant="false"/>
+      <parameter id="q_9" value="7.05714474742141" constant="false"/>
       <parameter id="q_10" value="0" constant="false"/>
       <parameter id="q_11" value="0" constant="false"/>
       <parameter id="q_12" value="0" constant="false"/>
       <parameter id="q_13" value="0" constant="false"/>
-      <parameter id="q_14" value="3.7509" constant="false"/>
-      <parameter id="q_15" value="3.3163" constant="false"/>
-      <parameter id="q_16" value="2.893" constant="false"/>
-      <parameter id="q_17" value="2.5416" constant="false"/>
-      <parameter id="q_18" value="2.304" constant="false"/>
-      <parameter id="q_19" value="2.1989" constant="false"/>
+      <parameter id="q_14" value="3.34289716182018" constant="false"/>
+      <parameter id="q_15" value="3.69277248068433" constant="false"/>
+      <parameter id="q_16" value="3.87942133769244" constant="false"/>
+      <parameter id="q_17" value="3.90061903207543" constant="false"/>
+      <parameter id="q_18" value="3.77875734283571" constant="false"/>
+      <parameter id="q_19" value="3.55364471589659" constant="false"/>
     </listOfParameters>
     <listOfRules>
       <rateRule variable="q_1">
