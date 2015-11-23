@@ -1,6 +1,7 @@
 % This is modified from thysim.m and is the experimental version that tries to
 % deal with absorption delay in hyperthyroid situations (ie, a patient is given
 % a super dose ~3000 mcg T4).
+% Date: 2014-03-12
 
 % Clear previous variables, if any
 clc; clear all;

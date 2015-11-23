@@ -96,7 +96,7 @@ if ($DEBUG == 5) {
 $thsim->processInputs(\$inputs);
 
 # Define command root
-my $command = "octave -q ".$ENV{'DOCUMENT_ROOT'}."/thyrosim/octave/thysim.m";
+my $command = "octave -q ".$ENV{'DOCUMENT_ROOT'}."/thyrosim/octave/thyrosim.m";
 my $getinit = "octave -q ".$ENV{'DOCUMENT_ROOT'}."/thyrosim/octave/getinit.m";
 
 #--------------------------------------------------
