@@ -1,7 +1,8 @@
 % Thyrosim stand alone MATLAB version.
 % Author: Simon X. Han
-% The stand alone version is limited in function, such as adding/chaining
-% inputs, but otherwise runs fine.
+% Description:
+% The stand alone version runs fine, but lack the ability to easily
+% add/chain inputs.
 % Run:
 % >> thyrosim
 
@@ -186,6 +187,9 @@ y2 = q(:,4)*T3conv;     % T3
 y3 = q(:,7)*TSHconv;    % TSH
 t  = t/24;              % Convert time to days
 
+% General
+figure('Name','Thyrosim Results','NumberTitle','off');
+
 % T4 plot
 subplot(3,1,1);
 plot(t,y1);
@@ -201,7 +205,7 @@ ylim([0 max(y2)*1.2]);
 % TSH plot
 subplot(3,1,3);
 plot(t,y3);
-ylabel('TSH mcg/L');
+ylabel('TSH mU/L');
 ylim([0 max(y3)*1.2]);
 xlabel('Days');
 end
