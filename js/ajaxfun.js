@@ -627,7 +627,7 @@ function getResponseObjObj() {
 }
 
 //--------------------------------------------------
-// Erase a drawn line
+// Range box
 //-------------------------------------------------- 
 function normRangeCalc(yMax,y2,y1) {
 
