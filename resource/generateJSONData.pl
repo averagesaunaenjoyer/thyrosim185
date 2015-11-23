@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# Generating a small set of testing data in JSON form.
 
 use strict;
 use warnings;
