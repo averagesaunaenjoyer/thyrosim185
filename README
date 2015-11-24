@@ -1,4 +1,9 @@
 Change log
+2015-11-23
+1. Added THYROSIM stand alone Matlab/Octave m files
+2. Added disclaimer
+3. Bit more documentation and general maintenance
+
 2015-11-20
 1. Added link to DiStefano Lab page
 2. Added link to code repository
