@@ -1,8 +1,8 @@
 /*--------------------------------------------------
-* General notes:
-* # for id
-* . for class
-* Keep in mind borders are 1px so border + padding = 11px
+* FILE:         content.css
+* AUTHOR:       Simon X. Han
+* DESCRIPTION:
+*   All css rules.
 *--------------------------------------------------*/
 html * {
   font-family: arial,helvetica,sans-serif;
@@ -54,7 +54,7 @@ html * {
   border-collapse: collapse;
   border: 0px; /* To counteract 1px border from above */
   /* height and width of the graphs are defined in ajaxfun.js 
-   * where Protovis is defined */
+   * where D3 is defined */
 }
 /* These are made into classes because id 'drag' is needed for the drag and drop
  * javascript. No longer relevant since drag and drag is no longer used, but

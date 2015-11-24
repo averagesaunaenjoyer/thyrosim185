@@ -1,3 +1,9 @@
+<!----------------------------------------------------
+! FILE:         index.html
+! AUTHOR:       Simon X. Han
+! DESCRIPTION:
+!   Home page.
+!---------------------------------------------------->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="content-type" content="text/html"; charset="UTF-8" />
@@ -5,7 +11,7 @@
 <link type="text/css" rel="stylesheet" href="css/content.css">
 <link type="text/css" rel="stylesheet" href="css/fonts-min.css">
 <link type="text/css" rel="stylesheet" href="css/ui-lightness/jquery-ui-1.10.1.custom.min.css">
-<!-- checkmsie.js must be loaded before protovis -->
+<!-- checkmsie.js must be loaded before D3 -->
 <script src="js/checkmsie.js"></script>
 <script src="js/jquery-1.10.2.min.js"></script>
 <script src="js/jquery-ui-1.10.1.custom.min.js"></script>
@@ -120,6 +126,24 @@
       </div>
     </div>
     <!-- Example end -->
+
+    <!-- Disclaimer -->
+    <div id="button-Disclaimer" class="bank-left infoButton unselectable">
+      <a id="link-Disclaimer" class="color-black header-buttons-link" href="javascript:clickInfoButton('Disclaimer');">DISCLAIMER</a>
+      <div id="dp-Disclaimer" class="popup-rollover">
+        <p>
+          <span class="infoButton-close bank-right" onClick="javascript:clickInfoButton('Disclaimer');">close</span><br>
+          <span style="color:red">THYROSIM</span>
+
+          is intended as an educational and research tool only.
+
+          Information provided is not a substitute for medical advice and you
+          should contact your doctor regarding any medical conditions or
+          medical questions that you have.
+        </p>
+      </div>
+    </div>
+    <!-- Disclaimer end -->
 
     &nbsp;
     Start by clicking 'show T3 input' or 'show T4 input'

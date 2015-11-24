@@ -1,19 +1,19 @@
 #!/usr/bin/perl
 #==============================================================================
-# FILE:         THSIM.pm
+# FILE:         THYROSIM.pm
 # AUTHOR:       Simon X. Han
 # DESCRIPTION:
-#   Package where the bulk of THyroid SIM related subroutines will live.
+#   Package where the bulk of Thyroid SIM related subroutines lives.
 #==============================================================================
 
 use strict;
 
-package THSIM;
+package THYROSIM;
 
 #====================================================================
 # SUBROUTINE:   new
 # DESCRIPTION:
-#   Returns an object of THSIM.
+#   Returns an object of THYROSIM.
 #   TODO:
 #   1.  Make adultChild something passed into new. new will load the correct
 #       set of parameters based on adultChild, probably in another function.

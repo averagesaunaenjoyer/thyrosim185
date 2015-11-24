@@ -152,7 +152,7 @@ endfunction
 % For some reason 1008 returns the wrong result for comp 4.
 % When t = 960, q4 value is closest to Lu's values. See octave-calc-IC.xls.
 q0 = [0.30753; 0.18899; 0.57109; 0.0065053; 0.010895; 0.055676; 2.1205; 51.875; 51.769; .515; 0; 0; 0; 4.3401; 5.3306; 6.1941; 6.8059; 7.1011; 7.0728];
-tspan = [0 960];
+tspan = [0 10];
 
 % default RelTol and AbsTol are 0.000001.
 % Increasing all these numbers decreased the solve time. MaxStep seems

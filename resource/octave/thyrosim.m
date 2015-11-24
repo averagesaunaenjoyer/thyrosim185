@@ -2,38 +2,23 @@
 % FILE:         thyrosim.m
 % AUTHOR:       Simon X. Han
 % DESCRIPTION:
-%   THYROSIM stand alone MATLAB version.
+%   THYROSIM stand alone OCTAVE version.
 %
 %   THYROSIM implmentation based on:
 %   All-Condition Thyroid Simulator Eqns 2015-06-29.pdf
 %
 %   The stand alone version runs fine, but lack the ability to easily add/chain
 %   inputs.
-% RUN:          >> thyrosim
+% RUN:          octave:1> thyrosim
 %-------------------------------------------------- 
-
-% Main function
-function thyrosim
 
 % Clean workspace
 clc; clear all;
 
-% Initialize variables
-initIC;     % Initial conditions
-initInputs; % Inputs
-initParams; % Parameters
-
-% Solve ODE
-global tspan ic;
-[t,q] = ode45(@ODEs, tspan, ic);
-
-% Graph results
-graph(t,q);
-end
+% Declare global variables
+global ic inf1 inf4 dial tspan kdelay d p;
 
 % Initialize initial conditions
-function initIC
-global ic
 ic(1) = 0.322114215761171;
 ic(2) = 0.201296960359917;
 ic(3) = 0.638967411907560;
@@ -53,22 +38,16 @@ ic(16) = 3.87942133769244;
 ic(17) = 3.90061903207543;
 ic(18) = 3.77875734283571;
 ic(19) = 3.55364471589659;
-end
+ic = ic';
 
 % Initialize inputs
-function initInputs
-global inf1 inf4 dial tspan
 inf1 = 0;               % Infusion into plasma T4
 inf4 = 0;               % Infusion into plasma T3
 % [T4 Secretion, T4 Absorption, T3 Secretion, T3 Absorption]
 dial = [1, 0.88, 1, 0.88];
 tspan = [0, 120];       % NOTE: this is hours, not days
-end
 
 % Initialize parameter values
-function initParams
-global inf1 inf4 dial
-global u1 u4 kdelay d p
 u1 = inf1;
 u4 = inf4;
 kdelay = 5/8;           %(n-1)/k = t; n comps, t = 8hr
@@ -128,10 +107,9 @@ p(46) = 0.12*d(4);      %k3excrete; originally 0.118
 % you need to change these values.
 p(47) = 3.2;            %Vp
 p(48) = 5.2;            %VTSH
-end
 
 % ODEs
-function dqdt = ODEs(t, q)
+function [dqdt] = ODEs(t, q)
 
 global u1 u4 kdelay d p;
 
@@ -148,35 +126,57 @@ f4 = p(37)+5*p(37)/(1+exp(2*q(8)-7));
 NL = p(13)/(p(14)+q(2));
 
 % ODEs
-qdot(1) = SR4+p(3)*q(2)+p(4)*q(3)-(p(5)+p(6))*q1F+p(11)*q(11)+u1;       %T4dot
-qdot(2) = p(6)*q1F-(p(3)+p(12)+NL)*q(2);                                %T4fast
-qdot(3) = p(5)*q1F-(p(4)+p(15)/(p(16)+q(3))+p(17)/(p(18)+q(3)))*q(3);   %T4slow
-qdot(4) = SR3+p(20)*q(5)+p(21)*q(6)-(p(22)+p(23))*q4F+p(28)*q(13)+u4;   %T3pdot
-qdot(5) = p(23)*q4F+NL*q(2)-(p(20)+p(29))*q(5);                         %T3fast
-qdot(6) = p(22)*q4F+p(15)*q(3)/(p(16)+q(3))+p(17)*q(3)/(p(18)+q(3))-(p(21))*q(6);%T3slow
-qdot(7) = SRTSH-fdegTSH*q(7);                                           %TSHp
-qdot(8) = f4/p(38)*q(1)+p(37)/p(39)*q(4)-p(40)*q(8);                    %T3B
-qdot(9) = fLAG*(q(8)-q(9));                                             %T3B LAG
-qdot(10)= -p(43)*q(10);                                                 %T4PILLdot
-qdot(11)=  p(43)*q(10)-(p(44)+p(11))*q(11);                             %T4GUTdot
-qdot(12)= -p(45)*q(12);                                                 %T3PILLdot
-qdot(13)=  p(45)*q(12)-(p(46)+p(28))*q(13);                             %T3GUTdot
+q1dot = SR4+p(3)*q(2)+p(4)*q(3)-(p(5)+p(6))*q1F+p(11)*q(11)+u1;       %T4dot
+q2dot = p(6)*q1F-(p(3)+p(12)+NL)*q(2);                                %T4fast
+q3dot = p(5)*q1F-(p(4)+p(15)/(p(16)+q(3))+p(17)/(p(18)+q(3)))*q(3);   %T4slow
+q4dot = SR3+p(20)*q(5)+p(21)*q(6)-(p(22)+p(23))*q4F+p(28)*q(13)+u4;   %T3pdot
+q5dot = p(23)*q4F+NL*q(2)-(p(20)+p(29))*q(5);                         %T3fast
+q6dot = p(22)*q4F+p(15)*q(3)/(p(16)+q(3))+p(17)*q(3)/(p(18)+q(3))-(p(21))*q(6);%T3slow
+q7dot = SRTSH-fdegTSH*q(7);                                           %TSHp
+q8dot = f4/p(38)*q(1)+p(37)/p(39)*q(4)-p(40)*q(8);                    %T3B
+q9dot = fLAG*(q(8)-q(9));                                             %T3B LAG
+q10dot= -p(43)*q(10);                                                 %T4PILLdot
+q11dot=  p(43)*q(10)-(p(44)+p(11))*q(11);                             %T4GUTdot
+q12dot= -p(45)*q(12);                                                 %T3PILLdot
+q13dot=  p(45)*q(12)-(p(46)+p(28))*q(13);                             %T3GUTdot
 
 % Delay ODEs
-qdot(14)= -kdelay*q(14) +q(7);                                          %delay1
-qdot(15)= kdelay*(q(14) -q(15));                                        %delay2
-qdot(16)= kdelay*(q(15) -q(16));                                        %delay3
-qdot(17)= kdelay*(q(16) -q(17));                                        %delay4
-qdot(18)= kdelay*(q(17) -q(18));                                        %delay5
-qdot(19)= kdelay*(q(18) -q(19));                                        %delay6
+q14dot= -kdelay*q(14) +q(7);                                          %delay1
+q15dot= kdelay*(q(14) -q(15));                                        %delay2
+q16dot= kdelay*(q(15) -q(16));                                        %delay3
+q17dot= kdelay*(q(16) -q(17));                                        %delay4
+q18dot= kdelay*(q(17) -q(18));                                        %delay5
+q19dot= kdelay*(q(18) -q(19));                                        %delay6
 
 % ODE vector
-dqdt = qdot';
-end
+dqdt(1)=q1dot;
+dqdt(2)=q2dot;
+dqdt(3)=q3dot;
+dqdt(4)=q4dot;
+dqdt(5)=q5dot;
+dqdt(6)=q6dot;
+dqdt(7)=q7dot;
+dqdt(8)=q8dot;
+dqdt(9)=q9dot;
+dqdt(10)=q10dot;
+dqdt(11)=q11dot;
+dqdt(12)=q12dot;
+dqdt(13)=q13dot;
+dqdt(14)=q14dot;
+dqdt(15)=q15dot;
+dqdt(16)=q16dot;
+dqdt(17)=q17dot;
+dqdt(18)=q18dot;
+dqdt(19)=q19dot;
+dqdt = dqdt';
+
+endfunction
+
+% Execute ODE solver
+vopt = odeset ('NormControl','on', 'InitialStep',1);
+[t,q] = ode45(@ODEs, tspan, ic, vopt);
 
 % Graph results
-function graph(t,q)
-global p
 
 % Conversion factors
 % 777: molecular weight of T4
@@ -214,4 +214,3 @@ plot(t,y3);
 ylabel('TSH mU/L');
 ylim([0 max(y3)*1.2]);
 xlabel('Days');
-end

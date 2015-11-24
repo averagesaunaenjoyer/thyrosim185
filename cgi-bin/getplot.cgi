@@ -1,5 +1,13 @@
 #!/usr/bin/perl
-
+#==============================================================================
+# FILE:         getplot.cgi
+# AUTHOR:       Simon X. Han
+# DESCRIPTION:
+#   The main function that:
+#   1. Takes input from the browser
+#   2. Sends commands out to the Octave ODE solver
+#   3. Collects results to send back to the browser
+#==============================================================================
 use strict;
 use warnings;
 use CGI qw/:standard/;
@@ -13,7 +21,7 @@ BEGIN {
 }
 
 use lib $ENV{'DOCUMENT_ROOT'}."/thyrosim/pm";
-use THSIM;
+use THYROSIM;
 
 # Testing/Debug
 my $DEBUG = 0; # See below for what DEBUG does. Default: 0
@@ -23,18 +31,10 @@ my $cgi = new CGI;
 
 # Create thsim object
 # TODO adultChild value to be derived from browser at some point
-my $thsim = THSIM->new('adultChild' => 1);
+my $thsim = THYROSIM->new('adultChild' => 1);
 
 # Set the results to send to the browser.
 my $toShow = {
-# TEST
-#--------------------------------------------------
-#     'q2'  => 1,
-#     'q3'  => 1,
-#     'q5'  => 1,
-#     'q6'  => 1,
-#-------------------------------------------------- 
-# Real
     't'   => 1,
     'q1'  => 1,
     'q4'  => 1,
@@ -142,22 +142,6 @@ foreach my $count (@$counts) {
 # Post process to create the JSON object
 my $JSONObj = $thsim->postProcess();
 
-# Save the obj of interest to a file
-#--------------------------------------------------
-# printData($JSONObj,"q4","../tmp/values.txt");
-# printData($JSONObj,"t","../tmp/times.txt");
-#-------------------------------------------------- 
-
 # Convert to JSON and print to browser
 print "content-type:text/html\n\n";
 print JSON::Syck::Dump($JSONObj)."\n";
-
-sub printData {
-    my ($obj,$val,$file) = @_;
-    my $vals = $obj->{data}->{$val}->{'values'};
-    open (FILE,">$file");
-    foreach my $val (@$vals) {
-        print FILE $val."\n";
-    }
-    close FILE;
-}

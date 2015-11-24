@@ -1,4 +1,10 @@
-// Functions relating to AJAX will go in here
+//--------------------------------------------------
+// FILE:        ajaxfun.js
+// AUTHOR:      Simon X. Han
+// DESCRIPTION:
+//   Functions relating to AJAX will go in here. Currently this involves sending
+//   and receiving the request object and graphing related functions.
+//-------------------------------------------------- 
 
 // Required for ajax, so load on file load
 var xmlhttp;

@@ -1,12 +1,12 @@
-"use strict"; // enable strict mode
+//--------------------------------------------------
+// FILE:        content.js
+// AUTHOR:      Simon X. Han
+// DESCRIPTION:
+//   This file deals with user interactions and animation effects on the main
+//   page.
+//-------------------------------------------------- 
 
-// TODO:
-// 3. New images are 'stacked' but can be slightly offsetted
-// 5. A separate function, 'reorganize' or 3, is needed, and will be run when
-// this function is called and when an input is deleted.
-// NOTE: To get the value of the dials, can use either
-// document.getElementById('dialinputX').value or
-// $('#dialinputX').attr('value')
+"use strict"; // enable strict mode
 
 // Animation object
 var animeObj = new animation();

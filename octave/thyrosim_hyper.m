@@ -1,56 +1,64 @@
-% This is modified from thysim.m and is the experimental version that tries to
-% deal with absorption delay in hyperthyroid situations (ie, a patient is given
-% a super dose ~3000 mcg T4).
-% Date: 2014-03-12
+%--------------------------------------------------
+% FILE:         thyrosim_hyper.m
+% AUTHOR:       Simon X. Han
+% DESCRIPTION:
+%   THYROSIM implmentation based on:
+%   All-Condition Thyroid Simulator Eqns 2015-06-29.pdf
+%
+%   This is modified from thysim.m and is the experimental version that tries to
+%   deal with absorption delay in hyperthyroid situations (i.e., a patient is
+%   given a super dose ~3000 mcg T4).
+% LAST UPDATE:  2014-03-12
+%-------------------------------------------------- 
 
 % Clear previous variables, if any
 clc; clear all;
 
 % Process argument list
 arg_list = argv();
-IC1  = str2num(arg_list{1});
-IC2  = str2num(arg_list{2});
-IC3  = str2num(arg_list{3});
-IC4  = str2num(arg_list{4});
-IC5  = str2num(arg_list{5});
-IC6  = str2num(arg_list{6});
-IC7  = str2num(arg_list{7});
-IC8  = str2num(arg_list{8});
-IC9  = str2num(arg_list{9});
-IC10 = str2num(arg_list{10});
-IC11 = str2num(arg_list{11});
-IC12 = str2num(arg_list{12});
-IC13 = str2num(arg_list{13});
-IC14 = str2num(arg_list{14});
-IC15 = str2num(arg_list{15});
-IC16 = str2num(arg_list{16});
-IC17 = str2num(arg_list{17});
-IC18 = str2num(arg_list{18});
-IC19 = str2num(arg_list{19});
-t1   = str2num(arg_list{20});
-t2   = str2num(arg_list{21});
-dial1= str2num(arg_list{22});
-dial2= str2num(arg_list{23});
-dial3= str2num(arg_list{24});
-dial4= str2num(arg_list{25});
-inf1 = str2num(arg_list{26});
-inf4 = str2num(arg_list{27});
+IC1   = str2num(arg_list{1});
+IC2   = str2num(arg_list{2});
+IC3   = str2num(arg_list{3});
+IC4   = str2num(arg_list{4});
+IC5   = str2num(arg_list{5});
+IC6   = str2num(arg_list{6});
+IC7   = str2num(arg_list{7});
+IC8   = str2num(arg_list{8});
+IC9   = str2num(arg_list{9});
+IC10  = str2num(arg_list{10});
+IC11  = str2num(arg_list{11});
+IC12  = str2num(arg_list{12});
+IC13  = str2num(arg_list{13});
+IC14  = str2num(arg_list{14});
+IC15  = str2num(arg_list{15});
+IC16  = str2num(arg_list{16});
+IC17  = str2num(arg_list{17});
+IC18  = str2num(arg_list{18});
+IC19  = str2num(arg_list{19});
+t1    = str2num(arg_list{20});
+t2    = str2num(arg_list{21});
+dial1 = str2num(arg_list{22});
+dial2 = str2num(arg_list{23});
+dial3 = str2num(arg_list{24});
+dial4 = str2num(arg_list{25});
+inf1  = str2num(arg_list{26});
+inf4  = str2num(arg_list{27});
 
 % Declare global variables for use in ODE function
-global p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11 p12 p13 p14 p15 p16 p17 p18 p19;
-global p20 p21 p22 p23 p24 p25 p26 p27 p28 p29 p30 p31 p32 p33 p34 p35 p36;
-global p37 p38 p39 p40 p41 p42 p43 p44 p45 p46 p47 p48 kdelay u1 u4;
-global d1 d2 d3 d4;
+global p1  p2  p3  p4  p5  p6  p7  p8  p9  p10 p11 p12 p13 p14 p15 p16;
+global p17 p18 p19 p20 p21 p22 p23 p24 p25 p26 p27 p28 p29 p30 p31 p32;
+global p33 p34 p35 p36 p37 p38 p39 p40 p41 p42 p43 p44 p45 p46 p47 p48;
+global kdelay u1 u4 d1 d2 d3 d4;
 global param1 param2 n;
 
 % Declare parameters
-u1 = inf1;                     % Infusion into plasma T4
-u4 = inf4;                     % Infusion into plasma T3
-kdelay = 5/8;               %(n-1)/k = t; n comps, t = 8hr
-d1=dial1;
-d2=dial2;
-d3=dial3;
-d4=dial4;
+u1 = inf1;              % Infusion into plasma T4
+u4 = inf4;              % Infusion into plasma T3
+kdelay = 5/8;           %(n-1)/k = t; n comps, t = 8hr
+d1 = dial1;
+d2 = dial2;
+d3 = dial3;
+d4 = dial4;
 
 n = 2;
 
