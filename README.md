@@ -7,10 +7,11 @@ See INSTALL.
 See License.docx.
 
 ## Cite THYROSIM
+Coming soon.
 
 * ## Reference
 1. [Eisenberg et al., 2006](http://online.liebertpub.com/doi/abs/10.1089/thy.2006.0144) 
 2. [Eisenberg et al., 2008](http://online.liebertpub.com/doi/abs/10.1089/thy.2007.0388) 
 3. [Eisenberg et al., 2009](http://online.liebertpub.com/doi/abs/10.1089/thy.2008.0148) 
 4. [Eisenberg et al., 2010](http://online.liebertpub.com/doi/abs/10.1089/thy.2009.0349) 
-5. [Ben-Shachar et al., 2012](http://online.liebertpub.com/doi/abs/10.1089/thy.2011.0355) 
+5. [Ben-Shachar et al., 2012](http://online.liebertpub.com/doi/abs/10.1089/thy.2011.0355)
