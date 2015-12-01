@@ -1,6 +1,6 @@
 # **THYROSIM**
 
-**THYROSIM** is a tool for simulating a well-validated human thyroid hormone (TH) feedback regulation system model. Users can simulate common thyroid system maladies by adjusting TH secretion/absorption rates on the interface. Oral input regimens, also selectable on the interface, simulate common hormone treatment options. Bolus and intravenous infusion inputs also can be added, for exploratory research and teaching demonstrations. For easy comparisons, the interface includes facility for superimposing two sets of simulation results.
+[http://biocyb1.cs.ucla.edu/thyrosim/]() is a tool for simulating a well-validated human thyroid hormone (TH) feedback regulation system model. Users can simulate common thyroid system maladies by adjusting TH secretion/absorption rates on the interface. Oral input regimens, also selectable on the interface, simulate common hormone treatment options. Bolus and intravenous infusion inputs also can be added, for exploratory research and teaching demonstrations. For easy comparisons, the interface includes facility for superimposing two sets of simulation results.
 
 # **Installation**
 See INSTALL.
