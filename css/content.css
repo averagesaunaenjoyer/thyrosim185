@@ -27,6 +27,11 @@ html * {
   margin-top: 10px;
   padding-bottom: 10px;
 }
+.textsub {
+  position: relative;
+  top: 0.3em;
+  font-size: 70%;
+}
 /* Applies to all divs within the content div */
 /*--------------------------------------------------
 * PROBLEM HERE: #content div declaration interferes with jqueryui

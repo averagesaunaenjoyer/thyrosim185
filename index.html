@@ -67,16 +67,22 @@
               To see normal thyroid hormone behavior: click "RUN"
             </li>
             <li>
-              To simulate hypo/hyperthyroidism: change T3/T4 secretion
+              To simulate hypo/hyperthyroidism: change
+              T<span class="textsub">3</span>/T<span class="textsub">4</span>
+              secretion
             </li>
             <li>
-              To modify oral input absorption: change T3/T4 absorption
+              To modify oral input absorption: change
+              T<span class="textsub">3</span>/T<span class="textsub">4</span>
+              absorption
             </li>
             <li>
               Simulate treatment options:
               <ol type="a">
                 <li>
-                  Click "show T3 input" or "show T4 input"
+                  Click
+                  "show T<span class="textsub">3</span> input" or
+                  "show T<span class="textsub">4</span> input"
                 </li>
                 <li>
                   Click the
@@ -147,7 +153,9 @@
     <!-- Disclaimer end -->
 
     &nbsp;
-    Start by clicking 'show T3 input' or 'show T4 input'
+    Start by clicking
+    "show T<span class="textsub">3</span> input" or
+    "show T<span class="textsub">4</span> input"
 
 <!----------------------------------------------------
 !       <button type="button" id="thisistemp">TMP</button>
@@ -184,7 +192,9 @@
       <!-- Inputs (left-most div) -->
       <div id="content-inputs" class="content-center">
         <!-- T3 input div -->
-        <a id="T3display" class="showhide" href="javascript:show_hide('T3');">Show T3 input</a><br>
+        <a id="T3display" class="showhide" href="javascript:show_hide('T3');">
+          Show T<span class="textsub">3</span> input
+        </a><br>
         <div id="T3input" class="interface-input-options">
           <a class="img-input" href="javascript:addInput('T3-Oral');">
             <img src="img/pill1.png" alt="T3 Pill Input" />
@@ -201,7 +211,9 @@
         <!-- T3 input end -->
         <br>
         <!-- T4 input div -->
-        <a id="T4display" class="showhide" href="javascript:show_hide('T4');">Show T4 input</a><br>
+        <a id="T4display" class="showhide" href="javascript:show_hide('T4');">
+          Show T<span class="textsub">4</span> input
+        </a><br>
         <div id="T4input" class="interface-input-options">
           <a class="img-input" href="javascript:addInput('T4-Oral');">
             <img src="img/pill2.png" alt="T4 Pill Input" />
@@ -265,7 +277,7 @@
 
     <!-- T4 Secretion -->
     <div class="adjuster" onmouseover="hilite('1');" onmouseout="lolite('1');">
-      T4 Secretion (0-200%):
+      T<span class="textsub">4</span> Secretion (0-200%):
       <input type="text" size="3" id="dialinput1" name="dialinput1">%
       <div id="slidercontainer1" class="slidercontainer">
         <div id="slider1"></div>
@@ -275,7 +287,7 @@
 
     <!-- T4 Absorption -->
     <div class="adjuster" onmouseover="hilite('2');" onmouseout="lolite('2');">
-      T4 Absorption (0-100%):
+      T<span class="textsub">4</span> Absorption (0-100%):
       <input type="text" size="3" id="dialinput2" name="dialinput2">%
       <div id="slidercontainer2" class="slidercontainer">
         <div id="slider2"></div>
@@ -285,7 +297,7 @@
 
     <!-- T3 Secretion -->
     <div class="adjuster" onmouseover="hilite('3');" onmouseout="lolite('3');">
-      T3 Secretion (0-200%):
+      T<span class="textsub">3</span> Secretion (0-200%):
       <input type="text" size="3" id="dialinput3" name="dialinput3">%
       <div id="slidercontainer3" class="slidercontainer">
         <div id="slider3"></div>
@@ -295,7 +307,7 @@
 
     <!-- T3 Absorption -->
     <div class="adjuster" onmouseover="hilite('4');" onmouseout="lolite('4');">
-      T3 Absorption (0-100%):
+      T<span class="textsub">3</span> Absorption (0-100%):
       <input type="text" size="3" id="dialinput4" name="dialinput4">%
       <div id="slidercontainer4" class="slidercontainer">
         <div id="slider4"></div>
@@ -359,6 +371,7 @@
       <a target="_blank" href="http://online.liebertpub.com/doi/abs/10.1089/thy.2009.0349">4. Eisenberg et al., 2010</a>
       <br>
       <a target="_blank" href="http://online.liebertpub.com/doi/abs/10.1089/thy.2011.0355">5. Ben-Shachar et al., 2012</a>
+      <br>
     </div>
   </div>
   <!-- References end -->
