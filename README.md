@@ -6,7 +6,7 @@
 See [INSTALL](https://bitbucket.org/DistefanoLab/thyrosim/src/df70a1e192b6bd13a54a4d2efcdd59669ded8802/INSTALL?at=master).
 
 # **License**
-See [License](https://bitbucket.org/DistefanoLab/thyrosim/src/df70a1e192b6bd13a54a4d2efcdd59669ded8802/License.docx?at=master).
+See [LICENSE](https://bitbucket.org/DistefanoLab/thyrosim/raw/df70a1e192b6bd13a54a4d2efcdd59669ded8802/License.docx).
 
 # **Citation**
 Coming soon.
