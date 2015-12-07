@@ -5,6 +5,9 @@
 # **Installation**
 See [INSTALL](https://bitbucket.org/DistefanoLab/thyrosim/src/df70a1e192b6bd13a54a4d2efcdd59669ded8802/INSTALL?at=master).
 
+# **Disclaimer**
+THYROSIM is intended as an educational and research tool only. Information provided is not a substitute for medical advice and you should contact your doctor regarding any medical conditions or medical questions that you have.
+
 # **License**
 See [LICENSE](https://bitbucket.org/DistefanoLab/thyrosim/raw/df70a1e192b6bd13a54a4d2efcdd59669ded8802/License.docx).
 
