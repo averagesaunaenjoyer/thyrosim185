@@ -13,14 +13,22 @@ use warnings;
 use CGI qw/:standard/;
 use JSON::Syck; # Convert between JSON and Perl objects
 
-# Set document root at compile time
+# Set document root and folder root at compile time
+my @S_NAME;
+my $F_ROOT;
 BEGIN {
+
+    # Folder root
+    @S_NAME = split(/\//, $ENV{'SCRIPT_NAME'});
+    $F_ROOT = $S_NAME[1];
+
+    # Document root
     if(!$ENV{'DOCUMENT_ROOT'}) {
         $ENV{'DOCUMENT_ROOT'} = '/home/simon/www';
     }
 }
 
-use lib $ENV{'DOCUMENT_ROOT'}."/thyrosim/pm";
+use lib $ENV{'DOCUMENT_ROOT'}."/$F_ROOT/pm";
 use THYROSIM;
 
 # Testing/Debug
@@ -96,8 +104,8 @@ if ($DEBUG == 5) {
 $thsim->processInputs(\$inputs);
 
 # Define command root
-my $command = "octave -q ".$ENV{'DOCUMENT_ROOT'}."/thyrosim/octave/thyrosim.m";
-my $getinit = "octave -q ".$ENV{'DOCUMENT_ROOT'}."/thyrosim/octave/getinit.m";
+my $command = "octave -q ".$ENV{'DOCUMENT_ROOT'}."/$F_ROOT/octave/thyrosim.m";
+my $getinit = "octave -q ".$ENV{'DOCUMENT_ROOT'}."/$F_ROOT/octave/getinit.m";
 
 #--------------------------------------------------
 # Perform 0th integration or skip it if the end value is already known.
