@@ -12,6 +12,7 @@ use strict;
 use warnings;
 use CGI qw/:standard/;
 use JSON::Syck; # Convert between JSON and Perl objects
+use Data::Dumper;
 
 # Set document root and folder root at compile time
 my @S_NAME;
@@ -39,67 +40,16 @@ my $cgi = new CGI;
 
 # Create thsim object
 # TODO adultChild value to be derived from browser at some point
-my $thsim = THYROSIM->new('adultChild' => 1);
-
-# Set the results to send to the browser.
-my $toShow = {
-    't'   => 1,
-    'q1'  => 1,
-    'q4'  => 1,
-    'q7'  => 1
-};
-
-$thsim->setLvl1('toShow',$toShow);
+my $thsim = THYROSIM->new('adultChild' => 1,
+                          'toShow'     => 'default');
 
 # Process inputs
-my $inputs;
-if (!$DEBUG) {
-    $inputs = $cgi->param('data'); # Inputs are passed as 1 string
-}
+my $inputs = $cgi->param('data'); # Inputs are passed as 1 string
 
-if ($DEBUG == 1) {
-    $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
-            . '&simtime=5'
-            . '&type-1=1&hormone-1=4&disabled-1=0&dose-1=1'
-            .  '&int-1=1&start-1=1&end-1=2'
-            . '&type-2=2&hormone-2=4&disabled-2=0&dose-2=2&start-2=2'
-            . '&type-3=3&hormone-3=4&disabled-3=0&dose-3=3&start-3=3'
-            .  '&end-3=4'
-            . '&type-4=1&hormone-4=4&disabled-4=0&dose-4=4'
-            .  '&singledose-4=1&start-4=4';
-}
-
-# Oral 400 mg T4 repeating dose day 1 to 5
-if ($DEBUG == 2) {
-    $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
-            . '&simtime=5'
-            . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=400&int-1=1'
-            .  '&start-1=1&end-1=5';
-}
-
-# Single 400 mg T4 dose
-if ($DEBUG == 3) {
-    $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
-            . '&simtime=3'
-            . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=400'
-            .  '&singledose-1=1&start-1=1';
-}
-
-# No inputs
-if ($DEBUG == 4) {
-    $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
-            . '&simtime=1';
-}
-
-# 2 infusion inputs
-if ($DEBUG == 5) {
-    $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
-            . '&simtime=5'
-            . '&hormone-1=4&type-1=3&disabled-1=0&dose-1=400'
-            .  '&start-1=1&end-1=4'
-            . '&hormone-2=4&type-2=3&disabled-2=0&dose-2=400'
-            .  '&start-2=2&end-2=6';
-}
+# For testing, can use a custom input. See $thsim->customInput().
+#--------------------------------------------------
+# $inputs = $thsim->customInput("3");
+#-------------------------------------------------- 
 
 $thsim->processInputs(\$inputs);
 
@@ -149,6 +99,15 @@ foreach my $count (@$counts) {
 
 # Post process to create the JSON object
 my $JSONObj = $thsim->postProcess();
+
+# Print to log file.
+# Make sure to set toShow to 'all' if you want non-standard compartments.
+#--------------------------------------------------
+# my $log = $ENV{'DOCUMENT_ROOT'}."/$F_ROOT/tmp/log";
+# open my $fh, '>', $log;
+# $thsim->printLog($fh,"t","q1","q4","q7");
+# close $fh;
+#-------------------------------------------------- 
 
 # Convert to JSON and print to browser
 print "content-type:text/html\n\n";

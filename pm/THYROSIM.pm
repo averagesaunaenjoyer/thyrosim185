@@ -27,32 +27,35 @@ sub new {
                           ? $params{'adultChild'} 
                           : 1;
 
-    # SS values, calculated using Marisa's IC, running for 1008 hours,
-    # and taking final values.
-    # See fullmodelV2.m
-#--------------------------------------------------
-#     $self->{'ICKey'}->{'1000088010000880'}->{1}     = 0.32211503553749;
-#     $self->{'ICKey'}->{'1000088010000880'}->{2}     = 0.20129760792015;
-#     $self->{'ICKey'}->{'1000088010000880'}->{3}     = 0.63896956238422;
-#     $self->{'ICKey'}->{'1000088010000880'}->{4}     = 0.00563704586667;
-#     $self->{'ICKey'}->{'1000088010000880'}->{5}     = 0.01222846569077;
-#     $self->{'ICKey'}->{'1000088010000880'}->{6}     = 0.06533441744367;
-#     $self->{'ICKey'}->{'1000088010000880'}->{7}     = 1.78828690438010;
-#     $self->{'ICKey'}->{'1000088010000880'}->{8}     = 7.05857005668430;
-#     $self->{'ICKey'}->{'1000088010000880'}->{9}     = 7.05694991894698;
-#     $self->{'ICKey'}->{'1000088010000880'}->{10}    = 0;
-#     $self->{'ICKey'}->{'1000088010000880'}->{11}    = 0;
-#     $self->{'ICKey'}->{'1000088010000880'}->{12}    = 0;
-#     $self->{'ICKey'}->{'1000088010000880'}->{13}    = 0;
-#     $self->{'ICKey'}->{'1000088010000880'}->{14}    = 3.34289826438784;
-#     $self->{'ICKey'}->{'1000088010000880'}->{15}    = 3.69277254249145;
-#     $self->{'ICKey'}->{'1000088010000880'}->{16}    = 3.87942103614693;
-#     $self->{'ICKey'}->{'1000088010000880'}->{17}    = 3.90061836747638;
-#     $self->{'ICKey'}->{'1000088010000880'}->{18}    = 3.77875640793801;
-#     $self->{'ICKey'}->{'1000088010000880'}->{19}    = 3.55364361682626;
-#-------------------------------------------------- 
+    # Set which results to send to the browser.
+    # By default, toShow is t, q1, q4, and q7.
+    $self->{'toShow'}->{'t'}  = 1;
+    $self->{'toShow'}->{'q1'} = 1;
+    $self->{'toShow'}->{'q4'} = 1;
+    $self->{'toShow'}->{'q7'} = 1;
 
-    # Trying out Lu Chen's IC
+    # Can additionally set all compartments to toShow
+    if ($params{'toShow'} eq "all") {
+        $self->{'toShow'}->{'q2'}  = 1;
+        $self->{'toShow'}->{'q3'}  = 1;
+        $self->{'toShow'}->{'q5'}  = 1;
+        $self->{'toShow'}->{'q6'}  = 1;
+        $self->{'toShow'}->{'q8'}  = 1;
+        $self->{'toShow'}->{'q9'}  = 1;
+        $self->{'toShow'}->{'q10'} = 1;
+        $self->{'toShow'}->{'q11'} = 1;
+        $self->{'toShow'}->{'q12'} = 1;
+        $self->{'toShow'}->{'q13'} = 1;
+        $self->{'toShow'}->{'q14'} = 1;
+        $self->{'toShow'}->{'q15'} = 1;
+        $self->{'toShow'}->{'q16'} = 1;
+        $self->{'toShow'}->{'q17'} = 1;
+        $self->{'toShow'}->{'q18'} = 1;
+        $self->{'toShow'}->{'q19'} = 1;
+    }
+
+    # SS values, calculated by Lu Chen using Marisa's IC.
+    # Ran for 1008 hours and taking final values.
     $self->{'ICKey'}->{'1000088010000880'}->{1}     = 0.322114215761171;
     $self->{'ICKey'}->{'1000088010000880'}->{2}     = 0.201296960359917;
     $self->{'ICKey'}->{'1000088010000880'}->{3}     = 0.638967411907560;
@@ -597,6 +600,9 @@ sub postProcess {
         }
     }
 
+    # Save a copy
+    $self->{JSONObj} = $retObj;
+
     return $retObj;
 }
 
@@ -956,6 +962,85 @@ sub hasICKey {
 sub recalcIC {
     my ($self) = @_;
     return $self->{'recalcIC'} ? 1 : 0;
+}
+
+#====================================================================
+# SUBROUTINE:   customInput
+# DESCRIPTION:
+#   Returns a preset custom input string.
+#====================================================================
+sub customInput {
+    my ($self,$num) = @_;
+    my $inputs;
+
+# All 3 types of input at low doses
+if ($num == 1) {
+    $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
+            . '&simtime=5'
+            . '&type-1=1&hormone-1=4&disabled-1=0&dose-1=1'
+            .  '&int-1=1&start-1=1&end-1=2'
+            . '&type-2=2&hormone-2=4&disabled-2=0&dose-2=2&start-2=2'
+            . '&type-3=3&hormone-3=4&disabled-3=0&dose-3=3&start-3=3'
+            .  '&end-3=4'
+            . '&type-4=1&hormone-4=4&disabled-4=0&dose-4=4'
+            .  '&singledose-4=1&start-4=4';
+}
+
+# Oral 400 mg T4 repeating dose day 1 to 5
+if ($num == 2) {
+    $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
+            . '&simtime=5'
+            . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=400&int-1=1'
+            .  '&start-1=1&end-1=5';
+}
+
+# Single 400 mg T4 dose
+if ($num == 3) {
+    $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
+            . '&simtime=3'
+            . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=400'
+            .  '&singledose-1=1&start-1=1';
+}
+
+# No inputs
+if ($num == 4) {
+    $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
+            . '&simtime=1';
+}
+
+# 2 infusion inputs
+if ($num == 5) {
+    $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
+            . '&simtime=5'
+            . '&hormone-1=4&type-1=3&disabled-1=0&dose-1=400'
+            .  '&start-1=1&end-1=4'
+            . '&hormone-2=4&type-2=3&disabled-2=0&dose-2=400'
+            .  '&start-2=2&end-2=6';
+}
+    return $inputs;
+}
+
+#====================================================================
+# SUBROUTINE:   printLog
+# DESCRIPTION:
+#   Given a file handle and list of compartments, print all data to log.
+#====================================================================
+sub printLog {
+    my ($self,$fh,@comps) = @_;
+
+    my $JSONObj = $self->{JSONObj};
+
+    # Headers
+    print $fh join(";",@comps)."\n";
+
+    for (my $i=0; $i<=$#{$JSONObj->{data}->{t}->{values}}; $i++) {
+        my @rowData;
+        foreach my $comp (@comps) {
+            my $value = $JSONObj->{data}->{$comp}->{values}->[$i];
+            push(@rowData,$value);
+        }
+        print $fh join(";",@rowData)."\n";
+    }
 }
 
 #====================================================================
