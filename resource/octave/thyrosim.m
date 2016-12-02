@@ -15,6 +15,8 @@
 % Clean workspace
 clc; clear all;
 
+pkg load odepkg;
+
 % Declare global variables
 global ic inf1 inf4 dial tspan kdelay d p;
 
