@@ -1,6 +1,13 @@
-Instructions for compiling your own .class files:
+Instructions
+------------
+The .class files that came with the repository may not work on your machine,
+depending on the version you have. Below are instructions for compiling your
+own .class files:
 
 1. Compile Thyrosim.java and Getinit.java while including .jar file:
 javac -classpath commons-math3-3.6.1.jar File.java
+
+If the command javac is not found, you need to install a suitable JDK for your
+distribution.
 
 2. Put .class files in edu/ucla/distefanolab/thyrosim/algorithm/
