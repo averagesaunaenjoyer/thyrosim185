@@ -13,6 +13,8 @@
 % Clear previous variables, if any
 clc; clear all;
 
+pkg load odepkg;
+
 % Process argument list
 arg_list = argv();
 IC1   = str2num(arg_list{1});

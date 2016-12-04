@@ -11,8 +11,8 @@
 use strict;
 use warnings;
 use CGI qw/:standard/;
-use JSON::Syck; # Convert between JSON and Perl objects
 use Data::Dumper;
+use JSON::Syck; # Convert between JSON and Perl objects
 
 # Set document root and folder root at compile time
 my @S_NAME;
@@ -32,16 +32,16 @@ BEGIN {
 use lib $ENV{'DOCUMENT_ROOT'}."/$F_ROOT/pm";
 use THYROSIM;
 
-# Testing/Debug
-my $DEBUG = 0; # See below for what DEBUG does. Default: 0
-
 # New CGI object
 my $cgi = new CGI;
 
 # Create thsim object
 # TODO adultChild value to be derived from browser at some point
-my $thsim = THYROSIM->new('adultChild' => 1,
-                          'toShow'     => 'default');
+my $thsim = THYROSIM->new('adultChild'  => 1,
+                          'toShow'      => 'default',
+                          'docRoot'     => $ENV{'DOCUMENT_ROOT'},
+                          'fRoot'       => $F_ROOT);
+$thsim->getCommand();
 
 # Process inputs
 my $inputs = $cgi->param('data'); # Inputs are passed as 1 string
@@ -53,9 +53,9 @@ my $inputs = $cgi->param('data'); # Inputs are passed as 1 string
 
 $thsim->processInputs(\$inputs);
 
-# Define command root
-my $command = "octave -q ".$ENV{'DOCUMENT_ROOT'}."/$F_ROOT/octave/thyrosim.m";
-my $getinit = "octave -q ".$ENV{'DOCUMENT_ROOT'}."/$F_ROOT/octave/getinit.m";
+# Define command. Currently using Java ODE solver.
+my $command = $thsim->getCommand("java");
+my $getinit = $thsim->getCommand("java","getinit");
 
 #--------------------------------------------------
 # Perform 0th integration or skip it if the end value is already known.

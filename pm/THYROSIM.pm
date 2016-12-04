@@ -54,6 +54,10 @@ sub new {
         $self->{'toShow'}->{'q19'} = 1;
     }
 
+    # Set document root and file root
+    $self->{'docRoot'}  = $params{'docRoot'};
+    $self->{'fRoot'}    = $params{'fRoot'};
+
     # SS values, calculated by Lu Chen using Marisa's IC.
     # Ran for 1008 hours and taking final values.
     $self->{'ICKey'}->{'1000088010000880'}->{1}     = 0.322114215761171;
@@ -1041,6 +1045,43 @@ sub printLog {
         }
         print $fh join(";",@rowData)."\n";
     }
+}
+
+#====================================================================
+# SUBROUTINE:   getCommand
+# DESCRIPTION:
+#   Given ODE solver type, return the command line argument.
+#   1. $solver can be "octave" or "java".
+#   2. $getinit - optional arg for the getinit file instead.
+#====================================================================
+sub getCommand {
+    my ($self,$solver,$getinit) = @_;
+
+    my $docRoot = $self->{'docRoot'};
+    my $fRoot   = $self->{'fRoot'};
+
+    my $command;
+    if ($solver eq "octave") {
+        $command = "octave -q $docRoot/$fRoot/octave";
+        if ($getinit) {
+            $command .= "/getinit.m";
+        } else {
+            $command .= "/thyrosim.m";
+        }
+    }
+
+    if ($solver eq "java") {
+        $command = "java -cp .:$docRoot/$fRoot/java/commons-math3-3.6.1.jar:"
+                 . "$docRoot/$fRoot/java/ "
+                 . "edu.ucla.distefanolab.thyrosim.algorithm.";
+        if ($getinit) {
+            $command .= "Getinit";
+        } else {
+            $command .= "Thyrosim";
+        }
+    }
+
+    return $command;
 }
 
 #====================================================================
