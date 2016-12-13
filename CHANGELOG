@@ -1,4 +1,8 @@
 Change log
+2016-12-12
+1. Updated version number
+2. Switched default solver to Java ODE solver
+
 2016-12-04
 1. Added Java ODE solver
 
