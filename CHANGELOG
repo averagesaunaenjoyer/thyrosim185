@@ -1,4 +1,7 @@
 Change log
+2017-03-28
+1. Added stand alone Matlab m file for repeated oral dosing
+
 2016-12-12
 1. Updated version number
 2. Switched default solver to Java ODE solver
