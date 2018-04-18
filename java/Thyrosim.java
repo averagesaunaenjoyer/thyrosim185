@@ -185,6 +185,8 @@ qDot[18] = kdelay*(q[17] -q[18]);                               // delay6
         double[] q18 = new double[t2 - t1 + 1];
         double[] q19 = new double[t2 - t1 + 1];
         double[] ts  = new double[t2 - t1 + 1];
+        double[] q1f = new double[t2 - t1 + 1];
+        double[] q4f = new double[t2 - t1 + 1];
         for (int i = t1; i <= t2; i++) {
             q1[i]  = q[0];
             q2[i]  = q[1];
@@ -206,6 +208,11 @@ qDot[18] = kdelay*(q[17] -q[18]);                               // delay6
             q18[i] = q[17];
             q19[i] = q[18];
             ts[i]  = i;
+
+            // Copy/paste equations from computeDerivatives
+            q4f[i] = (ode.p7 +ode.p8 *q[0]+ode.p9 *Math.pow(q[0],2)+ode.p10*Math.pow(q[0],3))*q[0]; // FT4p
+            q1f[i] = (ode.p24+ode.p25*q[0]+ode.p26*Math.pow(q[0],2)+ode.p27*Math.pow(q[0],3))*q[3]; // FT3p
+
             integrator.integrate(ode,i,q,i+1,q);
         }
 
@@ -288,6 +295,14 @@ qDot[18] = kdelay*(q[17] -q[18]);                               // delay6
         System.out.println("START_t_START");
         printArray(ts);
         System.out.println("END_t_END");
+
+        System.out.println("START_q4f_START");
+        printArray(q4f);
+        System.out.println("END_q4f_END");
+
+        System.out.println("START_q1f_START");
+        printArray(q1f);
+        System.out.println("END_q1f_END");
 
     }
 

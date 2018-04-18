@@ -20,12 +20,12 @@ my $F_ROOT;
 BEGIN {
 
     # Folder root
-    @S_NAME = split(/\//, $ENV{'SCRIPT_NAME'});
+    @S_NAME = split(/\//, $ENV{SCRIPT_NAME});
     $F_ROOT = $S_NAME[1];
 
     # Document root
-    if(!$ENV{'DOCUMENT_ROOT'}) {
-        $ENV{'DOCUMENT_ROOT'} = '/home/simon/www';
+    if(!$ENV{DOCUMENT_ROOT}) {
+        $ENV{DOCUMENT_ROOT} = '/home/simon/www';
     }
 }
 
@@ -37,10 +37,10 @@ my $cgi = new CGI;
 
 # Create thsim object
 # TODO adultChild value to be derived from browser at some point
-my $thsim = THYROSIM->new('adultChild'  => 1,
-                          'toShow'      => 'default',
-                          'docRoot'     => $ENV{'DOCUMENT_ROOT'},
-                          'fRoot'       => $F_ROOT);
+my $thsim = THYROSIM->new(adultChild => 1,
+                          toShow     => 'default',
+                          docRoot    => $ENV{DOCUMENT_ROOT},
+                          fRoot      => $F_ROOT);
 $thsim->getCommand();
 
 # Process inputs
@@ -103,9 +103,10 @@ my $JSONObj = $thsim->postProcess();
 # Print to log file.
 # Make sure to set toShow to 'all' if you want non-standard compartments.
 #--------------------------------------------------
-# my $log = $ENV{'DOCUMENT_ROOT'}."/$F_ROOT/tmp/log";
+# my $log = $ENV{DOCUMENT_ROOT}."/$F_ROOT/tmp/log";
 # open my $fh, '>', $log;
-# $thsim->printLog($fh,"t","q1","q4","q7");
+# say $fh Dumper($thsim->{data}->{q1f}->{values});
+# $thsim->printLog($fh,"t","q1","q4","q7","q1f","q4f");
 # close $fh;
 #-------------------------------------------------- 
 
