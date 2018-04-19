@@ -34,8 +34,8 @@ sub new {
     $self->{toShow}->{q1}  = 1;
     $self->{toShow}->{q4}  = 1;
     $self->{toShow}->{q7}  = 1;
-    $self->{toShow}->{q1f} = 1;
-    $self->{toShow}->{q4f} = 1;
+    $self->{toShow}->{ft4} = 1; # FT4p values
+    $self->{toShow}->{ft3} = 1; # FT3p values
 
     # Can additionally set all compartments to toShow
     if ($params{toShow} eq "all") {
@@ -307,7 +307,7 @@ sub detIntSteps {
     # Initialize inputTime 0. If there is an input at t=0, this initialization
     # will not do anything. If there isn't one, this serves as a placeholder
     # for determining intergration intervals.
-    $self->{'inputTime'}->{0}->{0} = "start";
+    $self->{inputTime}->{0}->{0} = "start";
 
     foreach my $inputNum (keys %$inputs) {
         my $thisInput = $inputs->{$inputNum}; # Save typing
@@ -455,6 +455,8 @@ sub setEVasIC {
     my $comp = $compData->{name};
     $comp =~ s/q//;
     return 1 if $comp eq "t";
+    return 1 if $comp eq "ft4";
+    return 1 if $comp eq "ft3";
 
     # Copy end values from $iter over
     $self->{IC}->{'q'.$nextIter}->{$comp} = $compData->{end}->{$comp};
@@ -567,8 +569,8 @@ sub postProcess {
     $convObj->{q1}  = 777/$p47; # T4
     $convObj->{q4}  = 651/$p47; # T3
     $convObj->{q7}  = 5.6/$p48; # TSH
-    $convObj->{q1f} = $convObj->{q1}; # T4 free
-    $convObj->{q4f} = $convObj->{q4}; # T3 free
+    $convObj->{ft4} = $convObj->{q1}; # FT4p
+    $convObj->{ft3} = $convObj->{q4}; # FT3p
 
     # TEST
 #--------------------------------------------------

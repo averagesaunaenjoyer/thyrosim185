@@ -8,6 +8,7 @@
 #   2. Sends commands out to the Octave ODE solver
 #   3. Collects results to send back to the browser
 #==============================================================================
+use v5.10;
 use strict;
 use warnings;
 use CGI qw/:standard/;
@@ -105,8 +106,8 @@ my $JSONObj = $thsim->postProcess();
 #--------------------------------------------------
 # my $log = $ENV{DOCUMENT_ROOT}."/$F_ROOT/tmp/log";
 # open my $fh, '>', $log;
-# say $fh Dumper($thsim->{data}->{q1f}->{values});
-# $thsim->printLog($fh,"t","q1","q4","q7","q1f","q4f");
+# say $fh Dumper($thsim->{data}->{ft4}->{values});
+# $thsim->printLog($fh,"t","q1","q4","q7","ft4","ft3");
 # close $fh;
 #-------------------------------------------------- 
 

@@ -90,8 +90,8 @@ public class Thyrosim implements FirstOrderDifferentialEquations
         double q4F, q1F, SR3, SR4, fCIRC, SRTSH, fdegTSH, fLAG, f4, NL;
 
 // Auxillary equations
-q4F = (p24+p25*q[0]+p26*Math.pow(q[0],2)+p27*Math.pow(q[0],3))*q[3]; // FT3p
 q1F = (p7 +p8 *q[0]+p9 *Math.pow(q[0],2)+p10*Math.pow(q[0],3))*q[0]; // FT4p
+q4F = (p24+p25*q[0]+p26*Math.pow(q[0],2)+p27*Math.pow(q[0],3))*q[3]; // FT3p
 SR3 = (p19*q[18])*d3; // Brain delay
 SR4 = (p1 *q[18])*d1; // Brain delay
 fCIRC = 1+(p32/(p31*Math.exp(-q[8]))-1)*(1/(1+Math.exp(10*q[8]-55)));
@@ -185,8 +185,8 @@ qDot[18] = kdelay*(q[17] -q[18]);                               // delay6
         double[] q18 = new double[t2 - t1 + 1];
         double[] q19 = new double[t2 - t1 + 1];
         double[] ts  = new double[t2 - t1 + 1];
-        double[] q1f = new double[t2 - t1 + 1];
-        double[] q4f = new double[t2 - t1 + 1];
+        double[] ft4 = new double[t2 - t1 + 1]; // FT4p values
+        double[] ft3 = new double[t2 - t1 + 1]; // FT3p values
         for (int i = t1; i <= t2; i++) {
             q1[i]  = q[0];
             q2[i]  = q[1];
@@ -210,8 +210,8 @@ qDot[18] = kdelay*(q[17] -q[18]);                               // delay6
             ts[i]  = i;
 
             // Copy/paste equations from computeDerivatives
-            q4f[i] = (ode.p7 +ode.p8 *q[0]+ode.p9 *Math.pow(q[0],2)+ode.p10*Math.pow(q[0],3))*q[0]; // FT4p
-            q1f[i] = (ode.p24+ode.p25*q[0]+ode.p26*Math.pow(q[0],2)+ode.p27*Math.pow(q[0],3))*q[3]; // FT3p
+            ft4[i] = (ode.p7 +ode.p8 *q[0]+ode.p9 *Math.pow(q[0],2)+ode.p10*Math.pow(q[0],3))*q[0]; // FT4p
+            ft3[i] = (ode.p24+ode.p25*q[0]+ode.p26*Math.pow(q[0],2)+ode.p27*Math.pow(q[0],3))*q[3]; // FT3p
 
             integrator.integrate(ode,i,q,i+1,q);
         }
@@ -296,20 +296,20 @@ qDot[18] = kdelay*(q[17] -q[18]);                               // delay6
         printArray(ts);
         System.out.println("END_t_END");
 
-        System.out.println("START_q4f_START");
-        printArray(q4f);
-        System.out.println("END_q4f_END");
+        System.out.println("START_ft4_START");
+        printArray(ft4);
+        System.out.println("END_ft4_END");
 
-        System.out.println("START_q1f_START");
-        printArray(q1f);
-        System.out.println("END_q1f_END");
+        System.out.println("START_ft3_START");
+        printArray(ft3);
+        System.out.println("END_ft3_END");
 
     }
 
-    public static void printArray(double[] q)
+    public static void printArray(double[] arr)
     {
-        for (int i = 0; i < q.length; i++) {
-            System.out.println(q[i]);
+        for (int i = 0; i < arr.length; i++) {
+            System.out.println(arr[i]);
         }
     }
 }
