@@ -569,8 +569,8 @@ sub postProcess {
     $convObj->{q1}  = 777/$p47; # T4
     $convObj->{q4}  = 651/$p47; # T3
     $convObj->{q7}  = 5.6/$p48; # TSH
-    $convObj->{ft4} = $convObj->{q1}; # FT4p
-    $convObj->{ft3} = $convObj->{q4}; # FT3p
+    $convObj->{ft4} = 100 *$convObj->{q1}; # FT4p: ng/dL
+    $convObj->{ft3} = 1000*$convObj->{q4}; # FT3p: pg/mL
 
     # TEST
 #--------------------------------------------------

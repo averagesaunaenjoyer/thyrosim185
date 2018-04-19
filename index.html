@@ -154,8 +154,8 @@
 
     &nbsp;
     Start by clicking
-    "show T<span class="textsub">3</span> input" or
-    "show T<span class="textsub">4</span> input"
+    "Show T<span class="textsub">3</span> input" or
+    "Show T<span class="textsub">4</span> input"
 
 <!----------------------------------------------------
 !       <button type="button" id="thisistemp">TMP</button>
@@ -252,6 +252,9 @@
 
     <!-- Graphs (right-most div) -->
     <div id="content-right">
+      <button type="button" onclick="togFreeHormoneButton();">Toggle Free Hormone Values</button>
+      <div id="FT4graph" class="displaynone"></div>
+      <div id="FT3graph" class="displaynone"></div>
       <div id="T4graph"></div>
       <div id="T3graph"></div>
       <div id="TSHgraph"></div>
@@ -264,7 +267,7 @@
   <div id="content-lower">
     <div class="textaligncenter">
       <a class="img-input" href="javascript:showhidescrollbars();">
-        <img class="textaligntop" id="showhidescrollbar" src="img/plus.png" alt="show scroll bars" />
+        <img class="textaligntop relative scrollbars" id="showhidescrollbar" src="img/plus.png" alt="show scroll bars" />
       </a>
       Adjust secretion/absorption rates:<br>
       <label title="Initial conditions are automatically recalculated when
@@ -322,8 +325,9 @@
   <div id="footer">
     <div class="textaligncenter">
       <label title="Total simulation time must be < 100 days.">
-        Simulation time (days):
-        <input type="text" id="simtime" name="simtime" size="6" value="5">
+        Simulation time:
+        <input type="text" id="simtime" name="simtime" size="1" value="5">
+        days
       </label>
       <br>
       Adjust pill quantity and frequency:

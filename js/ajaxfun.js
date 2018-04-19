@@ -67,18 +67,24 @@ function graphthis() {
 
     // Create hormone objects
     // Hormone, Compartment, Unit Label, Lower & Upper normal range
-    var T4  = new Hormone("T4" ,"q1","\u03BCg/L","45","105");
-    var T3  = new Hormone("T3" ,"q4","\u03BCg/L",".6","1.8");
-    var TSH = new Hormone("TSH","q7","mU/L"     ,".4","4"  );
+    var FT4 = new Hormone("FT4","ft4","ng/dL"    ,"0.8","1.8");
+    var FT3 = new Hormone("FT3","ft3","pg/mL"    ,"2.3","4.2");
+    var T4  = new Hormone("T4" ,"q1" ,"\u03BCg/L","45" ,"105");
+    var T3  = new Hormone("T3" ,"q4" ,"\u03BCg/L",".6" ,"1.8");
+    var TSH = new Hormone("TSH","q7" ,"mU/L"     ,".4" ,"4"  );
 
     // Need to initialize the graph?
     if (responseObjObj.initGraph) {
+        graph(FT4,"" ,"1");
+        graph(FT3,"" ,"1");
         graph(T4 ,"" ,"1");
         graph(T3 ,"" ,"1");
         graph(TSH,"1","1");
         responseObjObj.initGraph = false;
     // Plot the graph
     } else {
+        graph(FT4,"" );
+        graph(FT3,"" );
         graph(T4 ,"" );
         graph(T3 ,"" );
         graph(TSH,"1");
@@ -99,7 +105,7 @@ function graph(hormoneObj,addlabel,initgraph) {
 
     // Graph size
     var w = 350; // width in pixels of the graph
-    var h = 120; // height in pixels of the graph
+    var h = 130; // height in pixels of the graph
 
     // Scales
     var xVal = responseObjObj.getXVal(comp);
@@ -548,13 +554,17 @@ function getResponseObjObj() {
     this.getYVal = getYVal;
     function getYVal(comp) {
         // Minimum Y values
-        var q1min = 110; // Rounds to 120
-        var q4min = 1;   // Rounds to 2
-        var q7min = 4;   // Rounds to 5
+        var ft4min = 3;   // Rounds to 4
+        var ft3min = 6;   // Rounds to 7
+        var q1min  = 110; // Rounds to 120
+        var q4min  = 1;   // Rounds to 2
+        var q7min  = 4;   // Rounds to 5
         var maxY = 0;
-        if (comp == "q1") {maxY = q1min;}
-        if (comp == "q4") {maxY = q4min;}
-        if (comp == "q7") {maxY = q7min;}
+        if (comp == "ft4") {maxY = ft4min;}
+        if (comp == "ft3") {maxY = ft3min;}
+        if (comp == "q1")  {maxY = q1min; }
+        if (comp == "q4")  {maxY = q4min; }
+        if (comp == "q7")  {maxY = q7min; }
 
         $.each(colors,function(idx,type) {
             if (checkObjTypeExist(type)) {

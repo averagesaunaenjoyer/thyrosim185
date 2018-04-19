@@ -38,6 +38,7 @@ html * {
 *--------------------------------------------------*/
 #interactive-interface {
   width: 450px;
+  height: 500px;
   padding: 10px;
 }
 #content div {
@@ -53,7 +54,7 @@ html * {
   padding: 10px;
   margin-left: 10px;
   width: 396px;
-  height: 437px;
+  height: 500px;
 }
 #content-right div {
   border-collapse: collapse;
@@ -95,9 +96,10 @@ a.header-buttons-link:link {
   padding: 10px;
   margin-left: 10px;
   width: 374px;
-  height: 415px;
+  height: 478px;
   background-image: url("../img/sim.png");
   background-repeat: no-repeat;
+  background-position: 50% 30%;
   border: 1px dashed #bbb;
 }
 /* Container for images */
@@ -167,6 +169,9 @@ a.header-buttons-link:link {
 }
 .textaligncenter {
   text-align: center;
+}
+.scrollbars {
+  top: -4px;
 }
 /* This section deals with footer and what's in it */
 #footer {

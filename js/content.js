@@ -561,3 +561,20 @@ function clickInfoButton(id) {
         $('#link-'+id).addClass('color-white');
     }
 }
+
+//--------------------------------------------------
+// Function to toggle free hormone graph divs
+//--------------------------------------------------
+function togFreeHormoneButton() {
+    if ($('#FT4graph').hasClass('displaynone')) {
+        $('#FT4graph').removeClass('displaynone');
+        $('#FT3graph').removeClass('displaynone');
+        $('#T4graph').addClass('displaynone');
+        $('#T3graph').addClass('displaynone');
+    } else {
+        $('#FT4graph').addClass('displaynone');
+        $('#FT3graph').addClass('displaynone');
+        $('#T4graph').removeClass('displaynone');
+        $('#T3graph').removeClass('displaynone');
+    }
+}
