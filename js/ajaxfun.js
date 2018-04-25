@@ -67,8 +67,8 @@ function graphthis() {
 
     // Create hormone objects
     // Hormone, Compartment, Unit Label, Lower & Upper normal range
-    var FT4 = new Hormone("FT4","ft4","ng/dL"    ,"0.8","1.8");
-    var FT3 = new Hormone("FT3","ft3","pg/mL"    ,"2.3","4.2");
+    var FT4 = new Hormone("FT4","ft4","ng/L"     ,"8"  ,"17");
+    var FT3 = new Hormone("FT3","ft3","ng/L"     ,"2.2","4.4");
     var T4  = new Hormone("T4" ,"q1" ,"\u03BCg/L","45" ,"105");
     var T3  = new Hormone("T3" ,"q4" ,"\u03BCg/L",".6" ,"1.8");
     var TSH = new Hormone("TSH","q7" ,"mU/L"     ,".4" ,"4"  );
@@ -554,8 +554,8 @@ function getResponseObjObj() {
     this.getYVal = getYVal;
     function getYVal(comp) {
         // Minimum Y values
-        var ft4min = 3;   // Rounds to 4
-        var ft3min = 6;   // Rounds to 7
+        var ft4min = 17;  // Rounds to 18
+        var ft3min = 4;   // Rounds to 5
         var q1min  = 110; // Rounds to 120
         var q4min  = 1;   // Rounds to 2
         var q7min  = 4;   // Rounds to 5
