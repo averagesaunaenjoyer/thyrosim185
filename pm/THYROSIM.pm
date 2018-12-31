@@ -569,8 +569,9 @@ sub postProcess {
     $convObj->{q1}  = 777/$p47; # T4
     $convObj->{q4}  = 651/$p47; # T3
     $convObj->{q7}  = 5.6/$p48; # TSH
-    $convObj->{ft4} = 1000*$convObj->{q1}; # FT4p: ng/L
-    $convObj->{ft3} = 1000*$convObj->{q4}; # FT3p: ng/L
+    $convObj->{ft4} = 0.45*1000*$convObj->{q1}; # FT4p: ng/L
+    $convObj->{ft3} = 0.50*1000*$convObj->{q4}; # FT3p: ng/L
+    # The 0.45 and 0.50 are factors to correct for free hormone values.
 
     # TEST
 #--------------------------------------------------
