@@ -36,12 +36,12 @@ use THYROSIM;
 # New CGI object
 my $cgi = new CGI;
 
-# Create thsim object
-# TODO adultChild value to be derived from browser at some point
-my $thsim = THYROSIM->new(adultChild => 1,
-                          toShow     => 'default',
-                          docRoot    => $ENV{DOCUMENT_ROOT},
-                          fRoot      => $F_ROOT);
+# Create THYROSIM object
+# TODO make jr a parameter from the website
+my $thsim = THYROSIM->new(toShow  => 'default',
+                          docRoot => $ENV{DOCUMENT_ROOT},
+                          fRoot   => $F_ROOT,
+                          jr      => 0);
 $thsim->getCommand();
 
 # Process inputs

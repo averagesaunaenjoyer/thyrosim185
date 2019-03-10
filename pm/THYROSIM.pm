@@ -15,21 +15,18 @@ package THYROSIM;
 # SUBROUTINE:   new
 # DESCRIPTION:
 #   Returns an object of THYROSIM.
-#   TODO:
-#   1.  Make adultChild something passed into new. new will load the correct
-#       set of parameters based on adultChild, probably in another function.
+#   TODO - populate the following based on child or adult:
+#   1. ICKey (steady state values)
 #====================================================================
 sub new {
     my ($class,%params) = @_;
     my $self;
 
-    # 1 for adult, 0 for child, default adult
-    $self->{adultChild} = $params{adultChild}
-                        ? $params{adultChild} 
-                        : 1;
+    # 0 for adult, 1 for jr (child), default adult
+    $self->{jr} = $params{jr} ? $params{jr} : 0;
 
     # Set which results to send to the browser.
-    # By default, toShow is t, q1, q4, and q7.
+    # By default, toShow is t, q1, q4, q7, ft4, and ft3.
     $self->{toShow}->{t}   = 1;
     $self->{toShow}->{q1}  = 1;
     $self->{toShow}->{q4}  = 1;
@@ -55,6 +52,8 @@ sub new {
         $self->{toShow}->{q17} = 1;
         $self->{toShow}->{q18} = 1;
         $self->{toShow}->{q19} = 1;
+        $self->{toShow}->{ft4} = 1;
+        $self->{toShow}->{ft3} = 1;
     }
 
     # Set document root and file root
@@ -107,13 +106,6 @@ sub new {
     # Default simulation time (days)
     $self->{simTime} = 5;
 
-    # Conversion factor of T3, T4, and TSH from mcg/dL to mols
-    $self->{CF}->{'3'}   = 651/3;
-    $self->{CF}->{'4'}   = 777/30;
-    $self->{CF}->{'T3'}  = 651/3;
-    $self->{CF}->{'T4'}  = 777/30;
-    $self->{CF}->{'TSH'} = 5.6/3.5;
-
     # Molecular weight of T3&T4. Used as conversion factor from mcg to mols
     $self->{toMols}->{'3'}  = 651;
     $self->{toMols}->{'4'}  = 777;
@@ -131,6 +123,9 @@ sub new {
 
     # Load parameter list. Currently doesn't do anything.
     $self->loadParams();
+
+    # Load conversion factors.
+    $self->loadConversionFactors();
 
     # Build $self->{IC}->{q0}. Only needed when recalculating IC.
     $self->setInitialIC();
@@ -405,12 +400,42 @@ sub detIntSteps {
 #====================================================================
 # SUBROUTINE:   loadParams
 # DESCRIPTION:
-#   Loads a list of adult/child parameters based on "adultChild".
+#   Loads a list of adult/child parameters.
 #   TODO:
 # NOTE: Currently does nothing.
 #====================================================================
 sub loadParams {
     my ($self) = @_;
+}
+
+#====================================================================
+# SUBROUTINE:   loadConversionFactors
+# DESCRIPTION:
+#   Load conversion factors.
+#
+#   Conversion factors of T3, T4, and TSH from mcg/dL to mols.
+#====================================================================
+sub loadConversionFactors {
+    my ($self) = @_;
+
+    my $p47; # Plasma volume (L)
+    my $p48; # TSH volume (L)
+    my $ft4 = 0.45; # Temp conversion factor for free T4
+    my $ft3 = 0.50; # Temp conversion factor for free T3
+
+    if ($self->{jr}) {
+        $p47  = 1;
+        $p48  = 2.5;
+    } else {
+        $p47 = 3.2;
+        $p48 = 5.2;
+    }
+
+    $self->{CF}->{T4}  = 777/$p47; # mcg/L
+    $self->{CF}->{T3}  = 651/$p47; # mcg/L
+    $self->{CF}->{TSH} = 5.6/$p48; # mU/L
+    $self->{CF}->{FT4} = $ft4 * 1000 * $self->{CF}->{T4}; # ng/L
+    $self->{CF}->{FT3} = $ft3 * 1000 * $self->{CF}->{T3}; # ng/L
 }
 
 #====================================================================
@@ -562,16 +587,13 @@ sub postProcess {
     # Copy simTime over
     $retObj->{simTime} = $self->getLvl1('simTime');
 
-    # For now, save conv factors here:
+    # Copy conversion factors over
     my $convObj;
-    my $p47 = 3.2;
-    my $p48 = 5.2;
-    $convObj->{q1}  = 777/$p47; # T4
-    $convObj->{q4}  = 651/$p47; # T3
-    $convObj->{q7}  = 5.6/$p48; # TSH
-    $convObj->{ft4} = 0.45*1000*$convObj->{q1}; # FT4p: ng/L
-    $convObj->{ft3} = 0.50*1000*$convObj->{q4}; # FT3p: ng/L
-    # The 0.45 and 0.50 are factors to correct for free hormone values.
+    $convObj->{q1}  = $self->{CF}->{T4};
+    $convObj->{q4}  = $self->{CF}->{T3};
+    $convObj->{q7}  = $self->{CF}->{TSH};
+    $convObj->{ft4} = $self->{CF}->{FT4};
+    $convObj->{ft3} = $self->{CF}->{FT3};
 
     # TEST
 #--------------------------------------------------
@@ -1067,14 +1089,15 @@ sub getCommand {
 
     my $docRoot = $self->{docRoot};
     my $fRoot   = $self->{fRoot};
+    my $jr      = $self->{jr} ? "Jr" : "";
 
     my $command;
     if ($solver eq "octave") {
         $command = "octave -q $docRoot/$fRoot/octave";
         if ($getinit) {
-            $command .= "/getinit.m";
+            $command .= "/Getinit$jr.m";
         } else {
-            $command .= "/thyrosim.m";
+            $command .= "/Thyrosim$jr.m";
         }
     }
 
@@ -1083,9 +1106,9 @@ sub getCommand {
                  . "$docRoot/$fRoot/java/ "
                  . "edu.ucla.distefanolab.thyrosim.algorithm.";
         if ($getinit) {
-            $command .= "Getinit";
+            $command .= "Getinit$jr";
         } else {
-            $command .= "Thyrosim";
+            $command .= "Thyrosim$jr";
         }
     }
 

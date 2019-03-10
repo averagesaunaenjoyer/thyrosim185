@@ -1,13 +1,13 @@
 %--------------------------------------------------
-% FILE:         getinit.m
+% FILE:         Thyrosim.m
 % AUTHOR:       Simon X. Han
 % DESCRIPTION:
 %   THYROSIM implmentation based on:
 %   All-Condition Thyroid Simulator Eqns 2015-06-29.pdf
 %
-%   This file should be exactly the same as thyrosim.m except for 2 things:
+%   This file should be exactly the same as Getinit.m except for 2 things:
 %   1. vopt
-%   2. Only printing the last value rather than all values
+%   2. Printing all values rather than just the last values
 %-------------------------------------------------- 
 
 % Clear previous variables, if any
@@ -205,7 +205,7 @@ q0 = [IC1;  IC2;  IC3;  IC4;  IC5;  IC6;  IC7;  IC8;  IC9;
       IC10; IC11; IC12; IC13; IC14; IC15; IC16; IC17; IC18; IC19];
 tspan = [t1 t2];
 
-vopt = odeset ('RelTol',1e-2,'AbsTol',1e-2,'InitialStep',1,'MaxStep',100);
+vopt = odeset ('NormControl','on', 'InitialStep',1);
 [t,x]=ode45(@ODEss, tspan, q0, vopt);
 
 % Printing the output for the interface
@@ -213,102 +213,142 @@ vopt = odeset ('RelTol',1e-2,'AbsTol',1e-2,'InitialStep',1,'MaxStep',100);
 
 % T4
 printf("START_q1_START\n");
-printf("%0.6f\n",x(n,1));
+for i = 1:n
+  printf("%0.6f\n",x(i,1));
+end
 printf("END_q1_END\n");
 
 % T3
 printf("START_q4_START\n");
-printf("%0.6f\n",x(n,4));
+for i = 1:n
+  printf("%0.6f\n",x(i,4));
+end
 printf("END_q4_END\n");
 
 % TSH
 printf("START_q7_START\n");
-printf("%0.6f\n",x(n,7));
+for i = 1:n
+  printf("%0.6f\n",x(i,7));
+end
 printf("END_q7_END\n");
 
 % time
 printf("START_t_START\n");
-printf("%0.6f\n",t(n));
+for i = 1:n
+  printf("%0.6f\n",t(i));
+end
 printf("END_t_END\n");
 
 % q2
 printf("START_q2_START\n");
-printf("%0.6f\n",x(n,2));
+for i = 1:n
+  printf("%0.6f\n",x(i,2));
+end
 printf("END_q2_END\n");
 
 % q3
 printf("START_q3_START\n");
-printf("%0.6f\n",x(n,3));
+for i = 1:n
+  printf("%0.6f\n",x(i,3));
+end
 printf("END_q3_END\n");
 
 % q5
 printf("START_q5_START\n");
-printf("%0.6f\n",x(n,5));
+for i = 1:n
+  printf("%0.6f\n",x(i,5));
+end
 printf("END_q5_END\n");
 
 % q6
 printf("START_q6_START\n");
-printf("%0.6f\n",x(n,6));
+for i = 1:n
+  printf("%0.6f\n",x(i,6));
+end
 printf("END_q6_END\n");
 
 % q8
 printf("START_q8_START\n");
-printf("%0.6f\n",x(n,8));
+for i = 1:n
+  printf("%0.6f\n",x(i,8));
+end
 printf("END_q8_END\n");
 
 % q9
 printf("START_q9_START\n");
-printf("%0.6f\n",x(n,9));
+for i = 1:n
+  printf("%0.6f\n",x(i,9));
+end
 printf("END_q9_END\n");
 
 % q10
 printf("START_q10_START\n");
-printf("%0.6f\n",x(n,10));
+for i = 1:n
+  printf("%0.6f\n",x(i,10));
+end
 printf("END_q10_END\n");
 
 % q11
 printf("START_q11_START\n");
-printf("%0.6f\n",x(n,11));
+for i = 1:n
+  printf("%0.6f\n",x(i,11));
+end
 printf("END_q11_END\n");
 
 % q12
 printf("START_q12_START\n");
-printf("%0.6f\n",x(n,12));
+for i = 1:n
+  printf("%0.6f\n",x(i,12));
+end
 printf("END_q12_END\n");
 
 % q13
 printf("START_q13_START\n");
-printf("%0.6f\n",x(n,13));
+for i = 1:n
+  printf("%0.6f\n",x(i,13));
+end
 printf("END_q13_END\n");
 
 % q14
 printf("START_q14_START\n");
-printf("%0.6f\n",x(n,14));
+for i = 1:n
+  printf("%0.6f\n",x(i,14));
+end
 printf("END_q14_END\n");
 
 % q15
 printf("START_q15_START\n");
-printf("%0.6f\n",x(n,15));
+for i = 1:n
+  printf("%0.6f\n",x(i,15));
+end
 printf("END_q15_END\n");
 
 % q16
 printf("START_q16_START\n");
-printf("%0.6f\n",x(n,16));
+for i = 1:n
+  printf("%0.6f\n",x(i,16));
+end
 printf("END_q16_END\n");
 
 % q17
 printf("START_q17_START\n");
-printf("%0.6f\n",x(n,17));
+for i = 1:n
+  printf("%0.6f\n",x(i,17));
+end
 printf("END_q17_END\n");
 
 % q18
 printf("START_q18_START\n");
-printf("%0.6f\n",x(n,18));
+for i = 1:n
+  printf("%0.6f\n",x(i,18));
+end
 printf("END_q18_END\n");
 
 % q19
 printf("START_q19_START\n");
-printf("%0.6f\n",x(n,19));
+for i = 1:n
+  printf("%0.6f\n",x(i,19));
+end
 printf("END_q19_END\n");
 
 %%% script end %%%
