@@ -41,7 +41,7 @@ my $cgi = new CGI;
 my $thsim = THYROSIM->new(toShow  => 'default',
                           docRoot => $ENV{DOCUMENT_ROOT},
                           fRoot   => $F_ROOT,
-                          jr      => 0);
+                          jr      => 1);
 $thsim->getCommand();
 
 # Process inputs
