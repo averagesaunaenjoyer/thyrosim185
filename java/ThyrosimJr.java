@@ -64,8 +64,8 @@ public class ThyrosimJr implements FirstOrderDifferentialEquations
         p35 = 6.9;                      // VmaxTSH
         p36 = 23;                       // K50TSH
         p37 = 0.118;                    // k3
-        p38 = 100.8;                    // T4P-EU
-        p39 = 2.6;                      // T3P-EU
+        p38 = 0.1008;                   // T4P-EU
+        p39 = 0.0026;                   // T3P-EU
         p40 = 0.037;                    // KdegT3B
         p41 = 0.0034;                   // KLAG-HYPO
         p42 = 6.5;                      // KLAG
