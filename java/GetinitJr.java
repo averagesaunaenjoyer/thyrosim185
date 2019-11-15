@@ -27,7 +27,7 @@ public class GetinitJr implements FirstOrderDifferentialEquations
         d3 = dial3;
         d4 = dial4;
 
-        p1 = 0.00168;                   // S4
+        p1 = 0.00174155;                // S4
         p2 = 8;                         // tau
         p3 = 0.523;                     // k12
         p4 = 0.0514;                    // k13
@@ -37,8 +37,8 @@ public class GetinitJr implements FirstOrderDifferentialEquations
         p8 = 0.000214;                  // B
         p9 = 0.000128;                  // C
         p10 = -8.83 * Math.pow(10,-6);  // D
-        p11 = 0.88;                     // k4absorb; originally 0.881
-        p12 = 0.0189;                   // k02
+        p11 = 0.881;                    // k4absorb; originally 0.881
+        p12 = 0.0114;                   // k02
         p13 = 3.85  * Math.pow(10,-4);  // VmaxD1fast
         p14 = 2.85;                     // KmD1fast
         p15 = 6.63  * Math.pow(10,-4);  // VmaxD1slow
@@ -53,26 +53,26 @@ public class GetinitJr implements FirstOrderDifferentialEquations
         p24 = 0.00395;                  // a
         p25 = 0.00185;                  // b
         p26 = 0.00061;                  // c
-        p27 = -0.000505;                // d
-        p28 = 0.88;                     // k3absorb; originally 0.882
+        p27 = 0.000505;                 // d
+        p28 = 0.882;                    // k3absorb; originally 0.882
         p29 = 0.207;                    // k05
         p30 = 1166;                     // Bzero
         p31 = 581;                      // Azero
         p32 = 2.37;                     // Amax
         p33 = -3.71;                    // phi
         p34 = 0.53;                     // kdegTSH-HYPO
-        p35 = 0.037;                    // VmaxTSH
+        p35 = 6.9;                      // VmaxTSH
         p36 = 23;                       // K50TSH
         p37 = 0.118;                    // k3
-        p38 = 0.29;                     // T4P-EU
-        p39 = 0.006;                    // T3P-EU
+        p38 = 100.8;                    // T4P-EU
+        p39 = 2.6;                      // T3P-EU
         p40 = 0.037;                    // KdegT3B
         p41 = 0.0034;                   // KLAG-HYPO
-        p42 = 5;                        // KLAG
+        p42 = 6.5;                      // KLAG
         p43 = 1.3;                      // k4dissolve
-        p44 = 0.12 * d2;                // k4excrete; originally 0.119
+        p44 = 0.119 * d2;               // k4excrete; originally 0.119
         p45 = 1.78;                     // k3dissolve
-        p46 = 0.12 * d4;                // k3excrete; originally 0.118
+        p46 = 0.118 * d4;               // k3excrete; originally 0.118
         // p47 and p48 are only used in converting mols to units. Since unit
         // conversion is done in THYSIM->postProcess(), make sure you change
         // p47 and p48 there if you need to change these values.
