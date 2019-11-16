@@ -119,7 +119,10 @@ sub new {
 
     bless $self, $class;
 
-    # Load parameter list. Currently doesn't do anything.
+    # Load thysim.
+    $self->loadThysim();
+
+    # Load parameter list.
     $self->loadParams();
 
     # Load conversion factors.
@@ -396,14 +399,35 @@ sub detIntSteps {
 }
 
 #====================================================================
+# SUBROUTINE:   loadThysim
+# DESCRIPTION:
+#   Determine which thysim to load.
+#====================================================================
+sub loadThysim {
+    my ($self) = @_;
+    $self->{thysim} = "Thyrosim";
+    $self->{thysim} = "ThyrosimJr" if $self->{jr};
+}
+
+#====================================================================
 # SUBROUTINE:   loadParams
 # DESCRIPTION:
-#   Loads a list of adult/child parameters.
-#   TODO:
-# NOTE: Currently does nothing.
+#   Loads parameters for a given thysim model. By default, loads
+#   Thyrosim.params. See the config/ dir for a list of thysim.
 #====================================================================
 sub loadParams {
     my ($self) = @_;
+
+    my $file = "../config/" . $self->{thysim} . ".params";
+    open my $fh, '<', $file or die "Can't open file '$file': $!";
+
+    while (my $row = <$fh>) {
+        chomp $row;
+        my ($key, $value) = split /=/, $row;
+        $self->{params}->{$key} = $value;
+    }
+
+    close $fh or die "Can't close file '$file': $!";
 }
 
 #====================================================================
@@ -416,20 +440,10 @@ sub loadParams {
 sub loadConversionFactors {
     my ($self) = @_;
 
-    my $p47; # Plasma volume (L)
-    my $p48; # TSH volume (L)
+    my $p47 = $self->{params}->{p47}; # Plasma volume (L)
+    my $p48 = $self->{params}->{p48}; # TSH volume (L)
     my $ft4 = 0.45; # Temp conversion factor for free T4
     my $ft3 = 0.50; # Temp conversion factor for free T3
-
-    # TODO
-    # These values were already loaded in loadParams()
-    if ($self->{jr}) {
-        $p47  = 1;
-        $p48  = 2.5;
-    } else {
-        $p47 = 3.2;
-        $p48 = 5.2;
-    }
 
     $self->{CF}->{T4}  = 777/$p47; # mcg/L
     $self->{CF}->{T3}  = 651/$p47; # mcg/L
