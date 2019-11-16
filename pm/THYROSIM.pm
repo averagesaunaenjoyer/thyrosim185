@@ -707,8 +707,8 @@ sub setIntBound {
 #         memory.
 #====================================================================
 sub getCompData {
-    my ($self, $results) = @_;
-    my ($compData, $comp, @values);
+    my ($self,$results) = @_;
+    my ($compData,$comp,@values);
 
     while(@{$results}) {
         my $ele = shift(@{$results}); # Get element
@@ -799,7 +799,7 @@ sub getICKey {
 #   Turn initial conditions into a string that can be passed to Octave
 #====================================================================
 sub getICString {
-    my ($self, $IC) = @_;
+    my ($self,$IC) = @_;
 
     my $returnString = "";
 
