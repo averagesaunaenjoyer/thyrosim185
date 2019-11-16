@@ -1,13 +1,11 @@
 #!/usr/bin/perl
+use v5.10; use strict; use warnings;
 #==============================================================================
 # FILE:         THYROSIM.pm
 # AUTHOR:       Simon X. Han
 # DESCRIPTION:
-#   Package where the bulk of Thyroid SIM related subroutines lives.
+#   Package where Thyroid Simulator subroutines live.
 #==============================================================================
-
-use v5.10;
-use strict;
 
 package THYROSIM;
 
@@ -31,8 +29,8 @@ sub new {
     $self->{toShow}->{q1}  = 1;
     $self->{toShow}->{q4}  = 1;
     $self->{toShow}->{q7}  = 1;
-    $self->{toShow}->{ft4} = 1; # FT4p values
-    $self->{toShow}->{ft3} = 1; # FT3p values
+    $self->{toShow}->{q20} = 1; # FT4p values
+    $self->{toShow}->{q21} = 1; # FT3p values
 
     # Can additionally set all compartments to toShow
     if ($params{toShow} eq "all") {
@@ -52,8 +50,8 @@ sub new {
         $self->{toShow}->{q17} = 1;
         $self->{toShow}->{q18} = 1;
         $self->{toShow}->{q19} = 1;
-        $self->{toShow}->{ft4} = 1;
-        $self->{toShow}->{ft3} = 1;
+        $self->{toShow}->{q20} = 1;
+        $self->{toShow}->{q21} = 1;
     }
 
     # Set document root and file root
@@ -423,6 +421,8 @@ sub loadConversionFactors {
     my $ft4 = 0.45; # Temp conversion factor for free T4
     my $ft3 = 0.50; # Temp conversion factor for free T3
 
+    # TODO
+    # These values were already loaded in loadParams()
     if ($self->{jr}) {
         $p47  = 1;
         $p48  = 2.5;
@@ -480,8 +480,6 @@ sub setEVasIC {
     my $comp = $compData->{name};
     $comp =~ s/q//;
     return 1 if $comp eq "t";
-    return 1 if $comp eq "ft4";
-    return 1 if $comp eq "ft3";
 
     # Copy end values from $iter over
     $self->{IC}->{'q'.$nextIter}->{$comp} = $compData->{end}->{$comp};
@@ -508,6 +506,9 @@ sub setInitialIC {
 # SUBROUTINE:   setAdjustedIC
 # DESCRIPTION:
 #   Adjust IC with input quantity as appropriate.
+# NOTE:
+#   Input types: 1 = Oral, 2 = IV, 3 = Infusion
+#   Hormone types: 3 = T3, 4 = T4
 #====================================================================
 sub setAdjustedIC {
     my ($self,$iter) = @_;
@@ -564,9 +565,6 @@ sub setAdjustedIC {
         }
     }
 }
-# Note to self:
-# type: 1: oral; 2: IV; 3: Infusion
-# hormone: 3: T3; 4: T4
 
 #====================================================================
 # SUBROUTINE:   postProcess
@@ -592,8 +590,8 @@ sub postProcess {
     $convObj->{q1}  = $self->{CF}->{T4};
     $convObj->{q4}  = $self->{CF}->{T3};
     $convObj->{q7}  = $self->{CF}->{TSH};
-    $convObj->{ft4} = $self->{CF}->{FT4};
-    $convObj->{ft3} = $self->{CF}->{FT3};
+    $convObj->{q20} = $self->{CF}->{FT4};
+    $convObj->{q21} = $self->{CF}->{FT3};
 
     # TEST
 #--------------------------------------------------
@@ -796,7 +794,7 @@ sub getICKey {
 #====================================================================
 # SUBROUTINE:   getICString
 # DESCRIPTION:
-#   Turn initial conditions into a string that can be passed to Octave
+#   Turn initial conditions into a string for input into the solver.
 #====================================================================
 sub getICString {
     my ($self,$IC) = @_;
@@ -827,7 +825,7 @@ sub getICString {
 #     Multiplies the 'k3excrete' parameter to make the following true:
 #       k3absorb/(k3absorb+k3excrete) = absorb%
 #       absorb% is between 0-2 and default is 0.88
-# NOTE: $dialx here corresponds to varaible name in Octave file
+# NOTE: $dialx here corresponds to the same varaible name in the solver.
 #====================================================================
 sub getDialString {
     my ($self) = @_;
@@ -842,6 +840,9 @@ sub getDialString {
     my $T4absorb;
     my $T3absorb;
 
+    # TODO
+    # Instead of hardcoding 0.88 and 0.12, it should be loading the appropriate
+    # values from properties.
     if ($dial2 == 0) {
         $T4absorb = 0;
     } else {
@@ -1051,6 +1052,7 @@ if ($num == 5) {
             . '&hormone-2=4&type-2=3&disabled-2=0&dose-2=400'
             .  '&start-2=2&end-2=6';
 }
+
     return $inputs;
 }
 
@@ -1084,6 +1086,10 @@ sub printLog {
 #   1. $solver can be "octave" or "java".
 #   2. $getinit - optional arg for the getinit file instead.
 #====================================================================
+# TODO
+# Instead of loading Jr file, pass an arg[27] on what thysim is. Default thysim
+# should Thyrosim. Junior should be ThyrosimJr. The issue is that this
+# determination probably won't be here, as arguments are generated elsewhere.
 sub getCommand {
     my ($self,$solver,$getinit) = @_;
 

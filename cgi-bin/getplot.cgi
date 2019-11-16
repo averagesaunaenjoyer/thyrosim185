@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+use v5.10; use strict; use warnings;
 #==============================================================================
 # FILE:         getplot.cgi
 # AUTHOR:       Simon X. Han
@@ -8,12 +9,11 @@
 #   2. Sends commands out to the Octave ODE solver
 #   3. Collects results to send back to the browser
 #==============================================================================
-use v5.10;
-use strict;
-use warnings;
+
 use CGI qw/:standard/;
 use Data::Dumper;
 use JSON::Syck; # Convert between JSON and Perl objects
+$Data::Dumper::Sortkeys = 1;
 
 # Set document root and folder root at compile time
 my @S_NAME;
@@ -26,7 +26,7 @@ BEGIN {
 
     # Document root
     if(!$ENV{DOCUMENT_ROOT}) {
-        $ENV{DOCUMENT_ROOT} = '/home/simon/www';
+        $ENV{DOCUMENT_ROOT} = '/home/www';
     }
 }
 
