@@ -190,7 +190,7 @@ qDot[20] = q4F; // FT3p
         // Initial state
         double[] q = new double[] {IC1, IC2, IC3, IC4, IC5, IC6,
                                    IC7, IC8, IC9, IC10,IC11,IC12,
-                                   IC13,IC14,IC15,IC16,IC17,IC18,IC19};
+                                   IC13,IC14,IC15,IC16,IC17,IC18,IC19,0,0};
         Thyrosim ode = new Thyrosim(dial1,dial2,dial3,dial4,inf1,inf4,thysim);
 
         int t1 = (int)Math.round(t1d);

@@ -1109,7 +1109,8 @@ sub getCommand {
 
     my $docRoot = $self->{docRoot};
     my $fRoot   = $self->{fRoot};
-    my $jr      = $self->{jr} ? "Jr" : "";
+    #my $jr      = $self->{jr} ? "Jr" : "";
+    my $jr      = "";
 
     my $command;
     if ($solver eq "octave") {

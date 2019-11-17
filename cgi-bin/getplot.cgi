@@ -42,7 +42,6 @@ my $thsim = THYROSIM->new(toShow  => 'default',
                           docRoot => $ENV{DOCUMENT_ROOT},
                           fRoot   => $F_ROOT,
                           jr      => 1);
-$thsim->getCommand();
 
 # Process inputs
 my $inputs = $cgi->param('data'); # Inputs are passed as 1 string
@@ -75,7 +74,7 @@ if ($thsim->hasICKey($icKey) || !$thsim->recalcIC()) {
     $thsim->processKeyVal($icKey,'q0');
 } else {
     my $ICstr = $thsim->getICString('q0');
-    my @results = `$getinit $ICstr 0 1008 $secAbs 0 0` or die "died : $!";
+    my @results = `$getinit $ICstr 0 1008 $secAbs 0 0 ThyrosimJr` or die "died : $!";
 
     # Process the results of the 0th integration. Will also save the end values
     # as IC for the next integration, q1.
@@ -94,7 +93,7 @@ foreach my $count (@$counts) {
     my $ICstr = $thsim->getICString('q'.$count);
     my $u     = $thsim->getInfValue('q'.$count);
 
-    my @results = `$command $ICstr $start $end $secAbs $u` or die "died : $!";
+    my @results = `$command $ICstr $start $end $secAbs $u ThyrosimJr` or die "died : $!";
     $thsim->processResults(\@results,'q'.$count);
 }
 
