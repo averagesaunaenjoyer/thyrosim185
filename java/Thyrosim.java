@@ -106,7 +106,8 @@ public class Thyrosim implements FirstOrderDifferentialEquations
 
     public int getDimension()
     {
-        return 21;
+        return 19;
+        //return 21;
     }
 
     public void computeDerivatives(double t, double[] q, double[] qDot)
@@ -149,8 +150,8 @@ qDot[17] = kdelay*(q[16] -q[17]);                               // delay5
 qDot[18] = kdelay*(q[17] -q[18]);                               // delay6
 
 // Additional values
-qDot[19] = q1F; // FT4p
-qDot[20] = q4F; // FT3p
+//qDot[19] = q1F; // FT4p
+//qDot[20] = q4F; // FT3p
     }
 
     public static void main(String[] args)
@@ -190,7 +191,8 @@ qDot[20] = q4F; // FT3p
         // Initial state
         double[] q = new double[] {IC1, IC2, IC3, IC4, IC5, IC6,
                                    IC7, IC8, IC9, IC10,IC11,IC12,
-                                   IC13,IC14,IC15,IC16,IC17,IC18,IC19,0,0};
+                                   IC13,IC14,IC15,IC16,IC17,IC18,IC19};
+                                   //IC13,IC14,IC15,IC16,IC17,IC18,IC19,0,0};
         Thyrosim ode = new Thyrosim(dial1,dial2,dial3,dial4,inf1,inf4,thysim);
 
         int t1 = (int)Math.round(t1d);
@@ -216,9 +218,11 @@ qDot[20] = q4F; // FT3p
         double[] q17 = new double[t2 - t1 + 1];
         double[] q18 = new double[t2 - t1 + 1];
         double[] q19 = new double[t2 - t1 + 1];
-        double[] q20 = new double[t2 - t1 + 1]; // FT4p values
-        double[] q21 = new double[t2 - t1 + 1]; // FT3p values
+        //double[] q20 = new double[t2 - t1 + 1]; // FT4p values
+        //double[] q21 = new double[t2 - t1 + 1]; // FT3p values
         double[] ts  = new double[t2 - t1 + 1];
+        double[] ft4 = new double[t2 - t1 + 1]; // FT4p values
+        double[] ft3 = new double[t2 - t1 + 1]; // FT3p values
         for (int i = t1; i <= t2; i++) {
             q1[i]  = q[0];
             q2[i]  = q[1];
@@ -239,9 +243,13 @@ qDot[20] = q4F; // FT3p
             q17[i] = q[16];
             q18[i] = q[17];
             q19[i] = q[18];
-            q20[i] = q[19];
-            q21[i] = q[20];
+            //q20[i] = q[19];
+            //q21[i] = q[20];
             ts[i]  = i;
+
+// Copy/paste equations from computeDerivatives
+ft4[i] = (ode.p7 +ode.p8 *q[0]+ode.p9 *Math.pow(q[0],2)+ode.p10*Math.pow(q[0],3))*q[0]; // FT4p
+ft3[i] = (ode.p24+ode.p25*q[0]+ode.p26*Math.pow(q[0],2)+ode.p27*Math.pow(q[0],3))*q[3]; // FT3p
 
             integrator.integrate(ode,i,q,i+1,q);
         }
@@ -322,17 +330,27 @@ qDot[20] = q4F; // FT3p
         printArray(q19);
         System.out.println("END_q19_END");
 
-        System.out.println("START_q20_START");
-        printArray(q20);
-        System.out.println("END_q20_END");
-
-        System.out.println("START_q21_START");
-        printArray(q21);
-        System.out.println("END_q21_END");
+//--------------------------------------------------
+//         System.out.println("START_q20_START");
+//         printArray(q20);
+//         System.out.println("END_q20_END");
+// 
+//         System.out.println("START_q21_START");
+//         printArray(q21);
+//         System.out.println("END_q21_END");
+//-------------------------------------------------- 
 
         System.out.println("START_t_START");
         printArray(ts);
         System.out.println("END_t_END");
+
+        System.out.println("START_ft4_START");
+        printArray(ft4);
+        System.out.println("END_ft4_END");
+
+        System.out.println("START_ft3_START");
+        printArray(ft3);
+        System.out.println("END_ft3_END");
 
     }
 

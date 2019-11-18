@@ -106,7 +106,8 @@ public class Getinit implements FirstOrderDifferentialEquations
 
     public int getDimension()
     {
-        return 21;
+        return 19;
+        //return 21;
     }
 
     public void computeDerivatives(double t, double[] q, double[] qDot)
@@ -149,8 +150,8 @@ qDot[17] = kdelay*(q[16] -q[17]);                               // delay5
 qDot[18] = kdelay*(q[17] -q[18]);                               // delay6
 
 // Additional values
-qDot[19] = q1F; // FT4p
-qDot[20] = q4F; // FT3p
+//qDot[19] = q1F; // FT4p
+//qDot[20] = q4F; // FT3p
     }
 
     public static void main(String[] args)
@@ -191,6 +192,7 @@ qDot[20] = q4F; // FT3p
         double[] q = new double[] {IC1, IC2, IC3, IC4, IC5, IC6,
                                    IC7, IC8, IC9, IC10,IC11,IC12,
                                    IC13,IC14,IC15,IC16,IC17,IC18,IC19};
+                                   //IC13,IC14,IC15,IC16,IC17,IC18,IC19,0,0};
         Getinit ode = new Getinit(dial1,dial2,dial3,dial4,inf1,inf4,thysim);
 
         int t1 = (int)Math.round(t1d);
@@ -275,13 +277,15 @@ qDot[20] = q4F; // FT3p
         System.out.println(q[18]);
         System.out.println("END_q19_END");
 
-        System.out.println("START_q20_START");
-        System.out.println(q[19]);
-        System.out.println("END_q20_END");
-
-        System.out.println("START_q21_START");
-        System.out.println(q[20]);
-        System.out.println("END_q21_END");
+//--------------------------------------------------
+//         System.out.println("START_q20_START");
+//         System.out.println(q[19]);
+//         System.out.println("END_q20_END");
+// 
+//         System.out.println("START_q21_START");
+//         System.out.println(q[20]);
+//         System.out.println("END_q21_END");
+//-------------------------------------------------- 
 
         System.out.println("START_t_START");
         System.out.println(t2);

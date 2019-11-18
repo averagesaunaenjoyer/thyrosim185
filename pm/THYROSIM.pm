@@ -29,8 +29,10 @@ sub new {
     $self->{toShow}->{q1}  = 1;
     $self->{toShow}->{q4}  = 1;
     $self->{toShow}->{q7}  = 1;
-    $self->{toShow}->{q20} = 1; # FT4p values
-    $self->{toShow}->{q21} = 1; # FT3p values
+    $self->{toShow}->{ft4} = 1; # FT4p values
+    $self->{toShow}->{ft3} = 1; # FT3p values
+    #$self->{toShow}->{q20} = 1; # FT4p values
+    #$self->{toShow}->{q21} = 1; # FT3p values
 
     # Can additionally set all compartments to toShow
     if ($params{toShow} eq "all") {
@@ -50,8 +52,10 @@ sub new {
         $self->{toShow}->{q17} = 1;
         $self->{toShow}->{q18} = 1;
         $self->{toShow}->{q19} = 1;
-        $self->{toShow}->{q20} = 1;
-        $self->{toShow}->{q21} = 1;
+        $self->{toShow}->{ft4} = 1;
+        $self->{toShow}->{ft3} = 1;
+        #$self->{toShow}->{q20} = 1;
+        #$self->{toShow}->{q21} = 1;
     }
 
     # Set document root and file root
@@ -494,6 +498,8 @@ sub setEVasIC {
     my $comp = $compData->{name};
     $comp =~ s/q//;
     return 1 if $comp eq "t";
+    return 1 if $comp eq "ft4";
+    return 1 if $comp eq "ft3";
 
     # Copy end values from $iter over
     $self->{IC}->{'q'.$nextIter}->{$comp} = $compData->{end}->{$comp};
@@ -604,8 +610,10 @@ sub postProcess {
     $convObj->{q1}  = $self->{CF}->{T4};
     $convObj->{q4}  = $self->{CF}->{T3};
     $convObj->{q7}  = $self->{CF}->{TSH};
-    $convObj->{q20} = $self->{CF}->{FT4};
-    $convObj->{q21} = $self->{CF}->{FT3};
+    $convObj->{ft4} = $self->{CF}->{FT4};
+    $convObj->{ft3} = $self->{CF}->{FT3};
+    #$convObj->{q20} = $self->{CF}->{FT4};
+    #$convObj->{q21} = $self->{CF}->{FT3};
 
     # TEST
 #--------------------------------------------------
