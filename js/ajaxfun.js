@@ -433,7 +433,12 @@ function validateForm() {
         if (field.name == 'runRadio') {
             return true;
         }
+        // Skip checking for 'thysim'
+        if (field.name == 'thysim') {
+            return true;
+        }
 
+        // Checking for numeric
         if (field.value.match(/^\+?[0-9]*\.?[0-9]+$/)) {
             $('#'+field.name).removeClass('error');
         } else {
