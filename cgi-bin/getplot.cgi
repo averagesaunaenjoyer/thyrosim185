@@ -33,29 +33,35 @@ BEGIN {
 use lib $ENV{'DOCUMENT_ROOT'}."/$F_ROOT/pm";
 use THYROSIM;
 
-# New CGI object
-my $cgi = new CGI;
-
 # Create THYROSIM object
-# TODO make jr a parameter from the website
 my $thsim = THYROSIM->new(toShow  => 'default',
                           docRoot => $ENV{DOCUMENT_ROOT},
-                          fRoot   => $F_ROOT,
-                          jr      => 1);
+                          fRoot   => $F_ROOT);
+# TODO - currently setting thysim here, but need to set it in the UI.
+#$thsim->setLvl1('thysim',"ThyrosimJr");
 
-# Process inputs
-my $inputs = $cgi->param('data'); # Inputs are passed as 1 string
+# New CGI object and read input from UI.
+my $cgi = new CGI;
+my $dat = $cgi->param('data'); # Inputs are passed as 1 string
 
 # For testing, can use a custom input. See $thsim->customInput().
+# E.g., $dat = $thsim->customInput("3");
+$thsim->processInputs(\$dat);
+
 #--------------------------------------------------
-# $inputs = $thsim->customInput("3");
+# Define command. Currently using Java ODE solver. Command arguments are
+# generated in the section below.
+# Description of command arguments (zero-based):
+# 0 - 18:  19 compartments' initial conditions.
+# 19:      ODE start time.
+# 20:      ODE end time.
+# 21 - 24: Secretion/Absorption values (from dials).
+# 25 - 26: Infusion values.
+# 27:      The thysim parameters to load.
 #-------------------------------------------------- 
-
-$thsim->processInputs(\$inputs);
-
-# Define command. Currently using Java ODE solver.
 my $command = $thsim->getCommand("java");
 my $getinit = $thsim->getCommand("java","getinit");
+my $thysim = $thsim->getThysim();
 
 #--------------------------------------------------
 # Perform 0th integration or skip it if the end value is already known.
@@ -74,7 +80,7 @@ if ($thsim->hasICKey($icKey) || !$thsim->recalcIC()) {
     $thsim->processKeyVal($icKey,'q0');
 } else {
     my $ICstr = $thsim->getICString('q0');
-    my @results = `$getinit $ICstr 0 1008 $secAbs 0 0 ThyrosimJr` or die "died : $!";
+    my @results = `$getinit $ICstr 0 1008 $secAbs 0 0 $thysim` or die "died: $!";
 
     # Process the results of the 0th integration. Will also save the end values
     # as IC for the next integration, q1.
@@ -93,7 +99,7 @@ foreach my $count (@$counts) {
     my $ICstr = $thsim->getICString('q'.$count);
     my $u     = $thsim->getInfValue('q'.$count);
 
-    my @results = `$command $ICstr $start $end $secAbs $u ThyrosimJr` or die "died : $!";
+    my @results = `$command $ICstr $start $end $secAbs $u $thysim` or die "died: $!";
     $thsim->processResults(\@results,'q'.$count);
 }
 

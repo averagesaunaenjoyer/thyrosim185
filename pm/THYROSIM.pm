@@ -9,6 +9,9 @@ use v5.10; use strict; use warnings;
 
 package THYROSIM;
 
+use Data::Dumper;
+$Data::Dumper::Sortkeys = 1;
+
 #====================================================================
 # SUBROUTINE:   new
 # DESCRIPTION:
@@ -19,9 +22,6 @@ package THYROSIM;
 sub new {
     my ($class,%params) = @_;
     my $self;
-
-    # 0 for adult, 1 for jr (child), default adult
-    $self->{jr} = $params{jr} ? $params{jr} : 0;
 
     # Set which results to send to the browser.
     # By default, toShow is t, q1, q4, q7, ft4, and ft3.
@@ -123,15 +123,6 @@ sub new {
 
     bless $self, $class;
 
-    # Load thysim.
-    $self->loadThysim();
-
-    # Load parameter list.
-    $self->loadParams();
-
-    # Load conversion factors.
-    $self->loadConversionFactors();
-
     # Build $self->{IC}->{q0}. Only needed when recalculating IC.
     $self->setInitialIC();
 
@@ -141,7 +132,8 @@ sub new {
 #====================================================================
 # SUBROUTINE:   processInputs
 # DESCRIPTION:
-#   Loop through all simulation conditions and organize them:
+#   Inputs come from the browser as one string. Split into individual simulation
+#   conditions and organize them as follows:
 #     Total simulation time:
 #       $self->{simTime}        = $number
 #     Recalculate initial conditions:
@@ -157,6 +149,10 @@ sub new {
 #       $self->{inputs}->{$num}->{disabled}   = $number
 #       $self->{inputs}->{$num}->{hormone}    = $number
 #       $self->{inputs}->{$num}->{type}       = $number
+#   Additional initializations done here:
+#     detIntSteps()
+#     loadParams()
+#     loadConversionFactors()
 # NOTE: $num is the $num-th input
 #====================================================================
 sub processInputs {
@@ -182,16 +178,26 @@ sub processInputs {
             $self->setLvl1('recalcIC',$simCond->{$name});
         # Dials
         } elsif ($name =~ m/dialinput(\d)/) {
-            $self->{'dials'}->{$1} = $simCond->{$name};
-        # Rest of the inputs
+            $self->setLvl2('dials',$1,$simCond->{$name});
+        # Thysim model
+        } elsif ($name =~ m/thysim/) {
+            $self->setLvl1('thysim',$simCond->{$name});
+        # Dosing information. Assume splittable by '-'
+        } elsif ($name =~ m/(\w+)-(\d+)/) {
+            $self->setLvl3('inputs',$2,$1,$simCond->{$name});
+        # Ignore un-identified inputs
         } else {
-            my ($inputName,$num) = split(/-/,$name);
-            $self->setLvl3('inputs',$num,$inputName,$simCond->{$name});
         }
     }
 
     # Determine intergration steps
     $self->detIntSteps();
+
+    # Load parameter list.
+    $self->loadParams();
+
+    # Load conversion factors.
+    $self->loadConversionFactors();
 }
 
 #====================================================================
@@ -296,7 +302,7 @@ sub detIntSteps {
     my $inputs = $self->{inputs}; # Save typing
 
     # No inputs? Run simulation from 0 to simtime
-    if (!$inputs) {
+    if (!defined $inputs) {
         $self->setIntStart('thisStep',1,0);
         $self->setIntStart('trueStep',1,0);
         $self->setIntBound('thisStep',1,$simtime);
@@ -403,17 +409,6 @@ sub detIntSteps {
 }
 
 #====================================================================
-# SUBROUTINE:   loadThysim
-# DESCRIPTION:
-#   Determine which thysim to load.
-#====================================================================
-sub loadThysim {
-    my ($self) = @_;
-    $self->{thysim} = "Thyrosim";
-    $self->{thysim} = "ThyrosimJr" if $self->{jr};
-}
-
-#====================================================================
 # SUBROUTINE:   loadParams
 # DESCRIPTION:
 #   Loads parameters for a given thysim model. By default, loads
@@ -421,6 +416,8 @@ sub loadThysim {
 #====================================================================
 sub loadParams {
     my ($self) = @_;
+
+    $self->{thysim} = $self->{thysim} // "Thyrosim";
 
     my $file = "../config/" . $self->{thysim} . ".params";
     open my $fh, '<', $file or die "Can't open file '$file': $!";
@@ -471,7 +468,7 @@ sub addTHData {
     # Push new values to the end of the old values array, but time t needs to
     # be adjusted, ie: 0 1 2 3 0 1 2 3 => 0 1 2 3 4 5 6 7
     if ($comp eq "t") {
-        my $lastT = $self->{data}->{$comp}->{values}->[-1];
+        my $lastT = $self->{data}->{$comp}->{values}->[-1] // 0;
         foreach my $time (@{$compData->{values}}) {
             my $thisT = $lastT + $time;
             push(@{$self->{data}->{$comp}->{values}},$thisT);
@@ -536,10 +533,14 @@ sub setAdjustedIC {
     $iter =~ s/q//;             # ie. q0 => 0
     my $nextIter = $iter + 1;   # ie.  0 => 1
 
+    # Check whether there is a next iteration, skip if there isn't
+    return 1 if !exists $self->{trueStep}->{$nextIter};
+
     # Find all inputs given at $trueStart
     my $trueStart = $self->getIntStart('trueStep',$nextIter);
-
     foreach my $inputNum (keys %{$self->{inputTime}->{$trueStart}}) {
+
+        next if $inputNum < 1;
 
         # Get hormone's info
         my $hormone = $self->getLvl3('inputs',$inputNum,'hormone');
@@ -670,9 +671,25 @@ sub postProcess {
 #     NOTE: $value is a hashRef with hormone name key and boolean value.
 #   simTime: total simulation time
 #     $self->{simTime} = $value
+#   recalcIC: whether to recalculate initial conditions
+#     $self->{recalcIC} = binary
+#   thysim: the thysim model to use
+#     $self->{thysim} = $thysim
 #====================================================================
 sub setLvl1 {
     $_[0]->{$_[1]} = $_[2];
+}
+
+#====================================================================
+# SUBROUTINE:   setLvl2
+# DESCRIPTION:
+#   Save a value 2 levels after $self.
+# USES:
+#   dials: saves $value of a $dial
+#     $self->{dials}->{$dial} = $value
+#====================================================================
+sub setLvl2 {
+    $_[0]->{$_[1]}->{$_[2]} = $_[3];
 }
 
 #====================================================================
@@ -902,6 +919,8 @@ sub getInfValue {
     my $inputs = $self->{inputs}; # Save typing
     foreach my $inputNum (keys %$inputs) {
 
+        next if $inputNum < 1;
+
         # Skip non-infusion inputs
         next if ($self->getLvl3('inputs',$inputNum,'type') != 3);
 
@@ -933,7 +952,7 @@ sub getLvl1 {
 #====================================================================
 # SUBROUTINE:   getLvl2
 # DESCRIPTION:
-#   Retrieve a value 2 levels after $self
+#   Retrieve a value 2 levels after $self.
 # USES:
 #   toShow: checks whether $hormone ist to be sent to the browser.
 #     $self->{toShow}->{$hormone} = $value
@@ -953,9 +972,9 @@ sub getLvl2 {
 # USES:
 #   data-$name-values: returns an arrayRef of all values for a hormone $name.
 #     $self->{data}->{$name}->{values} = $arrayRef
-#   inputs: returns $value of an input parameter $name given $inputNum
+#   inputs: returns $value of an input parameter $name given $inputNum.
 #     $self->{inputs}->{$inputNum}->{$name} = $value
-#   infusion: returns infusion $value for u1 or u4
+#   infusion: returns infusion $value for u1 or u4.
 #     $self->{infusion}->{$inputNum}->{$uX} = $value
 #====================================================================
 sub getLvl3 {
@@ -969,9 +988,9 @@ sub getLvl3 {
 # USES:
 #   thisStep: refers to 'this' interval's start time.
 #     $self->{thisStep}->{$count}->[0] = $value
-#   trueStep: refers to 'true' interval's start time
+#   trueStep: refers to 'true' interval's start time.
 #     $self->{trueStep}->{$count}->[0] = $value
-# NOTE: $count is an integer that corresponds with nth integration
+# NOTE: $count is an integer that corresponds with nth integration.
 #====================================================================
 sub getIntStart {
     return $_[0]->{$_[1]}->{$_[2]}->[0];
@@ -984,9 +1003,9 @@ sub getIntStart {
 # USES:
 #   thisStep: refers to 'this' interval's end time.
 #     $self->{thisStep}->{$count}->[1] = $value
-#   trueStep: refers to 'true' interval's end time
+#   trueStep: refers to 'true' interval's end time.
 #     $self->{trueStep}->{$count}->[1] = $value
-# NOTE: $count is an integer that corresponds with nth integration
+# NOTE: $count is an integer that corresponds with nth integration.
 #====================================================================
 sub getIntBound {
     return $_[0]->{$_[1]}->{$_[2]}->[1];
@@ -1108,25 +1127,19 @@ sub printLog {
 #   1. $solver can be "octave" or "java".
 #   2. $getinit - optional arg for the getinit file instead.
 #====================================================================
-# TODO
-# Instead of loading Jr file, pass an arg[27] on what thysim is. Default thysim
-# should Thyrosim. Junior should be ThyrosimJr. The issue is that this
-# determination probably won't be here, as arguments are generated elsewhere.
 sub getCommand {
     my ($self,$solver,$getinit) = @_;
 
     my $docRoot = $self->{docRoot};
     my $fRoot   = $self->{fRoot};
-    #my $jr      = $self->{jr} ? "Jr" : "";
-    my $jr      = "";
 
     my $command;
     if ($solver eq "octave") {
         $command = "octave -q $docRoot/$fRoot/octave";
         if ($getinit) {
-            $command .= "/Getinit$jr.m";
+            $command .= "/Getinit.m";
         } else {
-            $command .= "/Thyrosim$jr.m";
+            $command .= "/Thyrosim.m";
         }
     }
 
@@ -1135,13 +1148,22 @@ sub getCommand {
                  . "$docRoot/$fRoot/java/ "
                  . "edu.ucla.distefanolab.thyrosim.algorithm.";
         if ($getinit) {
-            $command .= "Getinit$jr";
+            $command .= "Getinit";
         } else {
-            $command .= "Thyrosim$jr";
+            $command .= "Thyrosim";
         }
     }
 
     return $command;
+}
+
+#====================================================================
+# SUBROUTINE:   getThysim
+# DESCRIPTION:
+#   Getting for $self->{thysim}.
+#====================================================================
+sub getThysim {
+    return $_[0]->{thysim};
 }
 
 #====================================================================
