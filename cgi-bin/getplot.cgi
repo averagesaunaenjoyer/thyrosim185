@@ -5,9 +5,12 @@ use v5.10; use strict; use warnings;
 # AUTHOR:       Simon X. Han
 # DESCRIPTION:
 #   The main function that:
-#   1. Takes input from the browser
-#   2. Sends commands out to the Octave ODE solver
-#   3. Collects results to send back to the browser
+#     1. Takes input from the browser
+#     2. Sends commands out to the ODE solver
+#     3. Collects results to send back to the browser for graphing
+# NOTE:
+#   SS: Steady state
+#   IC: Initial condition
 #==============================================================================
 
 use CGI qw/:standard/;
@@ -56,42 +59,38 @@ $thsim->processInputs(\$dat);
 # 21 - 24: Dial values (secretion/absorption).
 # 25 - 26: Infusion values.
 # 27:      The thysim parameters to load.
-#-------------------------------------------------- 
+#--------------------------------------------------
 my $command = $thsim->getCommand("java");
 my $getinit = $thsim->getCommand("java","getinit");
 my $thysim = $thsim->getThysim();
 
 #--------------------------------------------------
-# Perform 0th integration or skip it if the end value is already known.
-# The 0th integration runs the model to SS using clinically derived initial
-# conditions (IC), q0. This step is important because it allows material to
-# enter the delay compartments. The end values of the 0th integration is used as
-# the basis of the IC of the next integration.
-# By Professor DiStefano, the 0th integration runs from 0-1000 hours.
-# We changed t to 1008, so that it's a multiple of 24. This solved an issue
-# where the initial day didn't start at exactly steady state.
-# Currently using Lu Chen's IC, which fixed an issue with q4 starting too low.
-#-------------------------------------------------- 
+# Decide whether to perform the 0th integration.
+# When the SS values are already known or if recalculate IC is off, 0th
+# integration is skipped. Otherwise, perform the 0th integration. In either case
+# we must set the IC for the next integration, q1.
+# NOTE: The 0th integration (q0) runs the model to SS using clinically derived
+# IC. This step is important because it allows material to enter the delay
+# compartments. The end values of q0 are used as the IC of q1. We run q0 from
+# 0-1008 hours so that it is a multiple of 24. This solved an issue where the
+# initial day didn't start at exactly SS (q0 used to run from 0-1000 hours).
+#--------------------------------------------------
 my $dials = $thsim->getDialString(); # Only needed once
 my $ickey = $thsim->getICKey();
-if ($thsim->hasICKey($ickey) || !$thsim->recalcIC()) {
-
-    # Skipping 0th integration, but still need to set q1's IC
+if ($thsim->hasICKey($ickey) || !$thsim->recalcIC()) { # Skipping 0th
     $thsim->processKeyVal($ickey,'q0');
 } else {
-
-    # Perform 0th integration
     my $ICstr = $thsim->getICString('q0');
-    my @results = `$getinit $ICstr 0 1008 $dials 0 0 $thysim` or die "died: $!";
 
-    # Save end values as IC for the next integration, q1
-    $thsim->processResults(\@results,'q0');
+    my $cmd = "$getinit $ICstr 0 1008 $dials 0 0 $thysim";
+    my @res = `$cmd` or die "died: $!";
+    $thsim->processResults(\@res,'q0');
 }
 
 #--------------------------------------------------
 # Perform 1st to nth integrations.
 # Integration intervals were determined in processInput, so here we retrieve
-# them and call Octave.
+# them and call the solver.
 #--------------------------------------------------
 my $counts = $thsim->getIntCount();
 foreach my $count (@$counts) {
@@ -100,8 +99,9 @@ foreach my $count (@$counts) {
     my $ICstr = $thsim->getICString('q'.$count);
     my $u     = $thsim->getInfValue('q'.$count);
 
-    my @results = `$command $ICstr $start $end $dials $u $thysim` or die "died: $!";
-    $thsim->processResults(\@results,'q'.$count);
+    my $cmd = "$command $ICstr $start $end $dials $u $thysim";
+    my @res = `$cmd` or die "died: $!";
+    $thsim->processResults(\@res,'q'.$count);
 }
 
 # Post process to create the JSON object
