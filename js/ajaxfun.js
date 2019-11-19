@@ -36,7 +36,7 @@ function loadXMLDoc(e) {
     var formdata = $("form").serialize();
     // If the user selected to run default behavior, override formdata
     if (e == "TEST") {
-      formdata="dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88&simtime=5";
+      formdata="dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88&simtime=5&thysim="+$('#thysim').val();
     }
 
     var start = new Date().getTime();
@@ -433,7 +433,12 @@ function validateForm() {
         if (field.name == 'runRadio') {
             return true;
         }
+        // Skip checking for 'thysim'
+        if (field.name == 'thysim') {
+            return true;
+        }
 
+        // Checking for numeric
         if (field.value.match(/^\+?[0-9]*\.?[0-9]+$/)) {
             $('#'+field.name).removeClass('error');
         } else {

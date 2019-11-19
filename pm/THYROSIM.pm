@@ -1,45 +1,50 @@
 #!/usr/bin/perl
+use v5.10; use strict; use warnings;
 #==============================================================================
 # FILE:         THYROSIM.pm
 # AUTHOR:       Simon X. Han
 # DESCRIPTION:
-#   Package where the bulk of Thyroid SIM related subroutines lives.
+#   Package where Thyroid Simulator subroutines live.
 #==============================================================================
 
-use v5.10;
-use strict;
-
 package THYROSIM;
+
+use Data::Dumper;
+$Data::Dumper::Sortkeys = 1;
 
 #====================================================================
 # SUBROUTINE:   new
 # DESCRIPTION:
 #   Returns an object of THYROSIM.
-#   TODO - populate the following based on child or adult:
-#   1. ICKey (steady state values)
 #====================================================================
 sub new {
     my ($class,%params) = @_;
     my $self;
 
-    # 0 for adult, 1 for jr (child), default adult
-    $self->{jr} = $params{jr} ? $params{jr} : 0;
+    #--------------------------------------------------
+    # Set which results to send to the browser
+    #--------------------------------------------------
 
-    # Set which results to send to the browser.
-    # By default, toShow is t, q1, q4, q7, ft4, and ft3.
+    # By default, send t, q1, q4, q7, ft4, and ft3 to browser
     $self->{toShow}->{t}   = 1;
     $self->{toShow}->{q1}  = 1;
     $self->{toShow}->{q4}  = 1;
     $self->{toShow}->{q7}  = 1;
     $self->{toShow}->{ft4} = 1; # FT4p values
     $self->{toShow}->{ft3} = 1; # FT3p values
+    #$self->{toShow}->{q20} = 1; # FT4p values
+    #$self->{toShow}->{q21} = 1; # FT3p values
 
-    # Can additionally set all compartments to toShow
+    # Can additionally send everything to browser
     if ($params{toShow} eq "all") {
+        $self->{toShow}->{t}   = 1;
+        $self->{toShow}->{q1}  = 1;
         $self->{toShow}->{q2}  = 1;
         $self->{toShow}->{q3}  = 1;
+        $self->{toShow}->{q4}  = 1;
         $self->{toShow}->{q5}  = 1;
         $self->{toShow}->{q6}  = 1;
+        $self->{toShow}->{q7}  = 1;
         $self->{toShow}->{q8}  = 1;
         $self->{toShow}->{q9}  = 1;
         $self->{toShow}->{q10} = 1;
@@ -54,35 +59,69 @@ sub new {
         $self->{toShow}->{q19} = 1;
         $self->{toShow}->{ft4} = 1;
         $self->{toShow}->{ft3} = 1;
+        #$self->{toShow}->{q20} = 1;
+        #$self->{toShow}->{q21} = 1;
     }
 
+    #--------------------------------------------------
     # Set document root and file root
+    #--------------------------------------------------
     $self->{docRoot} = $params{docRoot};
     $self->{fRoot}   = $params{fRoot};
 
-    # SS values, calculated by Lu Chen using Marisa's IC.
-    # Ran for 1008 hours and taking final values.
-    $self->{ICKey}->{'1000088010000880'}->{1}  = 0.322114215761171;
-    $self->{ICKey}->{'1000088010000880'}->{2}  = 0.201296960359917;
-    $self->{ICKey}->{'1000088010000880'}->{3}  = 0.638967411907560;
-    $self->{ICKey}->{'1000088010000880'}->{4}  = 0.00663104034826483;
-    $self->{ICKey}->{'1000088010000880'}->{5}  = 0.0112595761822961;
-    $self->{ICKey}->{'1000088010000880'}->{6}  = 0.0652960640300348;
-    $self->{ICKey}->{'1000088010000880'}->{7}  = 1.78829584764370;
-    $self->{ICKey}->{'1000088010000880'}->{8}  = 7.05727560072869;
-    $self->{ICKey}->{'1000088010000880'}->{9}  = 7.05714474742141;
-    $self->{ICKey}->{'1000088010000880'}->{10} = 0;
-    $self->{ICKey}->{'1000088010000880'}->{11} = 0;
-    $self->{ICKey}->{'1000088010000880'}->{12} = 0;
-    $self->{ICKey}->{'1000088010000880'}->{13} = 0;
-    $self->{ICKey}->{'1000088010000880'}->{14} = 3.34289716182018;
-    $self->{ICKey}->{'1000088010000880'}->{15} = 3.69277248068433;
-    $self->{ICKey}->{'1000088010000880'}->{16} = 3.87942133769244;
-    $self->{ICKey}->{'1000088010000880'}->{17} = 3.90061903207543;
-    $self->{ICKey}->{'1000088010000880'}->{18} = 3.77875734283571;
-    $self->{ICKey}->{'1000088010000880'}->{19} = 3.55364471589659;
+    #--------------------------------------------------
+    # SS values. Ran model for 1008 hours and taking final values.
+    #--------------------------------------------------
 
-    # Define type ID and hormone ID
+    # Thysim: Thyrosim
+    # Calculated by Lu Chen using Marisa's IC
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{1}  = 0.322114215761171;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{2}  = 0.201296960359917;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{3}  = 0.638967411907560;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{4}  = 0.00663104034826483;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{5}  = 0.0112595761822961;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{6}  = 0.0652960640300348;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{7}  = 1.78829584764370;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{8}  = 7.05727560072869;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{9}  = 7.05714474742141;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{10} = 0;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{11} = 0;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{12} = 0;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{13} = 0;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{14} = 3.34289716182018;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{15} = 3.69277248068433;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{16} = 3.87942133769244;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{17} = 3.90061903207543;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{18} = 3.77875734283571;
+    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{19} = 3.55364471589659;
+
+    # Thysim: ThyrosimJr
+    # Calculated by Simon Han using Thyrosim's SS
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{1}  = 0.09374997165528334;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{2}  = 0.12327377103697522;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{3}  = 0.13076884496615795;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{4}  = 0.003737105895366619;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{5}  = 0.005647605690886433;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{6}  = 0.0381258296681322;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{7}  = 0.6854188695057679;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{8}  = 7.50672575320393;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{9}  = 7.5062287694075875;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{10} = 0;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{11} = 0;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{12} = 0;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{13} = 0;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{14} = 1.3188108472954458;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{15} = 1.4914848785095203;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{16} = 1.5965449597371968;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{17} = 1.629073258562129;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{18} = 1.5956853645161484;
+    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{19} = 1.5115673448144067;
+
+    #--------------------------------------------------
+    # Define input types and hormone types
+    #--------------------------------------------------
+
+    # Define input types
     $self->{type}->{1} = "Oral";
     $self->{type}->{2} = "IV";
     $self->{type}->{3} = "Infusion";
@@ -91,44 +130,33 @@ sub new {
     $self->{type}->{IV}       = 2;
     $self->{type}->{Infusion} = 3;
 
+    # Define hormone types
     $self->{hormone}->{3} = "T3";
     $self->{hormone}->{4} = "T4";
 
     $self->{hormone}->{T3} = 3;
     $self->{hormone}->{T4} = 4;
 
-    # Default dial values
+    #--------------------------------------------------
+    # Define other simulation parameters
+    #--------------------------------------------------
+
+    # Define default dial values
     $self->{dials}->{1} = 100; # T4 Secretion
     $self->{dials}->{2} = 88;  # T4 Absorption
     $self->{dials}->{3} = 100; # T3 Secretion
     $self->{dials}->{4} = 88;  # T3 Absorption
 
-    # Default simulation time (days)
+    # Define default simulation time (days)
     $self->{simTime} = 5;
 
-    # Molecular weight of T3&T4. Used as conversion factor from mcg to mols
+    # Define molecular weights of T3 & T4, to convert between mcg and mols
     $self->{toMols}->{'3'}  = 651;
     $self->{toMols}->{'4'}  = 777;
     $self->{toMols}->{'T3'} = 651;
     $self->{toMols}->{'T4'} = 777;
 
-    # 0th integration is always 0-1008 hours and uses q0
-    # This part isn't currently used b/c 0th integration is defined in
-    # getplot.cgi.
-    $self->{integration}->{1}->{start} = 0;
-    $self->{integration}->{1}->{end}   = 1008;
-    $self->{integration}->{1}->{IC}    = 'q0';
-
     bless $self, $class;
-
-    # Load parameter list. Currently doesn't do anything.
-    $self->loadParams();
-
-    # Load conversion factors.
-    $self->loadConversionFactors();
-
-    # Build $self->{IC}->{q0}. Only needed when recalculating IC.
-    $self->setInitialIC();
 
     return $self;
 }
@@ -136,7 +164,8 @@ sub new {
 #====================================================================
 # SUBROUTINE:   processInputs
 # DESCRIPTION:
-#   Loop through all simulation conditions and organize them:
+#   Inputs come from the browser as one string. Split into individual simulation
+#   conditions and organize them as follows:
 #     Total simulation time:
 #       $self->{simTime}        = $number
 #     Recalculate initial conditions:
@@ -152,6 +181,11 @@ sub new {
 #       $self->{inputs}->{$num}->{disabled}   = $number
 #       $self->{inputs}->{$num}->{hormone}    = $number
 #       $self->{inputs}->{$num}->{type}       = $number
+#   Additional initializations done here:
+#     setInitialIC()
+#     detIntSteps()
+#     loadParams()
+#     loadConversionFactors()
 # NOTE: $num is the $num-th input
 #====================================================================
 sub processInputs {
@@ -177,16 +211,29 @@ sub processInputs {
             $self->setLvl1('recalcIC',$simCond->{$name});
         # Dials
         } elsif ($name =~ m/dialinput(\d)/) {
-            $self->{'dials'}->{$1} = $simCond->{$name};
-        # Rest of the inputs
+            $self->setLvl2('dials',$1,$simCond->{$name});
+        # Thysim model
+        } elsif ($name =~ m/thysim/) {
+            $self->setLvl1('thysim',$simCond->{$name});
+        # Dosing information. Assume splittable by '-'
+        } elsif ($name =~ m/(\w+)-(\d+)/) {
+            $self->setLvl3('inputs',$2,$1,$simCond->{$name});
+        # Ignore un-identified inputs
         } else {
-            my ($inputName,$num) = split(/-/,$name);
-            $self->setLvl3('inputs',$num,$inputName,$simCond->{$name});
         }
     }
 
+    # Build $self->{IC}->{q0}. Only needed when recalculating IC
+    $self->setInitialIC();
+
     # Determine intergration steps
     $self->detIntSteps();
+
+    # Load parameter list.
+    $self->loadParams();
+
+    # Load conversion factors.
+    $self->loadConversionFactors();
 }
 
 #====================================================================
@@ -227,20 +274,20 @@ sub processResults {
 #====================================================================
 # SUBROUTINE:   processKeyVal
 # DESCRIPTION:
-#   A pseudo-processResults.
-#   1. One of the main functions of processResults is to set end values of the
-#   Octave result as the IC for the next iteration. Here, IC is set from a
-#   pre-calculated value.
-#   2. After all ICs are set from pre-calculated values, make adjustments to IC
-#   based on inputs.
+#   Set next integration's IC with values from an ICKEY. Then, make adjustments
+#   to IC based on inputs.
+#
+#   Currently only used when the 0th integration is skipped and this is used to
+#   set q1's IC with values from a default ICKEY.
 #====================================================================
 sub processKeyVal {
-    my ($self,$icKey,$iter) = @_;
+    my ($self,$ickey,$iter) = @_;
 
-    my $keyRef = $self->getLvl2('ICKey',$icKey);
+    my $thysim = $self->getThysim();
+    my $keyRef = $self->getLvl3('ICKey',$thysim,$ickey);
     $iter =~ s/q//;             # ie. q0 => 0
     my $nextIter = $iter + 1;   # ie.  0 => 1
-    # Loop through all compartments as defined by $icKey
+    # Loop through all compartments to set their IC
     foreach my $comp (sort {$a <=> $b} keys %$keyRef) {
         $self->{IC}->{'q'.$nextIter}->{$comp} = $keyRef->{$comp};
     }
@@ -291,7 +338,7 @@ sub detIntSteps {
     my $inputs = $self->{inputs}; # Save typing
 
     # No inputs? Run simulation from 0 to simtime
-    if (!$inputs) {
+    if (!defined $inputs) {
         $self->setIntStart('thisStep',1,0);
         $self->setIntStart('trueStep',1,0);
         $self->setIntBound('thisStep',1,$simtime);
@@ -400,12 +447,24 @@ sub detIntSteps {
 #====================================================================
 # SUBROUTINE:   loadParams
 # DESCRIPTION:
-#   Loads a list of adult/child parameters.
-#   TODO:
-# NOTE: Currently does nothing.
+#   Loads parameters for a given thysim model. By default, loads
+#   Thyrosim.params. See the config/ dir for a list of thysim.
 #====================================================================
 sub loadParams {
     my ($self) = @_;
+
+    $self->{thysim} = $self->{thysim} // "Thyrosim";
+
+    my $file = "../config/" . $self->{thysim} . ".params";
+    open my $fh, '<', $file or die "Can't open file '$file': $!";
+
+    while (my $row = <$fh>) {
+        chomp $row;
+        my ($key, $value) = split /=/, $row;
+        $self->{params}->{$key} = $value;
+    }
+
+    close $fh or die "Can't close file '$file': $!";
 }
 
 #====================================================================
@@ -418,18 +477,10 @@ sub loadParams {
 sub loadConversionFactors {
     my ($self) = @_;
 
-    my $p47; # Plasma volume (L)
-    my $p48; # TSH volume (L)
+    my $p47 = $self->{params}->{p47}; # Plasma volume (L)
+    my $p48 = $self->{params}->{p48}; # TSH volume (L)
     my $ft4 = 0.45; # Temp conversion factor for free T4
     my $ft3 = 0.50; # Temp conversion factor for free T3
-
-    if ($self->{jr}) {
-        $p47  = 1;
-        $p48  = 2.5;
-    } else {
-        $p47 = 3.2;
-        $p48 = 5.2;
-    }
 
     $self->{CF}->{T4}  = 777/$p47; # mcg/L
     $self->{CF}->{T3}  = 651/$p47; # mcg/L
@@ -453,7 +504,7 @@ sub addTHData {
     # Push new values to the end of the old values array, but time t needs to
     # be adjusted, ie: 0 1 2 3 0 1 2 3 => 0 1 2 3 4 5 6 7
     if ($comp eq "t") {
-        my $lastT = $self->{data}->{$comp}->{values}->[-1];
+        my $lastT = $self->{data}->{$comp}->{values}->[-1] // 0;
         foreach my $time (@{$compData->{values}}) {
             my $thisT = $lastT + $time;
             push(@{$self->{data}->{$comp}->{values}},$thisT);
@@ -496,9 +547,10 @@ sub setEVasIC {
 sub setInitialIC {
     my ($self) = @_;
 
-    my $defaultKey = $self->getICKey('default');
-    my $keyRef = $self->getLvl2('ICKey',$defaultKey);
-    # Loop through all compartments
+    my $thysim = $self->getThysim();
+    my $ickey  = $self->getICKey('default');
+    my $keyRef = $self->getLvl3('ICKey',$thysim,$ickey);
+    # Loop through all compartments to set their IC
     foreach my $comp (sort {$a <=> $b} keys %$keyRef) {
         $self->{IC}->{q0}->{$comp} = $keyRef->{$comp};
     }
@@ -508,6 +560,9 @@ sub setInitialIC {
 # SUBROUTINE:   setAdjustedIC
 # DESCRIPTION:
 #   Adjust IC with input quantity as appropriate.
+# NOTE:
+#   Input types: 1 = Oral, 2 = IV, 3 = Infusion
+#   Hormone types: 3 = T3, 4 = T4
 #====================================================================
 sub setAdjustedIC {
     my ($self,$iter) = @_;
@@ -515,10 +570,14 @@ sub setAdjustedIC {
     $iter =~ s/q//;             # ie. q0 => 0
     my $nextIter = $iter + 1;   # ie.  0 => 1
 
+    # Check whether there is a next iteration, skip if there isn't
+    return 1 if !exists $self->{trueStep}->{$nextIter};
+
     # Find all inputs given at $trueStart
     my $trueStart = $self->getIntStart('trueStep',$nextIter);
-
     foreach my $inputNum (keys %{$self->{inputTime}->{$trueStart}}) {
+
+        next if $inputNum < 1;
 
         # Get hormone's info
         my $hormone = $self->getLvl3('inputs',$inputNum,'hormone');
@@ -564,9 +623,6 @@ sub setAdjustedIC {
         }
     }
 }
-# Note to self:
-# type: 1: oral; 2: IV; 3: Infusion
-# hormone: 3: T3; 4: T4
 
 #====================================================================
 # SUBROUTINE:   postProcess
@@ -594,6 +650,8 @@ sub postProcess {
     $convObj->{q7}  = $self->{CF}->{TSH};
     $convObj->{ft4} = $self->{CF}->{FT4};
     $convObj->{ft3} = $self->{CF}->{FT3};
+    #$convObj->{q20} = $self->{CF}->{FT4};
+    #$convObj->{q21} = $self->{CF}->{FT3};
 
     # TEST
 #--------------------------------------------------
@@ -650,9 +708,25 @@ sub postProcess {
 #     NOTE: $value is a hashRef with hormone name key and boolean value.
 #   simTime: total simulation time
 #     $self->{simTime} = $value
+#   recalcIC: whether to recalculate initial conditions
+#     $self->{recalcIC} = binary
+#   thysim: the thysim model to use
+#     $self->{thysim} = $thysim
 #====================================================================
 sub setLvl1 {
     $_[0]->{$_[1]} = $_[2];
+}
+
+#====================================================================
+# SUBROUTINE:   setLvl2
+# DESCRIPTION:
+#   Save a value 2 levels after $self.
+# USES:
+#   dials: saves $value of a $dial
+#     $self->{dials}->{$dial} = $value
+#====================================================================
+sub setLvl2 {
+    $_[0]->{$_[1]}->{$_[2]} = $_[3];
 }
 
 #====================================================================
@@ -781,7 +855,7 @@ sub getIntCount {
 sub getICKey {
     my ($self,$default) = @_;
 
-    # If user selected to not recalculate IC, return default icKey
+    # If user selected to not recalculate IC, return default ICKEY
     if ($default || !$self->recalcIC()) {
         return "1000088010000880";
     }
@@ -796,18 +870,15 @@ sub getICKey {
 #====================================================================
 # SUBROUTINE:   getICString
 # DESCRIPTION:
-#   Turn initial conditions into a string that can be passed to Octave
+#   Turn initial conditions into a string for input into the solver.
 #====================================================================
 sub getICString {
-    my ($self,$IC) = @_;
-
-    my $returnString = "";
-
-    foreach my $key (sort { $a <=> $b } keys %{$self->{IC}->{$IC}}) {
-        $returnString .= $self->{IC}->{$IC}->{$key}." ";
+    my ($self,$iter) = @_;
+    my $str = "";
+    foreach my $comp (sort { $a <=> $b } keys %{$self->{IC}->{$iter}}) {
+        $str .= $self->{IC}->{$iter}->{$comp}." ";
     }
-
-    return $returnString;
+    return $str;
 }
 
 #====================================================================
@@ -827,7 +898,7 @@ sub getICString {
 #     Multiplies the 'k3excrete' parameter to make the following true:
 #       k3absorb/(k3absorb+k3excrete) = absorb%
 #       absorb% is between 0-2 and default is 0.88
-# NOTE: $dialx here corresponds to varaible name in Octave file
+# NOTE: $dialx here corresponds to the same varaible name in the solver.
 #====================================================================
 sub getDialString {
     my ($self) = @_;
@@ -842,6 +913,9 @@ sub getDialString {
     my $T4absorb;
     my $T3absorb;
 
+    # TODO
+    # Instead of hardcoding 0.88 and 0.12, it should be loading the appropriate
+    # values from properties.
     if ($dial2 == 0) {
         $T4absorb = 0;
     } else {
@@ -879,6 +953,8 @@ sub getInfValue {
     my $inputs = $self->{inputs}; # Save typing
     foreach my $inputNum (keys %$inputs) {
 
+        next if $inputNum < 1;
+
         # Skip non-infusion inputs
         next if ($self->getLvl3('inputs',$inputNum,'type') != 3);
 
@@ -910,7 +986,7 @@ sub getLvl1 {
 #====================================================================
 # SUBROUTINE:   getLvl2
 # DESCRIPTION:
-#   Retrieve a value 2 levels after $self
+#   Retrieve a value 2 levels after $self.
 # USES:
 #   toShow: checks whether $hormone ist to be sent to the browser.
 #     $self->{toShow}->{$hormone} = $value
@@ -930,9 +1006,9 @@ sub getLvl2 {
 # USES:
 #   data-$name-values: returns an arrayRef of all values for a hormone $name.
 #     $self->{data}->{$name}->{values} = $arrayRef
-#   inputs: returns $value of an input parameter $name given $inputNum
+#   inputs: returns $value of an input parameter $name given $inputNum.
 #     $self->{inputs}->{$inputNum}->{$name} = $value
-#   infusion: returns infusion $value for u1 or u4
+#   infusion: returns infusion $value for u1 or u4.
 #     $self->{infusion}->{$inputNum}->{$uX} = $value
 #====================================================================
 sub getLvl3 {
@@ -946,9 +1022,9 @@ sub getLvl3 {
 # USES:
 #   thisStep: refers to 'this' interval's start time.
 #     $self->{thisStep}->{$count}->[0] = $value
-#   trueStep: refers to 'true' interval's start time
+#   trueStep: refers to 'true' interval's start time.
 #     $self->{trueStep}->{$count}->[0] = $value
-# NOTE: $count is an integer that corresponds with nth integration
+# NOTE: $count is an integer that corresponds with nth integration.
 #====================================================================
 sub getIntStart {
     return $_[0]->{$_[1]}->{$_[2]}->[0];
@@ -961,9 +1037,9 @@ sub getIntStart {
 # USES:
 #   thisStep: refers to 'this' interval's end time.
 #     $self->{thisStep}->{$count}->[1] = $value
-#   trueStep: refers to 'true' interval's end time
+#   trueStep: refers to 'true' interval's end time.
 #     $self->{trueStep}->{$count}->[1] = $value
-# NOTE: $count is an integer that corresponds with nth integration
+# NOTE: $count is an integer that corresponds with nth integration.
 #====================================================================
 sub getIntBound {
     return $_[0]->{$_[1]}->{$_[2]}->[1];
@@ -972,7 +1048,7 @@ sub getIntBound {
 #====================================================================
 # SUBROUTINE:   toHour
 # DESCRIPTION:
-#   Multiply a number by 24
+#   Multiply a number by 24.
 #====================================================================
 sub toHour {
     return $_[1]*24;
@@ -981,17 +1057,18 @@ sub toHour {
 #====================================================================
 # SUBROUTINE:   hasICKey
 # DESCRIPTION:
-#   Checks whether a initial condition key exists
+#   Checks whether an initial condition key exists.
 #====================================================================
 sub hasICKey {
-    my ($self,$icKey) = @_;
-    return $self->{ICKey}->{$icKey} ? 1 : 0;
+    my ($self,$ickey) = @_;
+    my $thysim = $self->getThysim();
+    return $self->{ICKey}->{$thysim}->{$ickey} ? 1 : 0;
 }
 
 #====================================================================
 # SUBROUTINE:   recalcIC
 # DESCRIPTION:
-#   Checks whether to recalculate initial conditions
+#   Checks whether to recalculate initial conditions.
 #====================================================================
 sub recalcIC {
     my ($self) = @_;
@@ -1005,12 +1082,14 @@ sub recalcIC {
 #====================================================================
 sub customInput {
     my ($self,$num) = @_;
+    my $thysim = $self->getThysim();
     my $inputs;
 
 # All 3 types of input at low doses
 if ($num == 1) {
     $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
             . '&simtime=5'
+            . '&thysim='.$thysim
             . '&type-1=1&hormone-1=4&disabled-1=0&dose-1=1'
             .  '&int-1=1&start-1=1&end-1=2'
             . '&type-2=2&hormone-2=4&disabled-2=0&dose-2=2&start-2=2'
@@ -1024,6 +1103,7 @@ if ($num == 1) {
 if ($num == 2) {
     $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
             . '&simtime=5'
+            . '&thysim='.$thysim
             . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=400&int-1=1'
             .  '&start-1=1&end-1=5';
 }
@@ -1032,6 +1112,7 @@ if ($num == 2) {
 if ($num == 3) {
     $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
             . '&simtime=3'
+            . '&thysim='.$thysim
             . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=400'
             .  '&singledose-1=1&start-1=1';
 }
@@ -1039,18 +1120,21 @@ if ($num == 3) {
 # No inputs
 if ($num == 4) {
     $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
-            . '&simtime=1';
+            . '&simtime=1'
+            . '&thysim='.$thysim;
 }
 
 # 2 infusion inputs
 if ($num == 5) {
     $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
             . '&simtime=5'
+            . '&thysim='.$thysim
             . '&hormone-1=4&type-1=3&disabled-1=0&dose-1=400'
             .  '&start-1=1&end-1=4'
             . '&hormone-2=4&type-2=3&disabled-2=0&dose-2=400'
             .  '&start-2=2&end-2=6';
 }
+
     return $inputs;
 }
 
@@ -1089,15 +1173,14 @@ sub getCommand {
 
     my $docRoot = $self->{docRoot};
     my $fRoot   = $self->{fRoot};
-    my $jr      = $self->{jr} ? "Jr" : "";
 
     my $command;
     if ($solver eq "octave") {
         $command = "octave -q $docRoot/$fRoot/octave";
         if ($getinit) {
-            $command .= "/Getinit$jr.m";
+            $command .= "/Getinit.m";
         } else {
-            $command .= "/Thyrosim$jr.m";
+            $command .= "/Thyrosim.m";
         }
     }
 
@@ -1106,13 +1189,22 @@ sub getCommand {
                  . "$docRoot/$fRoot/java/ "
                  . "edu.ucla.distefanolab.thyrosim.algorithm.";
         if ($getinit) {
-            $command .= "Getinit$jr";
+            $command .= "Getinit";
         } else {
-            $command .= "Thyrosim$jr";
+            $command .= "Thyrosim";
         }
     }
 
     return $command;
+}
+
+#====================================================================
+# SUBROUTINE:   getThysim
+# DESCRIPTION:
+#   Getting for $self->{thysim}.
+#====================================================================
+sub getThysim {
+    return $_[0]->{thysim};
 }
 
 #====================================================================
