@@ -1,4 +1,11 @@
 Change log
+2019-11-19
+1. Added ThyrosimJr html
+2. Removed solvers for just ThyrosimJr
+3. Created a system where the same solver can be used for any simulation model
+   (e.g., ThyrosimJr)
+4. Added configuration files and UI changes so #3 is possible
+
 2019-01-22
 1. "Example" pane automatically closes after a run
 2. Thyrosim set to version 2.0
