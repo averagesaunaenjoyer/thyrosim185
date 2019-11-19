@@ -37,8 +37,6 @@ use THYROSIM;
 my $thsim = THYROSIM->new(toShow  => 'default',
                           docRoot => $ENV{DOCUMENT_ROOT},
                           fRoot   => $F_ROOT);
-# TODO - currently setting thysim here, but need to set it in the UI.
-#$thsim->setLvl1('thysim',"ThyrosimJr");
 
 # New CGI object and read input from UI.
 my $cgi = new CGI;
@@ -55,7 +53,7 @@ $thsim->processInputs(\$dat);
 # 0 - 18:  19 compartments' initial conditions.
 # 19:      ODE start time.
 # 20:      ODE end time.
-# 21 - 24: Secretion/Absorption values (from dials).
+# 21 - 24: Dial values (secretion/absorption).
 # 25 - 26: Infusion values.
 # 27:      The thysim parameters to load.
 #-------------------------------------------------- 
@@ -74,16 +72,19 @@ my $thysim = $thsim->getThysim();
 # where the initial day didn't start at exactly steady state.
 # Currently using Lu Chen's IC, which fixed an issue with q4 starting too low.
 #-------------------------------------------------- 
-my $secAbs = $thsim->getDialString(); # Only needed once
-my $icKey = $thsim->getICKey();
-if ($thsim->hasICKey($icKey) || !$thsim->recalcIC()) {
-    $thsim->processKeyVal($icKey,'q0');
-} else {
-    my $ICstr = $thsim->getICString('q0');
-    my @results = `$getinit $ICstr 0 1008 $secAbs 0 0 $thysim` or die "died: $!";
+my $dials = $thsim->getDialString(); # Only needed once
+my $ickey = $thsim->getICKey();
+if ($thsim->hasICKey($ickey) || !$thsim->recalcIC()) {
 
-    # Process the results of the 0th integration. Will also save the end values
-    # as IC for the next integration, q1.
+    # Skipping 0th integration, but still need to set q1's IC
+    $thsim->processKeyVal($ickey,'q0');
+} else {
+
+    # Perform 0th integration
+    my $ICstr = $thsim->getICString('q0');
+    my @results = `$getinit $ICstr 0 1008 $dials 0 0 $thysim` or die "died: $!";
+
+    # Save end values as IC for the next integration, q1
     $thsim->processResults(\@results,'q0');
 }
 
@@ -99,7 +100,7 @@ foreach my $count (@$counts) {
     my $ICstr = $thsim->getICString('q'.$count);
     my $u     = $thsim->getInfValue('q'.$count);
 
-    my @results = `$command $ICstr $start $end $secAbs $u $thysim` or die "died: $!";
+    my @results = `$command $ICstr $start $end $dials $u $thysim` or die "died: $!";
     $thsim->processResults(\@results,'q'.$count);
 }
 
