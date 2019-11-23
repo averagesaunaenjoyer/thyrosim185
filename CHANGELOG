@@ -1,4 +1,8 @@
 Change log
+2019-11-23
+1. Deprecated Octave solvers
+2. Consolidated Getinit.java and Thyrosim.java into Thyrosim.java
+
 2019-11-19
 1. Added ThyrosimJr html
 2. Removed solvers for just ThyrosimJr
