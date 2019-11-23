@@ -4,7 +4,7 @@
 // DESCRIPTION:
 //   Functions relating to AJAX will go in here. Currently this involves sending
 //   and receiving the request object and graphing related functions.
-//-------------------------------------------------- 
+//--------------------------------------------------
 
 // Required for ajax, so load on file load
 var xmlhttp;
@@ -18,7 +18,7 @@ if (window.XMLHttpRequest) {
 
 // Run the server-side script and retrieve plotting data and configurations
 // in a JSON data structure
-var responseObjObj = new getResponseObjObj();
+var ThyrosimGraph = new ThyrosimGraph();
 function loadXMLDoc(e) {
     var followId = getFollowId();
     startLoading(followId); // shows "loading.gif"
@@ -31,7 +31,7 @@ function loadXMLDoc(e) {
     }
 
     // Serialize form inputs and inputs are processed server side. JQuery can't
-    // convert JS objects to JSON and would require an additional file that I 
+    // convert JS objects to JSON and would require an additional file that I
     // don't want to include.
     var formdata = $("form").serialize();
     // If the user selected to run default behavior, override formdata
@@ -49,7 +49,7 @@ function loadXMLDoc(e) {
 //        alert(msg);
         var responseObj = jQuery.parseJSON(msg);
         var runRadioVal = $('input:radio[name=runRadio]:checked').val();
-        responseObjObj.setObj(runRadioVal,responseObj);
+        ThyrosimGraph.setObj(runRadioVal,responseObj);
         graphthis();
         stopLoading(followId); // hides "loading.gif"
         var end = new Date().getTime();
@@ -62,25 +62,25 @@ function loadXMLDoc(e) {
 //--------------------------------------------------
 // Wrapper to call the graphing function based on the hormone.
 // Should be okay because JavaScript passes objects as references.
-//-------------------------------------------------- 
+//--------------------------------------------------
 function graphthis() {
 
     // Create hormone objects
     // Hormone, Compartment, Unit Label, Lower & Upper normal range
     var FT4 = new Hormone("FT4","ft4","ng/L"     ,"8"  ,"17");
     var FT3 = new Hormone("FT3","ft3","ng/L"     ,"2.2","4.4");
-    var T4  = new Hormone("T4" ,"q1" ,"\u03BCg/L","45" ,"105");
-    var T3  = new Hormone("T3" ,"q4" ,"\u03BCg/L",".6" ,"1.8");
-    var TSH = new Hormone("TSH","q7" ,"mU/L"     ,".4" ,"4"  );
+    var T4  = new Hormone("T4" ,"1"  ,"\u03BCg/L","45" ,"105");
+    var T3  = new Hormone("T3" ,"4"  ,"\u03BCg/L",".6" ,"1.8");
+    var TSH = new Hormone("TSH","7"  ,"mU/L"     ,".4" ,"4"  );
 
     // Need to initialize the graph?
-    if (responseObjObj.initGraph) {
+    if (ThyrosimGraph.initGraph) {
         graph(FT4,"" ,"1");
         graph(FT3,"" ,"1");
         graph(T4 ,"" ,"1");
         graph(T3 ,"" ,"1");
         graph(TSH,"1","1");
-        responseObjObj.initGraph = false;
+        ThyrosimGraph.initGraph = false;
     // Plot the graph
     } else {
         graph(FT4,"" );
@@ -93,7 +93,7 @@ function graphthis() {
 
 //--------------------------------------------------
 // d3 line graph
-//-------------------------------------------------- 
+//--------------------------------------------------
 //function graph(hormone,comp,unit,addlabel,initgraph) {
 function graph(hormoneObj,addlabel,initgraph) {
 
@@ -108,9 +108,9 @@ function graph(hormoneObj,addlabel,initgraph) {
     var h = 130; // height in pixels of the graph
 
     // Scales
-    var xVal = responseObjObj.getXVal(comp);
-    var yVal = responseObjObj.getYVal(comp);
-    var yEnd = responseObjObj.getEndVal(yVal);
+    var xVal = ThyrosimGraph.getXVal(comp);
+    var yVal = ThyrosimGraph.getYVal(comp);
+    var yEnd = ThyrosimGraph.getEndVal(yVal);
     var x = d3.scale.linear().domain([0,xVal]).range([0,w]);
     var y = d3.scale.linear().domain([0,yEnd]).range([h,0]);
 
@@ -131,7 +131,7 @@ function graph(hormoneObj,addlabel,initgraph) {
     var graph = d3.select("#"+hormone+"graph");
     var tooltip;
     var f = d3.format(".2f");
-    
+
     // Initialize the graph
     // Graph is initialized once per instance of loading.
     var xT = 45; // x direction translate
@@ -211,7 +211,7 @@ function graph(hormoneObj,addlabel,initgraph) {
             .call(yAxis);
 
         // Add hidden paths to graph
-        $.each(responseObjObj.colors,function(idx,color) {
+        $.each(ThyrosimGraph.colors,function(idx,color) {
             // Empty data values
             var data = [0];
 
@@ -228,7 +228,7 @@ function graph(hormoneObj,addlabel,initgraph) {
                 .attr("stroke",color)
                 .attr("stroke-width","1.5")
                 .attr("fill","none")
-                .style("stroke-dasharray",responseObjObj.lineStyle[color]);
+                .style("stroke-dasharray",ThyrosimGraph.lineStyle[color]);
 
             // Append dummy circle for tooltip
             graph.selectAll("circle.dot"+color)
@@ -265,7 +265,7 @@ function graph(hormoneObj,addlabel,initgraph) {
             .attr("height",h-y(rangeVals.height));
 
         // Update data points for each color
-        $.each(responseObjObj.colors,function(idx,color) {
+        $.each(ThyrosimGraph.colors,function(idx,color) {
             // Empty data values
             var valuesD = [0];
             var valuesT = [0];
@@ -274,10 +274,10 @@ function graph(hormoneObj,addlabel,initgraph) {
             graph.select("svg").select("g").selectAll(".dot"+color)
                 .data(valuesD).exit().remove();
 
-            if (responseObjObj.checkObjTypeExist(color)) {
+            if (ThyrosimGraph.checkObjTypeExist(color)) {
                 // Real data values
-                valuesD = responseObjObj.getObjData(color,comp);
-                valuesT = responseObjObj.getObjData(color,"t");
+                valuesD = ThyrosimGraph.getObjData(color,comp);
+                valuesT = ThyrosimGraph.getObjData(color,"t");
             }
 
             // Line
@@ -356,7 +356,7 @@ function graph(hormoneObj,addlabel,initgraph) {
             thisXAxis = xAxis;
             thisXLabel = "Days";
         }
-        
+
         // Update x-axis
         d3.selectAll("g.x-axis")
             .call(thisXAxis)
@@ -388,7 +388,7 @@ function graph(hormoneObj,addlabel,initgraph) {
 // image is hidden at first, so set css to block to show.
 // The 'click' event is needed so loading.gif shows up when "Simulate" is
 // pressed. Otherwise, loading.gif will only show after the mouse is moved.
-//-------------------------------------------------- 
+//--------------------------------------------------
 function getFollowId() {
     var s = '#dialinput';
     if ($(s+'1').prop('defaultValue') == $(s+'1').prop('value') &&
@@ -414,7 +414,7 @@ function startLoading(fid) {
 
 //--------------------------------------------------
 // After the graph is loaded, unbind the events and hide "Loading" image.
-//-------------------------------------------------- 
+//--------------------------------------------------
 function stopLoading(fid) {
     $(window).unbind();
     $('#'+fid).css('display','none');
@@ -422,7 +422,7 @@ function stopLoading(fid) {
 
 //--------------------------------------------------
 // Validate form.
-//-------------------------------------------------- 
+//--------------------------------------------------
 function validateForm() {
     var nomatch = 0;
 
@@ -479,7 +479,7 @@ function Hormone(hormone,comp,unit,lowerBound,upperBound) {
 //--------------------------------------------------------------------
 // Maintain both Blue and Green response objects
 //--------------------------------------------------------------------
-function getResponseObjObj() {
+function ThyrosimGraph() {
     this.initGraph = true;
 
     // Colors
@@ -567,9 +567,9 @@ function getResponseObjObj() {
         var maxY = 0;
         if (comp == "ft4") {maxY = ft4min;}
         if (comp == "ft3") {maxY = ft3min;}
-        if (comp == "q1")  {maxY = q1min; }
-        if (comp == "q4")  {maxY = q4min; }
-        if (comp == "q7")  {maxY = q7min; }
+        if (comp == "1")   {maxY = q1min; }
+        if (comp == "4")   {maxY = q4min; }
+        if (comp == "7")   {maxY = q7min; }
 
         $.each(colors,function(idx,type) {
             if (checkObjTypeExist(type)) {
@@ -649,12 +649,12 @@ function getResponseObjObj() {
 
 //--------------------------------------------------
 // Range box
-//-------------------------------------------------- 
+//--------------------------------------------------
 function normRangeCalc(yMax,y2,y1) {
 
     if (y1 > yMax) {
         return { y2: 0, y1: 0, height: 0, offset: 0 };
-    } 
+    }
     if (y2 > yMax) {
         var height = yMax - y1;
         return { y2: yMax, y1: y1, height: height, offset: 0 };
@@ -667,16 +667,16 @@ function normRangeCalc(yMax,y2,y1) {
 
 //--------------------------------------------------
 // Erase a drawn line
-//-------------------------------------------------- 
+//--------------------------------------------------
 function resetObj(type) {
-    responseObjObj.setObj(type,undefined);
+    ThyrosimGraph.setObj(type,undefined);
     graphthis();
 }
 
 //--------------------------------------------------
 // Select the next run color
 // Since we only have 2 colors, this would work
-//-------------------------------------------------- 
+//--------------------------------------------------
 function runRadioNext() {
     var runRadio = $('input[name=runRadio]');
     if (runRadio[0].checked == true) {

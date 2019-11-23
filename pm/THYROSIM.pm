@@ -5,6 +5,13 @@ use v5.10; use strict; use warnings;
 # AUTHOR:       Simon X. Han
 # DESCRIPTION:
 #   Package where Thyroid Simulator subroutines live.
+# NOTES:
+#   SS: Steady state
+#   IC: Initial condition
+#   iX: Prefix for the Xth integration
+#   qX: Prefix for the Xth compartment, refers only to q1 - q19
+#   cX: Prefix for the Xth compartment, refers to both qX and pseudo
+#       compartments.
 #==============================================================================
 
 package THYROSIM;
@@ -22,45 +29,55 @@ sub new {
     my $self;
 
     #--------------------------------------------------
+    # Define existing compartments. Must match java/Thyrosim.java.
+    #--------------------------------------------------
+
+    # Compartments 1-19 are as defined in the ODEs. The pseudo compartments are
+    # those needed by the program, but not part of the ODEs. Values match the
+    # order results from java/Thyrosim.java is printed.
+    $self->{compartment}->{t}   = 0;  # Pseudo compartment
+    $self->{compartment}->{1}   = 1;
+    $self->{compartment}->{2}   = 2;
+    $self->{compartment}->{3}   = 3;
+    $self->{compartment}->{4}   = 4;
+    $self->{compartment}->{5}   = 5;
+    $self->{compartment}->{6}   = 6;
+    $self->{compartment}->{7}   = 7;
+    $self->{compartment}->{8}   = 8;
+    $self->{compartment}->{9}   = 9;
+    $self->{compartment}->{10}  = 10;
+    $self->{compartment}->{11}  = 11;
+    $self->{compartment}->{12}  = 12;
+    $self->{compartment}->{13}  = 13;
+    $self->{compartment}->{14}  = 14;
+    $self->{compartment}->{15}  = 15;
+    $self->{compartment}->{16}  = 16;
+    $self->{compartment}->{17}  = 17;
+    $self->{compartment}->{18}  = 18;
+    $self->{compartment}->{19}  = 19;
+    $self->{compartment}->{ft4} = 20; # Pseudo compartment
+    $self->{compartment}->{ft3} = 21; # Pseudo compartment
+
+    # Shorthand for the 19 ODE compartments
+    $self->{qdots} = [ 1 .. 19 ];
+
+    #--------------------------------------------------
     # Set which results to send to the browser
     #--------------------------------------------------
 
     # By default, send t, q1, q4, q7, ft4, and ft3 to browser
-    $self->{toShow}->{t}   = 1;
-    $self->{toShow}->{q1}  = 1;
-    $self->{toShow}->{q4}  = 1;
-    $self->{toShow}->{q7}  = 1;
-    $self->{toShow}->{ft4} = 1; # FT4p values
-    $self->{toShow}->{ft3} = 1; # FT3p values
-    #$self->{toShow}->{q20} = 1; # FT4p values
-    #$self->{toShow}->{q21} = 1; # FT3p values
+    $self->{show}->{t}   = 1;
+    $self->{show}->{1}   = 1;
+    $self->{show}->{4}   = 1;
+    $self->{show}->{7}   = 1;
+    $self->{show}->{ft4} = 1;
+    $self->{show}->{ft3} = 1;
 
     # Can additionally send everything to browser
-    if ($params{toShow} eq "all") {
-        $self->{toShow}->{t}   = 1;
-        $self->{toShow}->{q1}  = 1;
-        $self->{toShow}->{q2}  = 1;
-        $self->{toShow}->{q3}  = 1;
-        $self->{toShow}->{q4}  = 1;
-        $self->{toShow}->{q5}  = 1;
-        $self->{toShow}->{q6}  = 1;
-        $self->{toShow}->{q7}  = 1;
-        $self->{toShow}->{q8}  = 1;
-        $self->{toShow}->{q9}  = 1;
-        $self->{toShow}->{q10} = 1;
-        $self->{toShow}->{q11} = 1;
-        $self->{toShow}->{q12} = 1;
-        $self->{toShow}->{q13} = 1;
-        $self->{toShow}->{q14} = 1;
-        $self->{toShow}->{q15} = 1;
-        $self->{toShow}->{q16} = 1;
-        $self->{toShow}->{q17} = 1;
-        $self->{toShow}->{q18} = 1;
-        $self->{toShow}->{q19} = 1;
-        $self->{toShow}->{ft4} = 1;
-        $self->{toShow}->{ft3} = 1;
-        #$self->{toShow}->{q20} = 1;
-        #$self->{toShow}->{q21} = 1;
+    if ($params{setshow} eq "all") {
+        foreach my $c (keys %{$self->{compartment}}) {
+            $self->{show}->{$c} = 1;
+        }
     }
 
     #--------------------------------------------------
@@ -75,60 +92,60 @@ sub new {
 
     # Thysim: Thyrosim
     # Calculated by Lu Chen using Marisa's IC
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{1}  = 0.322114215761171;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{2}  = 0.201296960359917;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{3}  = 0.638967411907560;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{4}  = 0.00663104034826483;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{5}  = 0.0112595761822961;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{6}  = 0.0652960640300348;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{7}  = 1.78829584764370;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{8}  = 7.05727560072869;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{9}  = 7.05714474742141;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{10} = 0;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{11} = 0;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{12} = 0;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{13} = 0;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{14} = 3.34289716182018;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{15} = 3.69277248068433;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{16} = 3.87942133769244;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{17} = 3.90061903207543;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{18} = 3.77875734283571;
-    $self->{ICKey}->{Thyrosim}->{'1000088010000880'}->{19} = 3.55364471589659;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{1}  = 0.322114215761171;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{2}  = 0.201296960359917;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{3}  = 0.638967411907560;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{4}  = 0.00663104034826483;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{5}  = 0.0112595761822961;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{6}  = 0.0652960640300348;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{7}  = 1.78829584764370;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{8}  = 7.05727560072869;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{9}  = 7.05714474742141;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{10} = 0;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{11} = 0;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{12} = 0;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{13} = 0;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{14} = 3.34289716182018;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{15} = 3.69277248068433;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{16} = 3.87942133769244;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{17} = 3.90061903207543;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{18} = 3.77875734283571;
+    $self->{ICKey}->{Thyrosim}->{1000088010000880}->{19} = 3.55364471589659;
 
     # Thysim: ThyrosimJr
     # Calculated by Simon Han using Thyrosim's SS
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{1}  = 0.09374997165528334;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{2}  = 0.12327377103697522;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{3}  = 0.13076884496615795;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{4}  = 0.003737105895366619;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{5}  = 0.005647605690886433;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{6}  = 0.0381258296681322;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{7}  = 0.6854188695057679;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{8}  = 7.50672575320393;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{9}  = 7.5062287694075875;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{10} = 0;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{11} = 0;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{12} = 0;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{13} = 0;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{14} = 1.3188108472954458;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{15} = 1.4914848785095203;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{16} = 1.5965449597371968;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{17} = 1.629073258562129;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{18} = 1.5956853645161484;
-    $self->{ICKey}->{ThyrosimJr}->{'1000088010000880'}->{19} = 1.5115673448144067;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{1}  = 0.09374997165528334;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{2}  = 0.12327377103697522;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{3}  = 0.13076884496615795;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{4}  = 0.003737105895366619;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{5}  = 0.005647605690886433;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{6}  = 0.0381258296681322;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{7}  = 0.6854188695057679;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{8}  = 7.50672575320393;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{9}  = 7.5062287694075875;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{10} = 0;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{11} = 0;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{12} = 0;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{13} = 0;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{14} = 1.3188108472954458;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{15} = 1.4914848785095203;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{16} = 1.5965449597371968;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{17} = 1.629073258562129;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{18} = 1.5956853645161484;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{19} = 1.5115673448144067;
 
     #--------------------------------------------------
-    # Define input types and hormone types
+    # Define input types and hormones
     #--------------------------------------------------
 
     # Define input types
-    $self->{type}->{1} = "Oral";
-    $self->{type}->{2} = "IV";
-    $self->{type}->{3} = "Infusion";
+    $self->{inputType}->{1} = "Oral";
+    $self->{inputType}->{2} = "IV";
+    $self->{inputType}->{3} = "Infusion";
 
-    $self->{type}->{Oral}     = 1;
-    $self->{type}->{IV}       = 2;
-    $self->{type}->{Infusion} = 3;
+    $self->{inputType}->{Oral}     = 1;
+    $self->{inputType}->{IV}       = 2;
+    $self->{inputType}->{Infusion} = 3;
 
     # Define hormone types
     $self->{hormone}->{3} = "T3";
@@ -142,59 +159,94 @@ sub new {
     #--------------------------------------------------
 
     # Define default dial values
-    $self->{dials}->{1} = 100; # T4 Secretion
-    $self->{dials}->{2} = 88;  # T4 Absorption
-    $self->{dials}->{3} = 100; # T3 Secretion
-    $self->{dials}->{4} = 88;  # T3 Absorption
+    $self->{dial}->{1} = 100; # T4 Secretion
+    $self->{dial}->{2} = 88;  # T4 Absorption
+    $self->{dial}->{3} = 100; # T3 Secretion
+    $self->{dial}->{4} = 88;  # T3 Absorption
 
     # Define default simulation time (days)
     $self->{simTime} = 5;
 
+    # Define default recalculate IC (1 for yes)
+    $self->{recalcIC} = 1;
+
     # Define molecular weights of T3 & T4, to convert between mcg and mols
-    $self->{toMols}->{'3'}  = 651;
-    $self->{toMols}->{'4'}  = 777;
-    $self->{toMols}->{'T3'} = 651;
-    $self->{toMols}->{'T4'} = 777;
+    $self->{toMols}->{3}   = 651;
+    $self->{toMols}->{4}   = 777;
+    $self->{toMols}->{T3}  = 651;
+    $self->{toMols}->{T4}  = 777;
+    $self->{toMols}->{TSH} = 5.6;
 
     bless $self, $class;
+
+    #--------------------------------------------------
+    # Post-bless initializations
+    #--------------------------------------------------
+
+    # Initialize compartments
+    $self->initCompartments();
 
     return $self;
 }
 
 #====================================================================
-# SUBROUTINE:   processInputs
+# SUBROUTINE:   initCompartments
+# DESCRIPTION:
+#   Initialize each compartment. Only 'show' compartments will have 'values'
+#   populated. While end values will always be populated, be aware that they are
+#   iteration dependant, so are more like temporary values.
+#
+#   min/max:    Will be initialized when the first value is seen.
+#====================================================================
+sub initCompartments {
+    my ($self) = @_;
+    my @cs = keys %{$self->{compartment}}; # All compartments
+    foreach my $c (@cs) {
+        $self->{data}->{$c} = {};
+        $self->{data}->{$c}->{name} = $c;
+        $self->{data}->{$c}->{min} = undef;
+        $self->{data}->{$c}->{max} = undef;
+        $self->{data}->{$c}->{end} = 0;
+        $self->{data}->{$c}->{idx} = $self->getCompIdx($c);
+        $self->{data}->{$c}->{count} = 0;
+        $self->{data}->{$c}->{values} = []; # arrayRef
+    }
+}
+
+#====================================================================
+# SUBROUTINE:   processForm
 # DESCRIPTION:
 #   Inputs come from the browser as one string. Split into individual simulation
 #   conditions and organize them as follows:
 #     Total simulation time:
 #       $self->{simTime}        = $number
 #     Recalculate initial conditions:
-#       $self->{recalcIC}       = $number (1 for yes)
+#       $self->{recalcIC}       = $number
 #     Dials (secretion/absorption):
-#       $self->{dials}->{$dial} = $number
+#       $self->{dial}->{$dial} = $number
 #     Simulation conditions (each input has some of the below):
-#       $self->{inputs}->{$num}->{dose}       = $number
-#       $self->{inputs}->{$num}->{int}        = $number
-#       $self->{inputs}->{$num}->{singledose} = $number
-#       $self->{inputs}->{$num}->{start}      = $number
-#       $self->{inputs}->{$num}->{end}        = $number
-#       $self->{inputs}->{$num}->{disabled}   = $number
-#       $self->{inputs}->{$num}->{hormone}    = $number
-#       $self->{inputs}->{$num}->{type}       = $number
+#       $self->{input}->{$num}->{dose}       = $number
+#       $self->{input}->{$num}->{int}        = $number
+#       $self->{input}->{$num}->{singledose} = $number
+#       $self->{input}->{$num}->{start}      = $number
+#       $self->{input}->{$num}->{end}        = $number
+#       $self->{input}->{$num}->{disabled}   = $number
+#       $self->{input}->{$num}->{hormone}    = $number
+#       $self->{input}->{$num}->{type}       = $number
 #   Additional initializations done here:
 #     setInitialIC()
 #     detIntSteps()
 #     loadParams()
 #     loadConversionFactors()
-# NOTE: $num is the $num-th input
+# NOTES: $num is the $num-th input
 #====================================================================
-sub processInputs {
+sub processForm {
     my ($self,$inputs) = @_;
 
     my $simCond;
 
-    # Breakup the input string and save to $simCond
-    my @inputs = split(/&/,$$inputs); # $inputs is a ref. Deref.
+    # Split the input string and save to $simCond
+    my @inputs = split(/&/,$$inputs); # $inputs is a stringRef
     foreach my $pair (@inputs) {
         my ($name,$value) = split(/=/,$pair);
         $simCond->{$name} = $value;
@@ -211,19 +263,19 @@ sub processInputs {
             $self->setLvl1('recalcIC',$simCond->{$name});
         # Dials
         } elsif ($name =~ m/dialinput(\d)/) {
-            $self->setLvl2('dials',$1,$simCond->{$name});
+            $self->setLvl2('dial',$1,$simCond->{$name});
         # Thysim model
         } elsif ($name =~ m/thysim/) {
             $self->setLvl1('thysim',$simCond->{$name});
         # Dosing information. Assume splittable by '-'
         } elsif ($name =~ m/(\w+)-(\d+)/) {
-            $self->setLvl3('inputs',$2,$1,$simCond->{$name});
+            $self->setLvl3('input',$2,$1,$simCond->{$name});
         # Ignore un-identified inputs
         } else {
         }
     }
 
-    # Build $self->{IC}->{q0}. Only needed when recalculating IC
+    # Build $self->{IC}->{0}. Only needed when recalculating IC
     $self->setInitialIC();
 
     # Determine intergration steps
@@ -239,59 +291,121 @@ sub processInputs {
 #====================================================================
 # SUBROUTINE:   processResults
 # DESCRIPTION:
-#   Processes Octave results 1 compartment at a time. For each comp:
-#     - Saves comp name
-#     - Saves all result values for comps set to show
-#     - Saves total number of results
-#     - Saves max/min values
-#     - Saves the end value as the initial condition for next run
-#   After all comp results are processed, make adjustments to IC based on
-#   inputs.
+#   Process results from the solver. Each line of results contains the
+#   following:
+#     [0]:    t
+#     [1-19]: q1 to q19 values at t
+#     [20]:   FT4p at t
+#     [21]:   FT3p at t
+#   Do:
+#     - Save results for show compartments
+#     - Update min/max values
+#     - Update total number of results
+#     - Set end values as initial conditions for the next iteration
+#     - Adjust initial conditions by input amounts
 #====================================================================
 sub processResults {
-    my ($self,$results,$iter) = @_;
+    my ($self,$res,$iThis) = @_;
 
-    # Get results from current simulation
-    while (my $compData = $self->getCompData($results)) {
+    my $iNext = $iThis + 1;
 
-        my $comp = $compData->{name};
+    my $ln_total = scalar @$res; # ln for lines
+    my $ln_count = 1;
 
-        # For hormones set toShow, saves hormone name and all result values.
-        # Compare current and previous max/min & count. Update as necessary.
-        # Results from 0th iteration is not saved because it is not shown to
-        # users.
-        $self->addTHData($comp,$compData)
-            if (($self->getLvl2('toShow',$comp)) && ($iter ne "q0"));
+    my @shows = keys %{$self->{show}};        # Compartments to show
+    my @comps = keys %{$self->{compartment}}; # All compartments
+    my @qdots = @{$self->{qdots}};            # q1 - q19
 
-        # Save the end values of $iter as the next IC
-        $self->setEVasIC($compData,$iter);
+    # Iterate over lines of results
+    foreach my $line (@$res) {
+        $line =~ s/[\r\n]*$//; # Remove newline
+        my @row = split / /, $line;
+
+        # Iterate over all show compartments
+        foreach my $c (@shows) {
+            my $s = $self->{data}->{$c}; # Shorthand
+            my $v = $row[$s->{idx}];     # Value
+
+            # Adjust value for t so that it is continuous:
+            # 0 1 2 3 0 1 2 3 => 0 1 2 3 4 5 6 7
+            $v += $s->{end} if $c eq "t";
+
+            # Save value only for i1+ because i0 isn't shown to users
+            push(@{$s->{values}},$v) if $iThis > 0;
+
+            # Initialize min/max
+            $s->{min} = $v if !defined $s->{min};
+            $s->{max} = $v if !defined $s->{max};
+
+            # Update min/max
+            $s->{min} = $v if $v < $s->{min};
+            $s->{max} = $v if $v > $s->{max};
+        }
+
+        # This is the last line of results
+        if ($ln_total == $ln_count) {
+
+            # Update all end values
+            foreach my $c (@comps) {
+                my $s = $self->{data}->{$c}; # Shorthand
+                my $v = $row[$s->{idx}];     # Value
+
+                # For time, the end value has to be the overall end value. When
+                # $s->{values}->[-1] is not defined, as in i0, use $s->{end},
+                # which is initialized as 0. For other compartments, taking the
+                # $v here suffices. Cannot use $s->{values}->[-1] because values
+                # are only saved for $iThis > 0;
+                if ($c eq "t") {
+                    $s->{end} = $s->{values}->[-1] // $s->{end};
+                } else {
+                    $s->{end} = $v;
+                }
+            }
+        }
+
+        $ln_count++;
+    } # Iterate over lines of results end
+
+    #--------------------------------------------------
+    # Post-iteration processing
+    #--------------------------------------------------
+
+    # Save end values as IC for next iteration (only qdots)
+    foreach my $c (@qdots) {
+        $self->{IC}->{$iNext}->{$c} = $self->{data}->{$c}->{end};
     }
 
-    # Make adjustment to IC based on inputs
-    $self->setAdjustedIC($iter);
+    # Make input adjustments for next iteration
+    $self->setAdjustedIC($iThis);
+
+    # Update counts (all compartments). Updating counts here allows checking how
+    # many new values were added per iX.
+    foreach my $c (@comps) {
+        my $s = $self->{data}->{$c}; # Shorthand
+        $s->{count} = scalar @{$s->{values}};
+    }
+
 }
 
 #====================================================================
 # SUBROUTINE:   processKeyVal
 # DESCRIPTION:
-#   Set next integration's IC with values from an ICKEY. Then, make adjustments
+#   Set next integration's IC with values from an $ickey. Then, make adjustments
 #   to IC based on inputs.
 #
-#   Currently only used when the 0th integration is skipped and this is used to
-#   set q1's IC with values from a default ICKEY.
+#   Currently only used when i0 is skipped and this is used to set i1's IC with
+#   values from a default $ickey.
 #====================================================================
 sub processKeyVal {
-    my ($self,$ickey,$iter) = @_;
-
+    my ($self,$ickey,$iThis) = @_;
+    my $iNext  = $iThis + 1;
     my $thysim = $self->getThysim();
-    my $keyRef = $self->getLvl3('ICKey',$thysim,$ickey);
-    $iter =~ s/q//;             # ie. q0 => 0
-    my $nextIter = $iter + 1;   # ie.  0 => 1
+    my $qs = $self->getLvl3('ICKey',$thysim,$ickey);
     # Loop through all compartments to set their IC
-    foreach my $comp (sort {$a <=> $b} keys %$keyRef) {
-        $self->{IC}->{'q'.$nextIter}->{$comp} = $keyRef->{$comp};
+    foreach my $c (keys %$qs) {
+        $self->{IC}->{$iNext}->{$c} = $qs->{$c};
     }
-    $self->setAdjustedIC('q'.$iter);
+    $self->setAdjustedIC($iThis);
 }
 
 #====================================================================
@@ -299,35 +413,34 @@ sub processKeyVal {
 # DESCRIPTION:
 #   Determine integration steps. Everytime an input is given, integration must
 #   be stopped, initial conditions updated to reflect the input, and
-#   re-submitted to Octave.
-#   For example, if an oral dose is given at times 0 and 2 days, Octave needs to
-#   be called for the following time intervals:
-#   1. A time interval so the system reaches steady state. This is the 0th
-#   integration and should already be done by this point.
-#   2. [0 48] hours for the 1st input between times 0 and 2 days
-#   3. [0 simtim-48] for the 2nd input between times 2 and end of simulation
+#   re-submitted to the solver.
+#
+#   For example, if an oral dose is given at times 0 and 2 days, the solver
+#   needs to be called for the following time intervals:
+#     1. A time interval so the system reaches steady state. This is the 0th
+#        integration and should already be done by this point.
+#     2. [0 48] hours for the 1st input between times 0 and 2 days.
+#     3. [0 simtime-48] for the 2nd input between times 2 and end of simulation.
 #
 #   In case of infusion, integration must also restart at end times.
 #
-#   First, keeps track that at a certain time, what inputs are relevant and
-#   whether the time is a start time or end time:
+#   First, keep track whether a time is a start or end time, as well as what
+#   inputs are relevant at that time:
 #     $self->{inputTime}->{$time}->{$input_num} = start or end
-#   NOTE: $time can be either $starttime or $endtime. This hash table will be
-#   looked at by setAdjustedIC subroutine to adjust initial conditions. In
-#   general, $endtime will only be noted if it is the end of an infusion.
+#   $time can be either $starttime or endtime. This object will be looked at by
+#   setAdjustedIC() to adjust IC. In general, $endtime will only be noted if it
+#   is the end of an infusion.
 #
 #   Second, the above is looped through to determine integration steps.
-#   Integration steps is organized as follows:
-#     $self->{thisStep}->{$iter}->[0] = $starttime
-#     $self->{thisStep}->{$iter}->[1] = $endtime
-#   NOTE: $iter is the nth iteration, ie. '1', '2', etc and will correspond with
-#   initial condition 'q1', 'q2', etc.
-#   NOTE2: $iter is the time of introduction of an input, so therefore should
+#   Integration steps are organized as follows:
+#     $self->{thisStep}->{$iThis}->[0] = $starttime
+#     $self->{thisStep}->{$iThis}->[1] = $endtime
+# NOTES:
+#   $iThis is the iteration when an input is introduced, so therefore should
 #   always be a "start" time. If an input is given at simulation start, it would
-#   be the 1st integration. If an input is given at some time after simulation
-#   start, it would be >= 2nd integration, since the 1st integration, in this
-#   case, would be the time between simulation start and when the 1st input is
-#   given.
+#   be at i1. If an input is given at some time after simulation start, it would
+#   be at >= i2. Since i1 in this case would take place during the time between
+#   simulation start and when the 1st input is given.
 #====================================================================
 sub detIntSteps {
     my ($self) = @_;
@@ -335,7 +448,7 @@ sub detIntSteps {
     my $simtime = $self->getLvl1('simTime');
 
     # Loop through all inputs to find start/end times
-    my $inputs = $self->{inputs}; # Save typing
+    my $inputs = $self->{input}; # Shorthand
 
     # No inputs? Run simulation from 0 to simtime
     if (!defined $inputs) {
@@ -353,14 +466,14 @@ sub detIntSteps {
 
     foreach my $inputNum (keys %$inputs) {
         my $thisInput = $inputs->{$inputNum}; # Save typing
-        my $type  = $self->getLvl3('inputs',$inputNum,'type');
-        my $start = $self->getLvl3('inputs',$inputNum,'start');
-        my $end   = $self->getLvl3('inputs',$inputNum,'end');
-        my $int   = $self->getLvl3('inputs',$inputNum,'int');
+        my $type  = $self->getLvl3('input',$inputNum,'type');
+        my $start = $self->getLvl3('input',$inputNum,'start');
+        my $end   = $self->getLvl3('input',$inputNum,'end');
+        my $int   = $self->getLvl3('input',$inputNum,'int');
 
         # Oral
         if ($type == 1) {
-            if ($self->getLvl3('inputs',$inputNum,'singledose')) {
+            if ($self->getLvl3('input',$inputNum,'singledose')) {
                 $self->{inputTime}->{$start}->{$inputNum} = "start";
 
             # Not singledose? Create input based on once every X interval
@@ -386,8 +499,8 @@ sub detIntSteps {
             # Figure/set infusion quantity
             my $duration = $end - $start;
             my $hours    = $self->toHour($duration);
-            my $mcg      = $self->getLvl3('inputs',$inputNum,'dose');
-            my $hormone  = $self->getLvl3('inputs',$inputNum,'hormone');
+            my $mcg      = $self->getLvl3('input',$inputNum,'dose');
+            my $hormone  = $self->getLvl3('input',$inputNum,'hormone');
             my $toMols   = $self->getLvl2('toMols',$hormone);
 
             my $infValue = $mcg / $toMols / 24; # Dose is per day
@@ -413,7 +526,7 @@ sub detIntSteps {
             $self->setIntStart('thisStep',$count,0);
             $self->setIntStart('trueStep',$count,$prior);
 
-            # Determine integration end time
+            # Determine integration end time.
             # Check total simulation against current time. Cut integration
             # interval short if necessary.
             if ($time >= $simtime) {
@@ -459,8 +572,8 @@ sub loadParams {
     open my $fh, '<', $file or die "Can't open file '$file': $!";
 
     while (my $row = <$fh>) {
-        chomp $row;
-        my ($key, $value) = split /=/, $row;
+        $row =~ s/[\r\n]*$//; # Remove newline
+        my ($key,$value) = split /=/, $row;
         $self->{params}->{$key} = $value;
     }
 
@@ -482,77 +595,28 @@ sub loadConversionFactors {
     my $ft4 = 0.45; # Temp conversion factor for free T4
     my $ft3 = 0.50; # Temp conversion factor for free T3
 
-    $self->{CF}->{T4}  = 777/$p47; # mcg/L
-    $self->{CF}->{T3}  = 651/$p47; # mcg/L
-    $self->{CF}->{TSH} = 5.6/$p48; # mU/L
+    $self->{CF}->{T4}  = $self->{toMols}->{T4} /$p47; # mcg/L
+    $self->{CF}->{T3}  = $self->{toMols}->{T3} /$p47; # mcg/L
+    $self->{CF}->{TSH} = $self->{toMols}->{TSH}/$p48; # mU/L
     $self->{CF}->{FT4} = $ft4 * 1000 * $self->{CF}->{T4}; # ng/L
     $self->{CF}->{FT3} = $ft3 * 1000 * $self->{CF}->{T3}; # ng/L
 }
 
 #====================================================================
-# SUBROUTINE:   addTHData
-# DESCRIPTION:
-#   Saves the comp name and array of values in the following fashion:
-#   $self->{data}->{$comp}->{values} = $array;
-#   $self->{data}->{$comp}->{count}  = $number;
-#   Note: $array is an array ref.
-#   Note2: $compData is a hash ref containing the above elements.
-#====================================================================
-sub addTHData {
-    my ($self,$comp,$compData) = @_;
-
-    # Push new values to the end of the old values array, but time t needs to
-    # be adjusted, ie: 0 1 2 3 0 1 2 3 => 0 1 2 3 4 5 6 7
-    if ($comp eq "t") {
-        my $lastT = $self->{data}->{$comp}->{values}->[-1] // 0;
-        foreach my $time (@{$compData->{values}}) {
-            my $thisT = $lastT + $time;
-            push(@{$self->{data}->{$comp}->{values}},$thisT);
-        }
-    } else {
-        push(@{$self->{data}->{$comp}->{values}},
-             @{$compData->{values}});
-    }
-
-    # Update count
-    $self->{data}->{$comp}->{count} += $compData->{count};
-}
-
-#====================================================================
-# SUBROUTINE:   setEVasIC
-# DESCRIPTION:
-#   Save the end values of $iter as the next IC.
-#====================================================================
-sub setEVasIC {
-    my ($self,$compData,$iter) = @_;
-
-    $iter =~ s/q//;             # ie. q0 => 0
-    my $nextIter = $iter + 1;   # ie.  0 => 1
-    my $comp = $compData->{name};
-    $comp =~ s/q//;
-    return 1 if $comp eq "t";
-    return 1 if $comp eq "ft4";
-    return 1 if $comp eq "ft3";
-
-    # Copy end values from $iter over
-    $self->{IC}->{'q'.$nextIter}->{$comp} = $compData->{end}->{$comp};
-}
-
-#====================================================================
 # SUBROUTINE:   setInitialIC
 # DESCRIPTION:
-#   Take values from the default ICKEY and put it into the object that keeps
-#   initial conditions, for q0.
+#   Take values from the default $ickey and put it into the object that keeps
+#   initial conditions for i0.
 #====================================================================
 sub setInitialIC {
     my ($self) = @_;
 
     my $thysim = $self->getThysim();
     my $ickey  = $self->getICKey('default');
-    my $keyRef = $self->getLvl3('ICKey',$thysim,$ickey);
-    # Loop through all compartments to set their IC
-    foreach my $comp (sort {$a <=> $b} keys %$keyRef) {
-        $self->{IC}->{q0}->{$comp} = $keyRef->{$comp};
+    my $qs     = $self->getLvl3('ICKey',$thysim,$ickey);
+    # Loop through all compartments to set their IC for i0
+    foreach my $c (keys %$qs) {
+        $self->{IC}->{0}->{$c} = $qs->{$c};
     }
 }
 
@@ -560,29 +624,28 @@ sub setInitialIC {
 # SUBROUTINE:   setAdjustedIC
 # DESCRIPTION:
 #   Adjust IC with input quantity as appropriate.
-# NOTE:
+# NOTES:
 #   Input types: 1 = Oral, 2 = IV, 3 = Infusion
-#   Hormone types: 3 = T3, 4 = T4
+#   Hormone: 3 = T3, 4 = T4
 #====================================================================
 sub setAdjustedIC {
-    my ($self,$iter) = @_;
+    my ($self,$iThis) = @_;
 
-    $iter =~ s/q//;             # ie. q0 => 0
-    my $nextIter = $iter + 1;   # ie.  0 => 1
+    my $iNext = $iThis + 1;
 
     # Check whether there is a next iteration, skip if there isn't
-    return 1 if !exists $self->{trueStep}->{$nextIter};
+    return 1 if !exists $self->{trueStep}->{$iNext};
 
     # Find all inputs given at $trueStart
-    my $trueStart = $self->getIntStart('trueStep',$nextIter);
+    my $trueStart = $self->getIntStart('trueStep',$iNext);
     foreach my $inputNum (keys %{$self->{inputTime}->{$trueStart}}) {
 
         next if $inputNum < 1;
 
         # Get hormone's info
-        my $hormone = $self->getLvl3('inputs',$inputNum,'hormone');
-        my $type    = $self->getLvl3('inputs',$inputNum,'type');
-        my $dose    = $self->getLvl3('inputs',$inputNum,'dose');
+        my $hormone = $self->getLvl3('input',$inputNum,'hormone');
+        my $type    = $self->getLvl3('input',$inputNum,'type');
+        my $dose    = $self->getLvl3('input',$inputNum,'dose');
 
         # Get the conversion factor
         my $toMols = $self->getLvl2('toMols',$hormone);
@@ -595,14 +658,14 @@ sub setAdjustedIC {
 
             # Update T3 oral compartment
             if ($type == 1) {
-                $newIC = $self->getLvl3('IC','q'.$nextIter,12) + $dose/$toMols;
-                $self->setLvl3('IC','q'.$nextIter,12,$newIC);
+                $newIC = $self->getLvl3('IC',$iNext,12) + $dose/$toMols;
+                $self->setLvl3('IC',$iNext,12,$newIC);
             }
 
             # Update T3 IV compartment
             if ($type == 2) {
-                $newIC = $self->getLvl3('IC','q'.$nextIter,4) + $dose/$toMols;
-                $self->setLvl3('IC','q'.$nextIter,4,$newIC);
+                $newIC = $self->getLvl3('IC',$iNext,4) + $dose/$toMols;
+                $self->setLvl3('IC',$iNext,4,$newIC);
             }
         }
 
@@ -611,91 +674,75 @@ sub setAdjustedIC {
 
             # Update T4 oral compartment
             if ($type == 1) {
-                $newIC = $self->getLvl3('IC','q'.$nextIter,10) + $dose/$toMols;
-                $self->setLvl3('IC','q'.$nextIter,10,$newIC);
+                $newIC = $self->getLvl3('IC',$iNext,10) + $dose/$toMols;
+                $self->setLvl3('IC',$iNext,10,$newIC);
             }
 
             # Update T4 IV compartment
             if ($type == 2) {
-                $newIC = $self->getLvl3('IC','q'.$nextIter,1) + $dose/$toMols;
-                $self->setLvl3('IC','q'.$nextIter,1,$newIC);
+                $newIC = $self->getLvl3('IC',$iNext,1) + $dose/$toMols;
+                $self->setLvl3('IC',$iNext,1,$newIC);
             }
         }
     }
 }
 
 #====================================================================
-# SUBROUTINE:   postProcess
+# SUBROUTINE:   getBrowserObj
 # DESCRIPTION:
-#   The front end needs the simTime, data, count, max, and min values to
-#   display the graphs. Create a new object with just these items.
-#   1. Loop through all data values
-#     a. Convert from mols to display units
-#     b. Determine max value (min value is always 0)
-#   2. Copy count to new obj
-#   3. TODO - It is here that we can apply resolution rules, to decrease
-#      the number of points if needed.
+#   Generate an object to send to the browser for graphing. The object has:
+#     $obj->{simTime}
+#         ->{data}->{$c}->{min}
+#                       ->{max}
+#                       ->{count}
+#                       ->{values}
+#
+#   Everything was generated in processResults(). Here, we additionally convert
+#   all 'values' from mols to display units.
 #====================================================================
-sub postProcess {
+sub getBrowserObj {
     my ($self) = @_;
-    my $retObj;
+
+    # Get conversion factors
+    my $cfs;
+    $cfs->{1}   = $self->{CF}->{T4};
+    $cfs->{4}   = $self->{CF}->{T3};
+    $cfs->{7}   = $self->{CF}->{TSH};
+    $cfs->{ft4} = $self->{CF}->{FT4};
+    $cfs->{ft3} = $self->{CF}->{FT3};
+
+    #--------------------------------------------------
+    # Generate the browser object
+    #--------------------------------------------------
+
+    my $obj;
 
     # Copy simTime over
-    $retObj->{simTime} = $self->getLvl1('simTime');
+    $obj->{simTime} = $self->getLvl1('simTime');
 
-    # Copy conversion factors over
-    my $convObj;
-    $convObj->{q1}  = $self->{CF}->{T4};
-    $convObj->{q4}  = $self->{CF}->{T3};
-    $convObj->{q7}  = $self->{CF}->{TSH};
-    $convObj->{ft4} = $self->{CF}->{FT4};
-    $convObj->{ft3} = $self->{CF}->{FT3};
-    #$convObj->{q20} = $self->{CF}->{FT4};
-    #$convObj->{q21} = $self->{CF}->{FT3};
+    # Iterate over show compartments
+    my @shows = keys %{$self->{show}}; # Compartments to show
+    foreach my $c (@shows) {
 
-    # TEST
-#--------------------------------------------------
-#     $convObj->{q5} = 100;
-#     $convObj->{q6} = 100;
-#-------------------------------------------------- 
+        # Copy data over as is
+        $obj->{data}->{$c} = $self->{data}->{$c};
+        next if $c eq "t"; # Nothing more needs to be done for time
 
-    # Loop through all data
-    foreach my $comp (keys %{$self->{data}}) {
-        # Copy all of time over
-        if ($comp eq "t") {
-            $retObj->{data}->{$comp} = $self->{data}->{$comp};
-            next;
-        }
+        # For non-time compartments, apply conversion factor
+        my $cf = $cfs->{$c} // 1;
+        my $s = $obj->{data}->{$c}; # Shorthand
+        $s->{end} = sprintf("%.4f", $s->{end}*$cf); # 4 decimal places
+        $s->{min} = sprintf("%.4f", $s->{min}*$cf);
+        $s->{max} = sprintf("%.4f", $s->{max}*$cf);
+        @{$s->{values}} = map { sprintf("%.4f", $_*$cf) } @{$s->{values}};
 
-        # Copy count over
-        $retObj->{data}->{$comp}->{count}
-            = $self->getLvl3('data',$comp,'count');
-
-        # Set min and max to 0
-        $retObj->{data}->{$comp}->{min} = 0;
-        $retObj->{data}->{$comp}->{max} = 0;
-
-        # Loop through all values and apply conversion factor
-        my $conv = $convObj->{$comp};
-        $conv = 1 if !$conv;
-        foreach my $val (@{$self->{data}->{$comp}->{values}}) {
-            my $newVal = sprintf("%.4f",$val * $conv); # 4 decimal places
-            $newVal = 0 if $newVal < 0;
-
-            # Check for new max
-            if ($newVal > $retObj->{data}->{$comp}->{max}) {
-                $retObj->{data}->{$comp}->{max} = $newVal;
-            }
-
-            # Push new val to new array
-            push(@{$retObj->{data}->{$comp}->{values}},$newVal);
-        }
+        # NOTES: Since we're dealing with references, the above will change the
+        # original $self->{data} values. This is why getBrowserObj() should only
+        # be called right before sending data to the browser.
     }
 
-    # Save a copy
-    $self->{JSONObj} = $retObj;
-
-    return $retObj;
+    $self->{browserObj} = $obj; # Save a copy
+    return $obj;
 }
 
 #====================================================================
@@ -703,9 +750,6 @@ sub postProcess {
 # DESCRIPTION:
 #   Save a value 1 level after $self.
 # USES:
-#   toShow: selects which outputs to send to the browser.
-#     $self->{toShow} = $value
-#     NOTE: $value is a hashRef with hormone name key and boolean value.
 #   simTime: total simulation time
 #     $self->{simTime} = $value
 #   recalcIC: whether to recalculate initial conditions
@@ -722,8 +766,8 @@ sub setLvl1 {
 # DESCRIPTION:
 #   Save a value 2 levels after $self.
 # USES:
-#   dials: saves $value of a $dial
-#     $self->{dials}->{$dial} = $value
+#   dial: saves $value of a $dial
+#     $self->{dial}->{$dial} = $value
 #====================================================================
 sub setLvl2 {
     $_[0]->{$_[1]}->{$_[2]} = $_[3];
@@ -734,8 +778,8 @@ sub setLvl2 {
 # DESCRIPTION:
 #   Save a value 3 levels after $self.
 # USES:
-#   inputs: saves $value of input parameter $name given $inputNum
-#     $self->{inputs}->{$inputNum}->{$name} = $value
+#   input: saves $value of input parameter $name given $inputNum
+#     $self->{input}->{$inputNum}->{$name} = $value
 #====================================================================
 sub setLvl3 {
     $_[0]->{$_[1]}->{$_[2]}->{$_[3]} = $_[4];
@@ -750,7 +794,7 @@ sub setLvl3 {
 #     $self->{thisStep}->{$count}->[0] = $value
 #   trueStep: refers to 'true' interval's start time.
 #     $self->{trueStep}->{$count}->[0] = $value
-# NOTE: $count is an integer that correponds with nth integration.
+# NOTES: $count is an integer that correponds with iX.
 #====================================================================
 sub setIntStart {
     $_[0]->{$_[1]}->{$_[2]}->[0] = $_[3];
@@ -765,84 +809,54 @@ sub setIntStart {
 #     $self->{thisStep}->{$count}->[1] = $value
 #   trueStep: refers to 'true' interval's end time.
 #     $self->{trueStep}->{$count}->[1] = $value
-# NOTE: $count is an integer that correponds with nth integration.
+# NOTES: $count is an integer that correponds with iX.
 #====================================================================
 sub setIntBound {
     $_[0]->{$_[1]}->{$_[2]}->[1] = $_[3];
 }
 
 #====================================================================
-# SUBROUTINE:   getCompData
+# SUBROUTINE:   getIntStart
 # DESCRIPTION:
-#   Returns results 1 compartment at a time. Makes use the knowledge that
-#   compartment results end at END_.*_END.
-#   Note: Must return an obj, otherwise the parent sub never end.
-#   Note: Uses shift, so @results gets reduced and no extra data is kept in
-#         memory.
+#   Get the start time.
+# USES:
+#   thisStep: refers to 'this' interval's start time.
+#     $self->{thisStep}->{$count}->[0] = $value
+#   trueStep: refers to 'true' interval's start time.
+#     $self->{trueStep}->{$count}->[0] = $value
+# NOTES: $count is an integer that corresponds with iX.
 #====================================================================
-sub getCompData {
-    my ($self,$results) = @_;
-    my ($compData,$comp,@values);
-
-    while(@{$results}) {
-        my $ele = shift(@{$results}); # Get element
-        $ele =~ s/[\r\n]*$//; # Remove newline
-
-        # Start line. Use it to get the comp name
-        if ($ele =~ m/^START_(.*)_START$/) {
-            $comp = $1;
-            next;
-        }
-
-        # End line. Return the object
-        if ($ele =~ m/^END_${comp}_END$/) {
-            $compData->{name}   = $comp; # name is saved as ie, 'q1'
-            $compData->{values} = \@values;
-            $compData->{count}  = $#values + 1;   
-
-            # Save last value in @values as 'end' value
-            $comp =~ s/q//; # ie. q1 => 1
-            $compData->{end}->{$comp} = $values[-1];
-
-            return $compData;
-        }
-
-        push(@values,$ele);
-    }
-
-    return undef;
+sub getIntStart {
+    return $_[0]->{$_[1]}->{$_[2]}->[0];
 }
 
 #====================================================================
-# SUBROUTINE:   getCompNames
+# SUBROUTINE:   getIntBound
 # DESCRIPTION:
-#   Returns an array ref of hormone names. Builds the array ref the first
-#   time called.
+#   Get the end time (bound).
+# USES:
+#   thisStep: refers to 'this' interval's end time.
+#     $self->{thisStep}->{$count}->[1] = $value
+#   trueStep: refers to 'true' interval's end time.
+#     $self->{trueStep}->{$count}->[1] = $value
+# NOTES: $count is an integer that corresponds with iX.
 #====================================================================
-sub getCompNames {
-    my ($self) = @_;
-    if (!$self->{THNames}) {
-        foreach my $comp (keys %{$self->{data}}) {
-            push(@{$self->{THNames}},$comp);
-        }
-    }
-    return $self->{THNames};
+sub getIntBound {
+    return $_[0]->{$_[1]}->{$_[2]}->[1];
 }
 
 #====================================================================
 # SUBROUTINE:   getIntCount
 # DESCRIPTION:
-#   returns an arrayRef of $count
-# NOTE: $count is an integer that corresponds with nth integration
+#   returns an arrayRef of $count.
+# NOTES: $count is an integer that corresponds with iX.
 #====================================================================
 sub getIntCount {
     my ($self) = @_;
     my @counts;
-
     foreach my $count (sort {$a <=> $b} keys %{$self->{thisStep}}) {
         push(@counts,$count);
     }
-
     return \@counts;
 }
 
@@ -861,22 +875,23 @@ sub getICKey {
     }
 
     # Get the dial values
-    return sprintf("%04d",$self->getLvl2('dials',1) * 10)
-         . sprintf("%04d",$self->getLvl2('dials',2) * 10)
-         . sprintf("%04d",$self->getLvl2('dials',3) * 10)
-         . sprintf("%04d",$self->getLvl2('dials',4) * 10);
+    return sprintf("%04d",$self->getLvl2('dial',1) * 10)
+         . sprintf("%04d",$self->getLvl2('dial',2) * 10)
+         . sprintf("%04d",$self->getLvl2('dial',3) * 10)
+         . sprintf("%04d",$self->getLvl2('dial',4) * 10);
 }
 
 #====================================================================
 # SUBROUTINE:   getICString
 # DESCRIPTION:
-#   Turn initial conditions into a string for input into the solver.
+#   Turn initial conditions into a string for input into the solver. IC is only
+#   needed for q1 - q19.
 #====================================================================
 sub getICString {
-    my ($self,$iter) = @_;
+    my ($self,$iThis) = @_;
     my $str = "";
-    foreach my $comp (sort { $a <=> $b } keys %{$self->{IC}->{$iter}}) {
-        $str .= $self->{IC}->{$iter}->{$comp}." ";
+    foreach my $c ( 1 .. 19) {
+        $str .= $self->{IC}->{$iThis}->{$c}." ";
     }
     return $str;
 }
@@ -885,7 +900,7 @@ sub getICString {
 # SUBROUTINE:   getDialString
 # DESCRIPTION:
 #   Get approximate secretion/absorption multipliers. These values are
-#   calculated here so that the Octave file is only used for integrations.
+#   calculated here so that the solver is only used for integrations.
 #   $dial1 = T4 secretion multiplier
 #     Multiplies the 'SR4' equation as a 0-1 value. Default is 1.
 #   $dial2 = T4 absorption multiplier
@@ -898,16 +913,16 @@ sub getICString {
 #     Multiplies the 'k3excrete' parameter to make the following true:
 #       k3absorb/(k3absorb+k3excrete) = absorb%
 #       absorb% is between 0-2 and default is 0.88
-# NOTE: $dialx here corresponds to the same varaible name in the solver.
+# NOTES: $dialx here corresponds to the same variable name in the solver.
 #====================================================================
 sub getDialString {
     my ($self) = @_;
 
     # Dial values are saved as percentages. Convert to decimal.
-    my $dial1 = $self->getLvl2('dials',1) / 100;
-    my $dial2 = $self->getLvl2('dials',2) / 100;
-    my $dial3 = $self->getLvl2('dials',3) / 100;
-    my $dial4 = $self->getLvl2('dials',4) / 100;
+    my $dial1 = $self->getLvl2('dial',1) / 100;
+    my $dial2 = $self->getLvl2('dial',2) / 100;
+    my $dial3 = $self->getLvl2('dial',3) / 100;
+    my $dial4 = $self->getLvl2('dial',4) / 100;
 
     # Calculate absorption multipliers
     my $T4absorb;
@@ -938,28 +953,26 @@ sub getDialString {
 #   1. Loop through all infusion inputs
 #   2. See which one(s) fall between $trueStart
 #   3. Sum infusion values for the respective hormone
-# NOTE: $iter is 'q1', 'q2', etc.
-# NOTE2: u1 is T4; u4 is T3
+# NOTES: u1 is T4; u4 is T3
 #====================================================================
 sub getInfValue {
-    my ($self,$iter) = @_;
+    my ($self,$iThis) = @_;
 
-    $iter =~ s/q//;             # ie. q0 => 0
-    my $trueStart = $self->getIntStart('trueStep',$iter);
+    my $trueStart = $self->getIntStart('trueStep',$iThis);
 
     my ($u1,$u4) = (0,0); # Initialize u1 and u4
 
     # Loop through all inputs
-    my $inputs = $self->{inputs}; # Save typing
+    my $inputs = $self->{input}; # Shorthand
     foreach my $inputNum (keys %$inputs) {
 
         next if $inputNum < 1;
 
         # Skip non-infusion inputs
-        next if ($self->getLvl3('inputs',$inputNum,'type') != 3);
+        next if ($self->getLvl3('input',$inputNum,'type') != 3);
 
-        my $start = $self->getLvl3('inputs',$inputNum,'start');
-        my $end   = $self->getLvl3('inputs',$inputNum,'end');
+        my $start = $self->getLvl3('input',$inputNum,'start');
+        my $end   = $self->getLvl3('input',$inputNum,'end');
 
         # Sum infusion dose only if $trueStart is within the infusion interval
         if ($trueStart >= $start && $trueStart < $end) {
@@ -974,7 +987,7 @@ sub getInfValue {
 #====================================================================
 # SUBROUTINE:   getLvl1
 # DESCRIPTION:
-#   Retrieve a value 1 level after $self
+#   Retrieve a value 1 level after $self.
 # USES:
 #   simTime: total simulation time
 #     $self->{simTime} = $value
@@ -988,10 +1001,10 @@ sub getLvl1 {
 # DESCRIPTION:
 #   Retrieve a value 2 levels after $self.
 # USES:
-#   toShow: checks whether $hormone ist to be sent to the browser.
-#     $self->{toShow}->{$hormone} = $value
-#   dials:
-#     $self->{dials}->{$dialNum} = $value
+#   show: checks whether $hormone is to be sent to the browser.
+#     $self->{show}->{$hormone} = $value
+#   dial:
+#     $self->{dial}->{$dialNum} = $value
 #   toMols:
 #     $self->{toMols}->{$hormone} = $value
 #====================================================================
@@ -1002,47 +1015,17 @@ sub getLvl2 {
 #====================================================================
 # SUBROUTINE:   getLvl3
 # DESCRIPTION:
-#   Retrieve a value 3 levels after $self
+#   Retrieve a value 3 levels after $self.
 # USES:
 #   data-$name-values: returns an arrayRef of all values for a hormone $name.
 #     $self->{data}->{$name}->{values} = $arrayRef
-#   inputs: returns $value of an input parameter $name given $inputNum.
-#     $self->{inputs}->{$inputNum}->{$name} = $value
+#   input: returns $value of an input parameter $name given $inputNum.
+#     $self->{input}->{$inputNum}->{$name} = $value
 #   infusion: returns infusion $value for u1 or u4.
 #     $self->{infusion}->{$inputNum}->{$uX} = $value
 #====================================================================
 sub getLvl3 {
     return $_[0]->{$_[1]}->{$_[2]}->{$_[3]};
-}
-
-#====================================================================
-# SUBROUTINE:   getIntStart
-# DESCRIPTION:
-#   Get the start time.
-# USES:
-#   thisStep: refers to 'this' interval's start time.
-#     $self->{thisStep}->{$count}->[0] = $value
-#   trueStep: refers to 'true' interval's start time.
-#     $self->{trueStep}->{$count}->[0] = $value
-# NOTE: $count is an integer that corresponds with nth integration.
-#====================================================================
-sub getIntStart {
-    return $_[0]->{$_[1]}->{$_[2]}->[0];
-}
-
-#====================================================================
-# SUBROUTINE:   getIntBound
-# DESCRIPTION:
-#   Get the end time (bound).
-# USES:
-#   thisStep: refers to 'this' interval's end time.
-#     $self->{thisStep}->{$count}->[1] = $value
-#   trueStep: refers to 'true' interval's end time.
-#     $self->{trueStep}->{$count}->[1] = $value
-# NOTE: $count is an integer that corresponds with nth integration.
-#====================================================================
-sub getIntBound {
-    return $_[0]->{$_[1]}->{$_[2]}->[1];
 }
 
 #====================================================================
@@ -1076,66 +1059,61 @@ sub recalcIC {
 }
 
 #====================================================================
-# SUBROUTINE:   customInput
+# SUBROUTINE:   getExperiment
 # DESCRIPTION:
-#   Returns a preset custom input string.
+#   Get a predefined experiment.
+#
+#   Creates a string that looks like it came from the browser, with all the
+#   items needed to run Thyrosim.
 #====================================================================
-sub customInput {
-    my ($self,$num) = @_;
+sub getExperiment {
+    my ($self,$exp) = @_;
     my $thysim = $self->getThysim();
-    my $inputs;
 
 # All 3 types of input at low doses
-if ($num == 1) {
-    $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
-            . '&simtime=5'
-            . '&thysim='.$thysim
-            . '&type-1=1&hormone-1=4&disabled-1=0&dose-1=1'
-            .  '&int-1=1&start-1=1&end-1=2'
-            . '&type-2=2&hormone-2=4&disabled-2=0&dose-2=2&start-2=2'
-            . '&type-3=3&hormone-3=4&disabled-3=0&dose-3=3&start-3=3'
-            .  '&end-3=4'
-            . '&type-4=1&hormone-4=4&disabled-4=0&dose-4=4'
-            .  '&singledose-4=1&start-4=4';
-}
+return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
+     . '&simtime=5'
+     . '&thysim='.$thysim
+     . '&type-1=1&hormone-1=4&disabled-1=0&dose-1=1'
+     .  '&int-1=1&start-1=1&end-1=2'
+     . '&type-2=2&hormone-2=4&disabled-2=0&dose-2=2&start-2=2'
+     . '&type-3=3&hormone-3=4&disabled-3=0&dose-3=3&start-3=3'
+     .  '&end-3=4'
+     . '&type-4=1&hormone-4=4&disabled-4=0&dose-4=4'
+     .  '&singledose-4=1&start-4=4'
+     . '' if $exp eq "simple-1";
 
-# Oral 400 mg T4 repeating dose day 1 to 5
-if ($num == 2) {
-    $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
-            . '&simtime=5'
-            . '&thysim='.$thysim
-            . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=400&int-1=1'
-            .  '&start-1=1&end-1=5';
-}
+# Oral 400 mg T4, repeating daily from day 1 to 5
+return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
+     . '&simtime=5'
+     . '&thysim='.$thysim
+     . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=400&int-1=1'
+     .  '&start-1=1&end-1=5'
+     . '' if $exp eq "simple-2";
 
-# Single 400 mg T4 dose
-if ($num == 3) {
-    $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
-            . '&simtime=3'
-            . '&thysim='.$thysim
-            . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=400'
-            .  '&singledose-1=1&start-1=1';
-}
+# Oral single dose 400 mg T4 on day 1
+return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
+     . '&simtime=3'
+     . '&thysim='.$thysim
+     . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=400'
+     .  '&singledose-1=1&start-1=1'
+     . '' if $exp eq "simple-3";
 
 # No inputs
-if ($num == 4) {
-    $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
-            . '&simtime=1'
-            . '&thysim='.$thysim;
-}
+return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
+     . '&simtime=10'
+     . '&thysim='.$thysim
+     . '' if $exp eq "simple-4";
 
-# 2 infusion inputs
-if ($num == 5) {
-    $inputs = 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
-            . '&simtime=5'
-            . '&thysim='.$thysim
-            . '&hormone-1=4&type-1=3&disabled-1=0&dose-1=400'
-            .  '&start-1=1&end-1=4'
-            . '&hormone-2=4&type-2=3&disabled-2=0&dose-2=400'
-            .  '&start-2=2&end-2=6';
-}
-
-    return $inputs;
+# 2 400 mg infusion inputs, day 1 to 4 and day 2 to 6
+return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
+     . '&simtime=5'
+     . '&thysim='.$thysim
+     . '&hormone-1=4&type-1=3&disabled-1=0&dose-1=400'
+     .  '&start-1=1&end-1=4'
+     . '&hormone-2=4&type-2=3&disabled-2=0&dose-2=400'
+     .  '&start-2=2&end-2=6'
+     . '' if $exp eq "simple-5";
 }
 
 #====================================================================
@@ -1144,67 +1122,58 @@ if ($num == 5) {
 #   Given a file handle and list of compartments, print all data to log.
 #====================================================================
 sub printLog {
-    my ($self,$fh,@comps) = @_;
+    my ($self,$fh,@cs) = @_;
 
-    my $JSONObj = $self->{JSONObj};
+    my $obj = $self->{browserObj};
 
-    # Headers
-    say $fh join("\t",@comps);
+    # Print headers
+    say $fh join("\t",@cs);
 
-    for (my $i=0; $i<=$#{$JSONObj->{data}->{t}->{values}}; $i++) {
-        my @rowData;
-        foreach my $comp (@comps) {
-            my $value = $JSONObj->{data}->{$comp}->{values}->[$i];
-            push(@rowData,$value);
+    # Print data
+    for (my $i=0; $i<=$#{$obj->{data}->{t}->{values}}; $i++) {
+        my @row;
+        foreach my $c (@cs) {
+            my $v = $obj->{data}->{$c}->{values}->[$i];
+            push(@row,$v);
         }
-        say $fh join("\t",@rowData);
+        say $fh join("\t",@row);
     }
 }
 
 #====================================================================
-# SUBROUTINE:   getCommand
+# SUBROUTINE:   getSolver
 # DESCRIPTION:
-#   Given ODE solver type, return the command line argument.
-#   1. $solver can be "octave" or "java".
-#   2. $getinit - optional arg for the getinit file instead.
+#   Get the base command line argument for the solver. Currently, the acceptable
+#   solver is Java only.
 #====================================================================
-sub getCommand {
-    my ($self,$solver,$getinit) = @_;
+sub getSolver {
+    my ($self) = @_;
 
     my $docRoot = $self->{docRoot};
     my $fRoot   = $self->{fRoot};
 
-    my $command;
-    if ($solver eq "octave") {
-        $command = "octave -q $docRoot/$fRoot/octave";
-        if ($getinit) {
-            $command .= "/Getinit.m";
-        } else {
-            $command .= "/Thyrosim.m";
-        }
-    }
-
-    if ($solver eq "java") {
-        $command = "java -cp .:$docRoot/$fRoot/java/commons-math3-3.6.1.jar:"
-                 . "$docRoot/$fRoot/java/ "
-                 . "edu.ucla.distefanolab.thyrosim.algorithm.";
-        if ($getinit) {
-            $command .= "Getinit";
-        } else {
-            $command .= "Thyrosim";
-        }
-    }
-
-    return $command;
+    return "java -cp .:$docRoot/$fRoot/java/commons-math3-3.6.1.jar:"
+         . "$docRoot/$fRoot/java/ "
+         . "edu.ucla.distefanolab.thyrosim.algorithm.Thyrosim";
 }
 
 #====================================================================
 # SUBROUTINE:   getThysim
 # DESCRIPTION:
-#   Getting for $self->{thysim}.
+#   Getter for $self->{thysim}.
 #====================================================================
 sub getThysim {
     return $_[0]->{thysim};
+}
+
+#====================================================================
+# SUBROUTINE:   getCompIdx
+# DESCRIPTION:
+#   Given a compartment name, return it's array index. See:
+#   $self->{compartment}->{$name} = $idx
+#====================================================================
+sub getCompIdx {
+    return $_[0]->{compartment}->{$_[1]};
 }
 
 #====================================================================

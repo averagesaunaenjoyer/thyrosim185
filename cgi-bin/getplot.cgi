@@ -5,12 +5,9 @@ use v5.10; use strict; use warnings;
 # AUTHOR:       Simon X. Han
 # DESCRIPTION:
 #   The main function that:
-#     1. Takes input from the browser
+#     1. Takes form values from the browser
 #     2. Sends commands out to the ODE solver
 #     3. Collects results to send back to the browser for graphing
-# NOTE:
-#   SS: Steady state
-#   IC: Initial condition
 #==============================================================================
 
 use CGI qw/:standard/;
@@ -37,17 +34,17 @@ use lib $ENV{'DOCUMENT_ROOT'}."/$F_ROOT/pm";
 use THYROSIM;
 
 # Create THYROSIM object
-my $thsim = THYROSIM->new(toShow  => 'default',
+my $thsim = THYROSIM->new(setshow => 'default',
                           docRoot => $ENV{DOCUMENT_ROOT},
                           fRoot   => $F_ROOT);
 
-# New CGI object and read input from UI.
+# New CGI object and read form values from UI.
 my $cgi = new CGI;
-my $dat = $cgi->param('data'); # Inputs are passed as 1 string
+my $dat = $cgi->param('data'); # Form values are passed as 1 string
 
-# For testing, can use a custom input. See $thsim->customInput().
-# E.g., $dat = $thsim->customInput("3");
-$thsim->processInputs(\$dat);
+# For testing, can use a custom experiment. See $thsim->getExperiment().
+# E.g., $dat = $thsim->getExperiment("simple-3");
+$thsim->processForm(\$dat);
 
 #--------------------------------------------------
 # Define command. Currently using Java ODE solver. Command arguments are
@@ -59,64 +56,63 @@ $thsim->processInputs(\$dat);
 # 21 - 24: Dial values (secretion/absorption).
 # 25 - 26: Infusion values.
 # 27:      The thysim parameters to load.
+# 28:      Whether to initialize IC (recalculate IC).
 #--------------------------------------------------
-my $command = $thsim->getCommand("java");
-my $getinit = $thsim->getCommand("java","getinit");
+my $solver = $thsim->getSolver();
 my $thysim = $thsim->getThysim();
 
 #--------------------------------------------------
-# Decide whether to perform the 0th integration.
-# When the SS values are already known or if recalculate IC is off, 0th
-# integration is skipped. Otherwise, perform the 0th integration. In either case
-# we must set the IC for the next integration, q1.
-# NOTE: The 0th integration (q0) runs the model to SS using clinically derived
-# IC. This step is important because it allows material to enter the delay
-# compartments. The end values of q0 are used as the IC of q1. We run q0 from
-# 0-1008 hours so that it is a multiple of 24. This solved an issue where the
-# initial day didn't start at exactly SS (q0 used to run from 0-1000 hours).
+# Decide whether to perform the 0th integration (i0).
+# When the SS values are already known or if recalculate IC is off, i0 is
+# skipped. Otherwise, perform i0. In either case, we must set the IC for the
+# next integration, i1.
+# NOTES: i0 runs the model to SS using clinically derived IC. This step is
+# important because it allows material to enter the delay compartments. The end
+# values of i0 are used as the IC of i1. We run i0 from 0-1008 hours so that it
+# is a multiple of 24. This solved an issue where the initial day didn't start
+# at exactly SS (i0 used to run from 0-1000 hours).
 #--------------------------------------------------
 my $dials = $thsim->getDialString(); # Only needed once
 my $ickey = $thsim->getICKey();
-if ($thsim->hasICKey($ickey) || !$thsim->recalcIC()) { # Skipping 0th
-    $thsim->processKeyVal($ickey,'q0');
+if ($thsim->hasICKey($ickey) || !$thsim->recalcIC()) { # Skipping i0
+    $thsim->processKeyVal($ickey,'0');
 } else {
-    my $ICstr = $thsim->getICString('q0');
+    my $ICstr = $thsim->getICString('0');
 
-    my $cmd = "$getinit $ICstr 0 1008 $dials 0 0 $thysim";
+    my $cmd = "$solver $ICstr 0 1008 $dials 0 0 $thysim initic";
     my @res = `$cmd` or die "died: $!";
-    $thsim->processResults(\@res,'q0');
+    $thsim->processResults(\@res,'0');
 }
 
 #--------------------------------------------------
-# Perform 1st to nth integrations.
-# Integration intervals were determined in processInput, so here we retrieve
+# Perform i1 to iX integrations.
+# Integration intervals were determined in detIntSteps(), so here we retrieve
 # them and call the solver.
 #--------------------------------------------------
-my $counts = $thsim->getIntCount();
-foreach my $count (@$counts) {
-    my $start = $thsim->toHour($thsim->getIntStart('thisStep',$count));
-    my $end   = $thsim->toHour($thsim->getIntBound('thisStep',$count));
-    my $ICstr = $thsim->getICString('q'.$count);
-    my $u     = $thsim->getInfValue('q'.$count);
+my $iXs = $thsim->getIntCount();
+foreach my $iThis (@$iXs) {
+    my $start = $thsim->toHour($thsim->getIntStart('thisStep',$iThis));
+    my $end   = $thsim->toHour($thsim->getIntBound('thisStep',$iThis));
+    my $ICstr = $thsim->getICString($iThis);
+    my $u     = $thsim->getInfValue($iThis);
 
-    my $cmd = "$command $ICstr $start $end $dials $u $thysim";
+    my $cmd = "$solver $ICstr $start $end $dials $u $thysim noinit";
     my @res = `$cmd` or die "died: $!";
-    $thsim->processResults(\@res,'q'.$count);
+    $thsim->processResults(\@res,$iThis);
 }
 
-# Post process to create the JSON object
-my $JSONObj = $thsim->postProcess();
+# Generate the browser object
+my $browserObj = $thsim->getBrowserObj();
 
 # Print to log file.
 # Make sure to set toShow to 'all' if you want non-standard compartments.
 #--------------------------------------------------
 # my $log = $ENV{DOCUMENT_ROOT}."/$F_ROOT/tmp/log";
 # open my $fh, '>', $log;
-# say $fh Dumper($thsim->{data}->{ft4}->{values});
-# $thsim->printLog($fh,"t","q1","q4","q7","ft4","ft3");
+# $thsim->printLog($fh,"t","1","4","7","ft4","ft3");
 # close $fh;
 #-------------------------------------------------- 
 
 # Convert to JSON and print to browser
 print "content-type:text/html\n\n";
-print JSON::Syck::Dump($JSONObj)."\n";
+print JSON::Syck::Dump($browserObj)."\n";
