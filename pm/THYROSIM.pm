@@ -216,8 +216,8 @@ sub initCompartments {
 #====================================================================
 # SUBROUTINE:   processForm
 # DESCRIPTION:
-#   Inputs come from the browser as one string. Split into individual simulation
-#   conditions and organize them as follows:
+#   Form parameters come from the browser as one string. Split into individual
+#   simulation conditions and organize them as follows:
 #     Total simulation time:
 #       $self->{simTime}        = $number
 #     Recalculate initial conditions:
@@ -241,35 +241,34 @@ sub initCompartments {
 # NOTES: $num is the $num-th input
 #====================================================================
 sub processForm {
-    my ($self,$inputs) = @_;
+    my ($self,$data) = @_;
 
-    my $simCond;
-
-    # Split the input string and save to $simCond
-    my @inputs = split(/&/,$$inputs); # $inputs is a stringRef
-    foreach my $pair (@inputs) {
-        my ($name,$value) = split(/=/,$pair);
-        $simCond->{$name} = $value;
+    # Split the data string and save to $form
+    my $form;
+    my @vars = split(/&/,$$data); # $data is a stringRef
+    foreach my $var (@vars) {
+        my ($key,$val) = split(/=/,$var);
+        $form->{$key} = $val;
     }
 
-    # Save the inputs
-    foreach my $name (keys %$simCond) {
+    # Save the form parameters
+    foreach my $key (keys %$form) {
 
         # Total simulation time
-        if ($name =~ m/simtime/) {
-            $self->setLvl1('simTime',$simCond->{$name});
+        if ($key eq "simTime") {
+            $self->setLvl1('simTime',$form->{$key});
         # Recalculate IC
-        } elsif ($name =~ m/recalcIC/) {
-            $self->setLvl1('recalcIC',$simCond->{$name});
+        } elsif ($key eq "recalcIC") {
+            $self->setLvl1('recalcIC',$form->{$key});
         # Dials
-        } elsif ($name =~ m/dialinput(\d)/) {
-            $self->setLvl2('dial',$1,$simCond->{$name});
+        } elsif ($key =~ m/dialinput(\d)/) {
+            $self->setLvl2('dial',$1,$form->{$key});
         # Thysim model
-        } elsif ($name =~ m/thysim/) {
-            $self->setLvl1('thysim',$simCond->{$name});
+        } elsif ($key eq "thysim") {
+            $self->setLvl1('thysim',$form->{$key});
         # Dosing information. Assume splittable by '-'
-        } elsif ($name =~ m/(\w+)-(\d+)/) {
-            $self->setLvl3('input',$2,$1,$simCond->{$name});
+        } elsif ($key =~ m/(\w+)-(\d+)/) {
+            $self->setLvl3('input',$2,$1,$form->{$key});
         # Ignore un-identified inputs
         } else {
         }
@@ -1068,12 +1067,11 @@ sub recalcIC {
 #====================================================================
 sub getExperiment {
     my ($self,$exp) = @_;
-    my $thysim = $self->getThysim();
 
 # All 3 types of input at low doses
 return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
      . '&simtime=5'
-     . '&thysim='.$thysim
+     . '&thysim=Thyrosim'
      . '&type-1=1&hormone-1=4&disabled-1=0&dose-1=1'
      .  '&int-1=1&start-1=1&end-1=2'
      . '&type-2=2&hormone-2=4&disabled-2=0&dose-2=2&start-2=2'
@@ -1086,7 +1084,7 @@ return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
 # Oral 400 mg T4, repeating daily from day 1 to 5
 return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
      . '&simtime=5'
-     . '&thysim='.$thysim
+     . '&thysim=Thyrosim'
      . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=400&int-1=1'
      .  '&start-1=1&end-1=5'
      . '' if $exp eq "simple-2";
@@ -1094,7 +1092,7 @@ return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
 # Oral single dose 400 mg T4 on day 1
 return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
      . '&simtime=3'
-     . '&thysim='.$thysim
+     . '&thysim=Thyrosim'
      . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=400'
      .  '&singledose-1=1&start-1=1'
      . '' if $exp eq "simple-3";
@@ -1102,13 +1100,13 @@ return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
 # No inputs
 return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
      . '&simtime=10'
-     . '&thysim='.$thysim
+     . '&thysim=Thyrosim'
      . '' if $exp eq "simple-4";
 
 # 2 400 mg infusion inputs, day 1 to 4 and day 2 to 6
 return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
      . '&simtime=5'
-     . '&thysim='.$thysim
+     . '&thysim=Thyrosim'
      . '&hormone-1=4&type-1=3&disabled-1=0&dose-1=400'
      .  '&start-1=1&end-1=4'
      . '&hormone-2=4&type-2=3&disabled-2=0&dose-2=400'
