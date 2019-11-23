@@ -104,9 +104,6 @@ p(43) = 1.3;            %k4dissolve
 p(44) = 0.12*d(2);      %k4excrete; originally 0.119
 p(45) = 1.78;           %k3dissolve
 p(46) = 0.12*d(4);      %k3excrete; originally 0.118
-% p47 and p48 are only used in converting mols to units. Since unit conversion
-% is done in THYSIM->postProcess(), make sure you change p47 and p48 there if
-% you need to change these values.
 p(47) = 3.2;            %Vp
 p(48) = 5.2;            %VTSH
 
