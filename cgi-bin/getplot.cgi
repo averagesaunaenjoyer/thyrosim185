@@ -41,10 +41,7 @@ my $thsim = THYROSIM->new(setshow => 'default',
 # New CGI object and read form values from UI.
 my $cgi = new CGI;
 my $dat = $cgi->param('data'); # Form values are passed as 1 string
-
-# For testing, can use a custom experiment. See $thsim->getExperiment().
-# E.g., $dat = $thsim->getExperiment("simple-3");
-$thsim->processForm(\$dat);
+$thsim->processForm($dat);
 
 #--------------------------------------------------
 # Define command. Currently using Java ODE solver. Command arguments are

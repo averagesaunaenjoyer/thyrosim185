@@ -216,14 +216,48 @@ sub initCompartments {
 #====================================================================
 # SUBROUTINE:   processForm
 # DESCRIPTION:
-#   Form parameters come from the browser as one string. Split into individual
-#   simulation conditions and organize them as follows:
+#   The parameter 'data' can come in one of two forms:
+#     1. A string with all simulation conditions or
+#     2. An experiment name
+#   In 1, the string can be fed to processForm() to parse simulation conditions.
+#   In 2, retrieve a 'data' string using the experiment name and then feed to
+#   processForm().
+#
+#   Since the parameter thysim is used in many different places, it is set here
+#   first. If the value from getExperiment() also has thysim, then thysim is
+#   overwritten. This gives us some flexibility in terms of whether to define
+#   thysim specific experiments in getExperiment().
+#
+#   For testing, can use a custom experiment, like:
+#   $data = $self->getExperiment("simple-3");
+#====================================================================
+sub processForm {
+    my ($self,$data) = @_;
+
+    my $form = $self->getFormParams($data);
+    $self->setLvl1('thysim',$form->{thysim}) if exists $form->{thysim};
+
+    # Check for experiment
+    if (exists $form->{experiment}) {
+        $self->_processForm($self->getExperiment($form->{experiment}));
+    } else {
+        $self->_processForm($data);
+    }
+}
+
+#====================================================================
+# SUBROUTINE:   _processForm
+# DESCRIPTION:
+#   Given 'data', split into individual simulation conditions and organize them
+#   as follows:
 #     Total simulation time:
 #       $self->{simTime}        = $number
 #     Recalculate initial conditions:
 #       $self->{recalcIC}       = $number
 #     Dials (secretion/absorption):
-#       $self->{dial}->{$dial} = $number
+#       $self->{dial}->{$dial}  = $number
+#     Thyrosim model:
+#       $self->{thysim}         = $string
 #     Simulation conditions (each input has some of the below):
 #       $self->{input}->{$num}->{dose}       = $number
 #       $self->{input}->{$num}->{int}        = $number
@@ -240,22 +274,15 @@ sub initCompartments {
 #     loadConversionFactors()
 # NOTES: $num is the $num-th input
 #====================================================================
-sub processForm {
+sub _processForm {
     my ($self,$data) = @_;
 
-    # Split the data string and save to $form
-    my $form;
-    my @vars = split(/&/,$$data); # $data is a stringRef
-    foreach my $var (@vars) {
-        my ($key,$val) = split(/=/,$var);
-        $form->{$key} = $val;
-    }
+    my $form = $self->getFormParams($data);
 
     # Save the form parameters
     foreach my $key (keys %$form) {
-
         # Total simulation time
-        if ($key eq "simTime") {
+        if ($key eq "simtime") {
             $self->setLvl1('simTime',$form->{$key});
         # Recalculate IC
         } elsif ($key eq "recalcIC") {
@@ -1058,6 +1085,22 @@ sub recalcIC {
 }
 
 #====================================================================
+# SUBROUTINE:   getFormParams
+# DESCRIPTION:
+#   Helper function that returns form parameters in hashRef.
+#====================================================================
+sub getFormParams {
+    my ($self,$data) = @_;
+    my $form;
+    my @vars = split(/&/,$data);
+    foreach my $var (@vars) {
+        my ($key,$val) = split(/=/,$var);
+        $form->{$key} = $val;
+    }
+    return $form;
+}
+
+#====================================================================
 # SUBROUTINE:   getExperiment
 # DESCRIPTION:
 #   Get a predefined experiment.
@@ -1067,11 +1110,22 @@ sub recalcIC {
 #====================================================================
 sub getExperiment {
     my ($self,$exp) = @_;
+    my $thysim = $self->getThysim();
+
+# The default example
+return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
+     . '&simtime=5'
+     . '&thysim='.$thysim
+     . '' if $exp eq "default";
+
+#--------------------------------------------------
+# Simple experiments. All are thysim independent.
+#--------------------------------------------------
 
 # All 3 types of input at low doses
 return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
      . '&simtime=5'
-     . '&thysim=Thyrosim'
+     . '&thysim='.$thysim
      . '&type-1=1&hormone-1=4&disabled-1=0&dose-1=1'
      .  '&int-1=1&start-1=1&end-1=2'
      . '&type-2=2&hormone-2=4&disabled-2=0&dose-2=2&start-2=2'
@@ -1084,7 +1138,7 @@ return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
 # Oral 400 mg T4, repeating daily from day 1 to 5
 return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
      . '&simtime=5'
-     . '&thysim=Thyrosim'
+     . '&thysim='.$thysim
      . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=400&int-1=1'
      .  '&start-1=1&end-1=5'
      . '' if $exp eq "simple-2";
@@ -1092,7 +1146,7 @@ return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
 # Oral single dose 400 mg T4 on day 1
 return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
      . '&simtime=3'
-     . '&thysim=Thyrosim'
+     . '&thysim='.$thysim
      . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=400'
      .  '&singledose-1=1&start-1=1'
      . '' if $exp eq "simple-3";
@@ -1100,18 +1154,31 @@ return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
 # No inputs
 return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
      . '&simtime=10'
-     . '&thysim=Thyrosim'
+     . '&thysim='.$thysim
      . '' if $exp eq "simple-4";
 
 # 2 400 mg infusion inputs, day 1 to 4 and day 2 to 6
 return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
      . '&simtime=5'
-     . '&thysim=Thyrosim'
+     . '&thysim='.$thysim
      . '&hormone-1=4&type-1=3&disabled-1=0&dose-1=400'
      .  '&start-1=1&end-1=4'
      . '&hormone-2=4&type-2=3&disabled-2=0&dose-2=400'
      .  '&start-2=2&end-2=6'
      . '' if $exp eq "simple-5";
+
+#--------------------------------------------------
+# DiStefano-Jonklaas-2019 experiments
+#--------------------------------------------------
+
+# Figure 1
+return 'dialinput1=25&dialinput2=88&dialinput3=25&dialinput4=88'
+     . '&simtime=30&recalcIC=1'
+     . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=123&int-1=1'
+     .  '&start-1=1&end-1=30'
+     . '&hormone-2=3&type-2=1&disabled-2=0&dose-2=6.5&int-2=1'
+     .  '&start-2=1&end-2=30'
+     . '' if $exp eq "DiJo19-1";
 }
 
 #====================================================================

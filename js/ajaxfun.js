@@ -36,7 +36,10 @@ function loadXMLDoc(e) {
     var formdata = $("form").serialize();
     // If the user selected to run default behavior, override formdata
     if (e == "TEST") {
-      formdata="dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88&simtime=5&thysim="+$('#thysim').val();
+      formdata="experiment=default&thysim="+$('#thysim').val();
+    }
+    if (e == "DiJo19-1") {
+      formdata="experiment=DiJo19-1&thysim=Thyrosim";
     }
 
     var start = new Date().getTime();
