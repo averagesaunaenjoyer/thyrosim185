@@ -11,11 +11,11 @@
 <link rel="icon" type="image/png" href="favicon.ico">
 <link type="text/css" rel="stylesheet" href="css/content.css">
 <link type="text/css" rel="stylesheet" href="css/fonts-min.css">
-<link type="text/css" rel="stylesheet" href="css/ui-lightness/jquery-ui-1.10.1.custom.min.css">
+<link type="text/css" rel="stylesheet" href="css/ui-lightness/jquery-ui-1.12.1.custom.min.css">
 <!-- checkmsie.js must be loaded before D3 -->
 <script src="js/checkmsie.js"></script>
-<script src="js/jquery-1.10.2.min.js"></script>
-<script src="js/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/jquery-ui-1.12.1.custom.min.js"></script>
 <script src="js/d3.v3.min.js"></script>
 <script src="js/content.js"></script>
 <script src="js/ajaxfun.js"></script>
@@ -123,16 +123,50 @@
       <div id="dp-Example" class="popup-rollover">
         <p>
           <span class="infoButton-close bank-right" onClick="javascript:clickInfoButton('Example');">close</span><br>
-          Run default example:
-          <button type="button" onclick="loadXMLDoc('TEST');clickInfoButton('Example');">RUN</button>
+
+          <!-- Example default -->
+          <span>
+            <span class="" style="width:50%;float:left;">
+              <b>The Euthyroid Example</b> uses default thyroid hormone
+              secretion/absorption values without any input doses. Simulated for
+              5 days.
+              <br>
+              <br>
+              <button type="button" onclick="loadXMLDoc('experiment-default');
+                                             clickInfoButton('Example');">
+                Simulate
+              </button>
+            </span>
+            <span class="" style="width:50%;float:left;">
+              <img src="img/experiment-default.png" alt="Default Example"
+              style="vertical-align:top;width:250;" />
+            </span>
+          </span>
           <br>
           <br>
-          The example uses default thyroid hormone secretion/absorption values
-          without any inputs.
+
+          <!-- Example DiJo19-1 -->
+          <span>
+            <span class="" style="width:50%;float:left;">
+              <b>The DiStefano-Jonklaas 2019 Example-1</b> reproduces Figure 1
+              of the DiStefano-Jonklaas 2019 paper. Specifically, the simulated
+              individual is given 123 &microg T<span class="textsub">T</span>
+              and 6.5 &microg T<span class="textsub">3</span> daily for 30 days.
+              <button type="button" onclick="loadXMLDoc('experiment-DiJo19-1');
+                                             clickInfoButton('Example');">
+                Simulate
+              </button>
+            </span>
+            <span class="" style="width:50%;float:left;">
+              <img src="img/experiment-DiJo19-1.png" alt="DiStefano-Jonklass Example 1"
+              style="vertical-align:top;width:250;height:300;" />
+            </span>
+          </span>
           <br>
           <br>
-          Examples used in DiStefano-Jonklaas 2019.
-          <button type="button" onclick="loadXMLDoc('DiJo19-1');clickInfoButton('Example');">RUN</button>
+
+          <!-- Example Next -->
+
         </p>
       </div>
     </div>
@@ -160,10 +194,6 @@
     Start by clicking
     "Show T<span class="textsub">3</span> input" or
     "Show T<span class="textsub">4</span> input"
-
-<!----------------------------------------------------
-!       <button type="button" id="thisistemp">TMP</button>
-!---------------------------------------------------->
 
     <br>
 
@@ -256,7 +286,9 @@
 
     <!-- Graphs (right-most div) -->
     <div id="content-right">
-      <button type="button" onclick="togFreeHormoneButton();">Toggle Free Hormone Values</button>
+      Toggle:
+      <button type="button" onclick="togFreeHormoneButton();">Free Hormone Values</button>
+      <!--<button type="button" id="togXAxisDisp">X-Axis Days/Hours</button>-->
       <div id="FT4graph" class="displaynone"></div>
       <div id="FT3graph" class="displaynone"></div>
       <div id="T4graph"></div>

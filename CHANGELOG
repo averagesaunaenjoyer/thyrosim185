@@ -1,4 +1,10 @@
 Change log
+2019-11-24
+1. Added additional examples with images
+2. Updated d3, jquery, and jquery-ui libraries
+3. Fixed issue with animation not aligning
+4. Fixed issue where free hormone values were not calculating correctly
+
 2019-11-23
 1. Deprecated Octave solvers
 2. Consolidated Getinit.java and Thyrosim.java into Thyrosim.java

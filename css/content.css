@@ -131,18 +131,18 @@ a.header-buttons-link:link {
 }
 /* Define location of the swallow pill images */
 .spill {
-  top: 54px;
-  left: 24px;
+  top: 79px;
+  left: 33px;
 }
 /* Define location of the inject images */
 .inject {
-  top: 177px;
-  left: -3px;
+  top: 202px;
+  left: 6px;
 }
 /* Define location of the infuse images */
 .infuse {
-  top: 224px;
-  left: -3px;
+  top: 249px;
+  left: 6px;
 }
 /* This section deals with content-lower and what's in it */
 #content-lower {

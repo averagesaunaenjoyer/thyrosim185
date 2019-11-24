@@ -35,11 +35,11 @@ function loadXMLDoc(e) {
     // don't want to include.
     var formdata = $("form").serialize();
     // If the user selected to run default behavior, override formdata
-    if (e == "TEST") {
-      formdata="experiment=default&thysim="+$('#thysim').val();
+    if (e == "experiment-default") {
+      formdata="experiment="+e+"&thysim="+$('#thysim').val();
     }
-    if (e == "DiJo19-1") {
-      formdata="experiment=DiJo19-1&thysim=Thyrosim";
+    if (e == "experiment-DiJo19-1") {
+      formdata="experiment="+e+"&thysim=Thyrosim";
     }
 
     var start = new Date().getTime();
@@ -380,7 +380,9 @@ function graph(hormoneObj,addlabel,initgraph) {
         toggleRangeBox();
 
     d3.select("#togNormRange").on("click",toggleRangeBox);
-    d3.select("#thisistemp").on("click",toggleXAxis);
+    d3.select("#togXAxisDisp").on("click",toggleXAxis);
+    // Currently, not using this toggle button. While the graph labels change
+    // correctly, the pop-up when hovering over graph values does not update.
 }
 
 //--------------------------------------------------

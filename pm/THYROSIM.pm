@@ -1117,7 +1117,7 @@ sub getExperiment {
 return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
      . '&simtime=5'
      . '&thysim='.$thysim
-     . '' if $exp eq "default";
+     . '' if $exp eq "experiment-default";
 
 #--------------------------------------------------
 # Simple experiments. All are thysim independent.
@@ -1134,7 +1134,7 @@ return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
      .  '&end-3=4'
      . '&type-4=1&hormone-4=4&disabled-4=0&dose-4=4'
      .  '&singledose-4=1&start-4=4'
-     . '' if $exp eq "simple-1";
+     . '' if $exp eq "experiment-simple-1";
 
 # Oral 400 mg T4, repeating daily from day 1 to 5
 return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
@@ -1142,7 +1142,7 @@ return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
      . '&thysim='.$thysim
      . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=400&int-1=1'
      .  '&start-1=1&end-1=5'
-     . '' if $exp eq "simple-2";
+     . '' if $exp eq "experiment-simple-2";
 
 # Oral single dose 400 mg T4 on day 1
 return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
@@ -1150,13 +1150,13 @@ return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
      . '&thysim='.$thysim
      . '&hormone-1=4&type-1=1&disabled-1=0&dose-1=400'
      .  '&singledose-1=1&start-1=1'
-     . '' if $exp eq "simple-3";
+     . '' if $exp eq "experiment-simple-3";
 
 # No inputs
 return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
      . '&simtime=10'
      . '&thysim='.$thysim
-     . '' if $exp eq "simple-4";
+     . '' if $exp eq "experiment-simple-4";
 
 # 2 400 mg infusion inputs, day 1 to 4 and day 2 to 6
 return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
@@ -1166,7 +1166,7 @@ return 'dialinput1=100&dialinput2=88&dialinput3=100&dialinput4=88'
      .  '&start-1=1&end-1=4'
      . '&hormone-2=4&type-2=3&disabled-2=0&dose-2=400'
      .  '&start-2=2&end-2=6'
-     . '' if $exp eq "simple-5";
+     . '' if $exp eq "experiment-simple-5";
 
 #--------------------------------------------------
 # DiStefano-Jonklaas-2019 experiments
@@ -1179,7 +1179,7 @@ return 'dialinput1=25&dialinput2=88&dialinput3=25&dialinput4=88'
      .  '&start-1=1&end-1=30'
      . '&hormone-2=3&type-2=1&disabled-2=0&dose-2=6.5&int-2=1'
      .  '&start-2=1&end-2=30'
-     . '' if $exp eq "DiJo19-1";
+     . '' if $exp eq "experiment-DiJo19-1";
 }
 
 #====================================================================
