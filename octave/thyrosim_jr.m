@@ -15,7 +15,8 @@ initParams; % Parameters
 
 % Solve ODE
 global tspan ic;
-[t,q] = ode45(@ODEs, tspan, ic);
+vopt = odeset ('NormControl','on', 'InitialStep',1);
+[t,q] = ode45(@ODEs, tspan, ic, vopt);
 
 % Graph results
 graph(t,q);
