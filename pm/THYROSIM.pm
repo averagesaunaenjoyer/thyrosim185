@@ -752,7 +752,6 @@ sub getBrowserObj {
 
         # Copy data over as is
         $obj->{data}->{$c} = $self->{data}->{$c};
-        next if $c eq "t"; # Nothing more needs to be done for time
 
         # For non-time compartments, apply conversion factor
         my $cf = $cfs->{$c} // 1;
@@ -951,22 +950,24 @@ sub getDialString {
     my $dial4 = $self->getLvl2('dial',4) / 100;
 
     # Calculate absorption multipliers
+    my $p11 = $self->{params}->{p11}; # k4absorb
+    my $p44 = $self->{params}->{p44}; # k4excrete
+    my $p28 = $self->{params}->{p28}; # k3absorb
+    my $p46 = $self->{params}->{p46}; # k3excrete
+
     my $T4absorb;
     my $T3absorb;
 
-    # TODO
-    # Instead of hardcoding 0.88 and 0.12, it should be loading the appropriate
-    # values from properties.
     if ($dial2 == 0) {
         $T4absorb = 0;
     } else {
-        $T4absorb = ((0.88*(1-$dial2))/$dial2)/0.12;
+        $T4absorb = (($p11*(1-$dial2))/$dial2)/$p44;
     }
 
     if ($dial4 == 0) {
         $T3absorb = 0;
     } else {
-        $T3absorb = ((0.88*(1-$dial4))/$dial4)/0.12;
+        $T3absorb = (($p28*(1-$dial4))/$dial4)/$p46;
     }
 
     return "$dial1 $T4absorb $dial3 $T3absorb";
@@ -1189,12 +1190,11 @@ return 'dialinput1=25&dialinput2=88&dialinput3=25&dialinput4=88'
 sub printLog {
     my ($self,$fh,@cs) = @_;
 
-    my $obj = $self->{browserObj};
-
     # Print headers
     say $fh join("\t",@cs);
 
     # Print data
+    my $obj = $self->{browserObj};
     for (my $i=0; $i<=$#{$obj->{data}->{t}->{values}}; $i++) {
         my @row;
         foreach my $c (@cs) {

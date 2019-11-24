@@ -109,7 +109,7 @@ public class Thyrosim implements FirstOrderDifferentialEquations
 
     public int getDimension()
     {
-        return 21;
+        return 19;
     }
 
     public void computeDerivatives(double t, double[] q, double[] qDot)
@@ -129,31 +129,28 @@ f4 = p37+5*p37/(1+Math.exp(2*q[7]-7));
 NL = p13/(p14+q[1]);
 
 // ODEs
-qDot[0] = SR4+p3*q[1]+p4*q[2]-(p5+p6)*q1F+p11*q[10]+u1;         // T4dot
-qDot[1] = p6*q1F-(p3+p12+NL)*q[1];                              // T4fast
-qDot[2] = p5*q1F-(p4+p15/(p16+q[2])+p17/(p18+q[2]))*q[2];       // T4slow
-qDot[3] = SR3+p20*q[4]+p21*q[5]-(p22+p23)*q4F+p28*q[12]+u4;     // T3pdot
-qDot[4] = p23*q4F+NL*q[1]-(p20+p29)*q[4];                       // T3fast
+qDot[0] = SR4+p3*q[1]+p4*q[2]-(p5+p6)*q1F+p11*q[10]+u1;            // T4dot
+qDot[1] = p6*q1F-(p3+p12+NL)*q[1];                                 // T4fast
+qDot[2] = p5*q1F-(p4+p15/(p16+q[2])+p17/(p18+q[2]))*q[2];          // T4slow
+qDot[3] = SR3+p20*q[4]+p21*q[5]-(p22+p23)*q4F+p28*q[12]+u4;        // T3pdot
+qDot[4] = p23*q4F+NL*q[1]-(p20+p29)*q[4];                          // T3fast
 qDot[5] = p22*q4F+p15*q[2]/(p16+q[2])+p17*q[2]/(p18+q[2])-p21*q[5];// T3slow
-qDot[6] = SRTSH-fdegTSH*q[6];                                   // TSHp
-qDot[7] = f4/p38*q[0]+p37/p39*q[3]-p40*q[7];                    // T3B
-qDot[8] = fLAG*(q[7]-q[8]);                                     // T3B LAG
-qDot[9] = -p43*q[9];                                            // T4PILLdot
-qDot[10]=  p43*q[9]-(p44+p11)*q[10];                            // T4GUTdot
-qDot[11]= -p45*q[11];                                           // T3PILLdot
-qDot[12]=  p45*q[11]-(p46+p28)*q[12];                           // T3GUTdot
+qDot[6] = SRTSH-fdegTSH*q[6];                                      // TSHp
+qDot[7] = f4/p38*q[0]+p37/p39*q[3]-p40*q[7];                       // T3B
+qDot[8] = fLAG*(q[7]-q[8]);                                        // T3B LAG
+qDot[9] = -p43*q[9];                                               // T4PILLdot
+qDot[10]=  p43*q[9]-(p44+p11)*q[10];                               // T4GUTdot
+qDot[11]= -p45*q[11];                                              // T3PILLdot
+qDot[12]=  p45*q[11]-(p46+p28)*q[12];                              // T3GUTdot
 
 // Delay ODEs
-qDot[13] = -kdelay*q[13] +q[6];                                 // delay1
-qDot[14] = kdelay*(q[13] -q[14]);                               // delay2
-qDot[15] = kdelay*(q[14] -q[15]);                               // delay3
-qDot[16] = kdelay*(q[15] -q[16]);                               // delay4
-qDot[17] = kdelay*(q[16] -q[17]);                               // delay5
-qDot[18] = kdelay*(q[17] -q[18]);                               // delay6
+qDot[13] = -kdelay*q[13] +q[6];                                    // delay1
+qDot[14] = kdelay*(q[13] -q[14]);                                  // delay2
+qDot[15] = kdelay*(q[14] -q[15]);                                  // delay3
+qDot[16] = kdelay*(q[15] -q[16]);                                  // delay4
+qDot[17] = kdelay*(q[16] -q[17]);                                  // delay5
+qDot[18] = kdelay*(q[17] -q[18]);                                  // delay6
 
-// Additional values
-qDot[19] = q1F; // FT4p
-qDot[20] = q4F; // FT3p
     }
 
     public static void main(String[] args)
@@ -189,8 +186,18 @@ qDot[20] = q4F; // FT3p
         String thysim = String.valueOf(args[27]);
         final String initic = String.valueOf(args[28]);
 
+        // Get ODEs and parameters
+        Thyrosim ode = new Thyrosim(dial1,dial2,dial3,dial4,inf1,inf4,thysim);
+        int t1 = (int)Math.round(t1d);
+        int t2 = (int)Math.round(t2d);
+        double[] q = new double[] {IC1, IC2, IC3, IC4, IC5, IC6,
+                                   IC7, IC8, IC9, IC10,IC11,IC12,
+                                   IC13,IC14,IC15,IC16,IC17,IC18,IC19};
+
         // Initialize a StepHandler for continuous output. If initic is enabled,
         // then only print the end values. Otherwise, print all values.
+        final double[] p = new double[] { ode.p7,  ode.p8,  ode.p9,  ode.p10,
+                                          ode.p24, ode.p25, ode.p26, ode.p27 };
         StepHandler stepHandler = new StepHandler()
         {
             public void init(double t0, double[] y0, double t)
@@ -203,42 +210,38 @@ qDot[20] = q4F; // FT3p
                 double[] y = interpolator.getInterpolatedState();
                 if (initic.equals("initic")) { // Print only end values
                     if (isLast) {
-                        System.out.println(getLine(t,y));
+                        System.out.println(getLine(t,y,p));
                     }
                 } else { // Print everything
-                    System.out.println(getLine(t,y));
+                    System.out.println(getLine(t,y,p));
                 }
             }
         };
 
-        // Initialize an integrator
-        FirstOrderIntegrator foi = new DormandPrince853Integrator(1.0e-8,100.0,1.0e-10,1.0e-10);
-        //FirstOrderIntegrator foi = new GraggBulirschStoerIntegrator(1.0e-8,100.0,1.0e-10,1.0e-10);
-
+        // Initialize an integrator with the stepHandler and integrate
+        double[] o = new double[]{ 1.0e-8, 100.0, 1.0e-10, 1.0e-10 };
+        FirstOrderIntegrator foi = new DormandPrince853Integrator(o[0],o[1],o[2],o[3]);
         foi.addStepHandler(stepHandler);
-
-        // Get ODE parameters
-        double[] q = new double[] {IC1, IC2, IC3, IC4, IC5, IC6, IC7,
-                                   IC8, IC9, IC10,IC11,IC12,IC13,IC14,
-                                   IC15,IC16,IC17,IC18,IC19,0,   0};
-        Thyrosim ode = new Thyrosim(dial1,dial2,dial3,dial4,inf1,inf4,thysim);
-        int t1 = (int)Math.round(t1d);
-        int t2 = (int)Math.round(t2d);
-
-        // Perform integration
         foi.integrate(ode,t1,q,t2,q);
+
+        // There are other integrators, e.g., GraggBulirschStoerIntegrator
     }
 
-    public static String getLine(double t, double[] y)
+    // Generate the output per time point. In addition, recalculate FT4 and FT3
+    // values here because unfortunately can't figure out how to extract q1F and
+    // q4F values directly.
+    public static String getLine(double t, double[] y, double[] p)
     {
         StringBuilder sb = new StringBuilder();
-        sb.append(Double.toString(t));
-        sb.append(" ");
+        sb.append(Double.toString(t)+" ");
         for (double v : y)
         {
-            sb.append(Double.toString(v));
-            sb.append(" ");
+            sb.append(Double.toString(v)+" ");
         }
+        double ft4 = (p[0]+p[1]*y[0]+p[2]*Math.pow(y[0],2)+p[3]*Math.pow(y[0],3))*y[0];
+        double ft3 = (p[4]+p[5]*y[0]+p[6]*Math.pow(y[0],2)+p[7]*Math.pow(y[0],3))*y[3];
+        sb.append(Double.toString(ft4)+" ");
+        sb.append(Double.toString(ft3)+" ");
         return sb.toString();
     }
 }

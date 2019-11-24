@@ -18,6 +18,10 @@ my $thsim = THYROSIM->new(setshow => 'default',
                           docRoot => '/home/www',
                           fRoot   => 'thyrosimon');
 
+# In a normal browser setting, these are done in $thsim->_processForm().
+$thsim->loadParams();
+$thsim->loadConversionFactors();
+
 my $cmd = "java -cp .:/home/www/thyrosimon/java/commons-math3-3.6.1.jar:"
         . "/home/www/thyrosimon/java/ "
         . "edu.ucla.distefanolab.thyrosim.algorithm.Thyrosim"
@@ -26,7 +30,7 @@ my $cmd = "java -cp .:/home/www/thyrosimon/java/commons-math3-3.6.1.jar:"
         . " 1.7882958476437 7.05727560072869 7.05714474742141 0 0 0 0"
         . " 3.34289716182018 3.69277248068433 3.87942133769244"
         . " 3.90061903207543 3.77875734283571 3.55364471589659"
-        . " 0 24 1 1 1 1 0 0 ThyrosimJr noinit";
+        . " 0 1008 1 1 1 1 0 0 Thyrosim noinit";
 
 my @res = `$cmd`;
 $thsim->processResults(\@res,'1');
