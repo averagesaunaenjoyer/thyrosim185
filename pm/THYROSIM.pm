@@ -167,6 +167,9 @@ sub new {
     # Define default simulation time (days)
     $self->{simTime} = 5;
 
+    # Define default thysim
+    $self->{thysim} = "Thyrosim";
+
     # Define default recalculate IC (1 for yes)
     $self->{recalcIC} = 1;
 
@@ -1092,11 +1095,13 @@ sub recalcIC {
 #====================================================================
 sub getFormParams {
     my ($self,$data) = @_;
-    my $form;
-    my @vars = split(/&/,$data);
-    foreach my $var (@vars) {
-        my ($key,$val) = split(/=/,$var);
-        $form->{$key} = $val;
+    my $form = {};
+    if ($data) {
+        my @vars = split(/&/,$data);
+        foreach my $var (@vars) {
+            my ($key,$val) = split(/=/,$var);
+            $form->{$key} = $val;
+        }
     }
     return $form;
 }

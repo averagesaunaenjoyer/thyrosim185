@@ -46,7 +46,7 @@ function loadXMLDoc(e) {
     // Submit to server and process response
     $.ajax({
         type: "POST",
-        url:  "cgi-bin/getplot.cgi",
+        url:  "cgi-bin/ajax_getplot.cgi",
         data: { data: formdata }
     }).done(function(msg) {
 //        alert(msg);

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use v5.10; use strict; use warnings;
 #==============================================================================
-# FILE:         getplot.cgi
+# FILE:         ajax_getplot.cgi
 # AUTHOR:       Simon X. Han
 # DESCRIPTION:
 #   The main function that:
@@ -27,6 +27,30 @@ BEGIN {
     # Document root
     if(!$ENV{DOCUMENT_ROOT}) {
         $ENV{DOCUMENT_ROOT} = '/home/www';
+    }
+
+    # Print out ENV
+    my $printENV = 0;
+    if ($printENV == 1) {
+        foreach my $env (sort keys %ENV) {
+            say STDERR "$env --> $ENV{$env}";
+        }
+    }
+
+    # Disallow directly executing this script from the browser. This environment
+    # variable and value is set by jQuery by default.
+    if (exists $ENV{HTTP_X_REQUESTED_WITH} &&
+               $ENV{HTTP_X_REQUESTED_WITH} eq "XMLHttpRequest") {
+        # Looks good
+    } else {
+        # Return a message and exit
+        my $cgi = CGI->new();
+        print
+            $cgi->header(-status=>'400 Bad Request',-type=>'text/html'),
+            $cgi->start_html(-title=>'Bad Request'),
+            $cgi->h1('Bad Request'),
+            $cgi->end_html();
+        exit 0;
     }
 }
 
