@@ -1,5 +1,5 @@
 <!----------------------------------------------------
-! FILE:         index.html
+! FILE:         junior.html
 ! AUTHOR:       Simon X. Han
 ! DESCRIPTION:
 !   Home page.
@@ -11,11 +11,11 @@
 <link rel="icon" type="image/png" href="favicon.ico">
 <link type="text/css" rel="stylesheet" href="css/content.css">
 <link type="text/css" rel="stylesheet" href="css/fonts-min.css">
-<link type="text/css" rel="stylesheet" href="css/ui-lightness/jquery-ui-1.10.1.custom.min.css">
+<link type="text/css" rel="stylesheet" href="css/ui-lightness/jquery-ui-1.12.1.custom.min.css">
 <!-- checkmsie.js must be loaded before D3 -->
 <script src="js/checkmsie.js"></script>
-<script src="js/jquery-1.10.2.min.js"></script>
-<script src="js/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/jquery-ui-1.12.1.custom.min.js"></script>
 <script src="js/d3.v3.min.js"></script>
 <script src="js/content.js"></script>
 <script src="js/ajaxfun.js"></script>
@@ -157,10 +157,6 @@
     "Show T<span class="textsub">3</span> input" or
     "Show T<span class="textsub">4</span> input"
 
-<!----------------------------------------------------
-!       <button type="button" id="thisistemp">TMP</button>
-!---------------------------------------------------->
-
     <br>
 
     <!-- Not-for-IE Message -->
@@ -252,7 +248,9 @@
 
     <!-- Graphs (right-most div) -->
     <div id="content-right">
-      <button type="button" onclick="togFreeHormoneButton();">Toggle Free Hormone Values</button>
+      Toggle:
+      <button type="button" onclick="togFreeHormoneButton();">Free Hormone Values</button>
+      <!--<button type="button" id="togXAxisDisp">X-Axis Days/Hours</button>-->
       <div id="FT4graph" class="displaynone"></div>
       <div id="FT3graph" class="displaynone"></div>
       <div id="T4graph"></div>
