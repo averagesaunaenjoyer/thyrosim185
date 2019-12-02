@@ -125,14 +125,17 @@ foreach my $iThis (@$iXs) {
 # Generate the browser object
 my $browserObj = $thsim->getBrowserObj();
 
-# Print to log file.
-# Make sure to set toShow to 'all' if you want non-standard compartments.
+# Print results to log. Make sure included comps were set to show.
+#--------------------------------------------------
+# my $reslog = $ENV{DOCUMENT_ROOT}."/$F_ROOT/tmp/reslog";
+# $thsim->printCompResults($reslog,"t","1","4","7","ft4","ft3");
+#--------------------------------------------------
+
+# Print objects to log
 #--------------------------------------------------
 # my $log = $ENV{DOCUMENT_ROOT}."/$F_ROOT/tmp/log";
-# open my $fh, '>', $log;
-# $thsim->printLog($fh,"t","1","4","7","ft4","ft3");
-# close $fh;
-#-------------------------------------------------- 
+# $thsim->printToLog($log,$thsim->{input},$thsim->{inputTime});
+#--------------------------------------------------
 
 # Convert to JSON and print to browser
 print "content-type:text/html\n\n";

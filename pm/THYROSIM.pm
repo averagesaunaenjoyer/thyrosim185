@@ -669,7 +669,8 @@ sub setAdjustedIC {
     my $trueStart = $self->getIntStart('trueStep',$iNext);
     foreach my $inputNum (keys %{$self->{inputTime}->{$trueStart}}) {
 
-        next if $inputNum < 1;
+        # Initialized inputTime->0 is an empty hashRef
+        next if (!$self->{input}->{$inputNum});
 
         # Get hormone's info
         my $hormone = $self->getLvl3('input',$inputNum,'hormone');
@@ -996,7 +997,8 @@ sub getInfValue {
     my $inputs = $self->{input}; # Shorthand
     foreach my $inputNum (keys %$inputs) {
 
-        next if $inputNum < 1;
+        # Initialized inputTime->0 is an empty hashRef
+        next if (!$self->{input}->{$inputNum});
 
         # Skip non-infusion inputs
         next if ($self->getLvl3('input',$inputNum,'type') != 3);
@@ -1006,8 +1008,10 @@ sub getInfValue {
 
         # Sum infusion dose only if $trueStart is within the infusion interval
         if ($trueStart >= $start && $trueStart < $end) {
-            $u1 += $self->getLvl3('infusion',$inputNum,'u1');
-            $u4 += $self->getLvl3('infusion',$inputNum,'u4');
+            my $_u1 = $self->getLvl3('infusion',$inputNum,'u1') // 0;
+            my $_u4 = $self->getLvl3('infusion',$inputNum,'u4') // 0;
+            $u1 += $_u1;
+            $u4 += $_u4;
         }
     }
 
@@ -1188,12 +1192,18 @@ return 'dialinput1=25&dialinput2=88&dialinput3=25&dialinput4=88'
 }
 
 #====================================================================
-# SUBROUTINE:   printLog
+# SUBROUTINE:   printCompResults
 # DESCRIPTION:
-#   Given a file handle and list of compartments, print all data to log.
+#   Given a $file and an array of compartments, print as follows:
+#   c1  c2  c3  c4  etc.
+# NOTES:
+#   1. Only works for compartments set to show.
+#   2. It is a good idea to set $cs[0] as t.
 #====================================================================
-sub printLog {
-    my ($self,$fh,@cs) = @_;
+sub printCompResults {
+    my ($self,$file,@cs) = @_;
+
+    open my $fh, '>', $file;
 
     # Print headers
     say $fh join("\t",@cs);
@@ -1208,6 +1218,22 @@ sub printLog {
         }
         say $fh join("\t",@row);
     }
+
+    close $fh;
+}
+
+#====================================================================
+# SUBROUTINE:   printToLog
+# DESCRIPTION:
+#   Dump array of objects to $file.
+#====================================================================
+sub printToLog {
+    my ($self,$file,@objs) = @_;
+    open my $fh, '>', $file;
+    foreach my $obj (@objs) {
+        say $fh Dumper($obj);
+    }
+    close $fh;
 }
 
 #====================================================================
