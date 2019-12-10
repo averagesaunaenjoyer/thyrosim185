@@ -12,10 +12,14 @@ use v5.10; use strict; use warnings;
 
 use CGI qw/:standard/;
 use Data::Dumper;
-use JSON::Syck; # Convert between JSON and Perl objects
+use JSON::Syck;                    # Convert between JSON and Perl objects
 $Data::Dumper::Sortkeys = 1;
+$CGI::POST_MAX = 1024 * 1024 * 10; # Max 10MB posts
+$CGI::DISABLE_UPLOADS = 1;         # No uploads
 
-# Set document root and folder root at compile time
+#====================================================================
+# Compile time items
+#====================================================================
 my @S_NAME;
 my $F_ROOT;
 BEGIN {
@@ -29,32 +33,28 @@ BEGIN {
         $ENV{DOCUMENT_ROOT} = '/home/www';
     }
 
-    # Print out ENV
-    my $printENV = 0;
-    if ($printENV == 1) {
-        foreach my $env (sort keys %ENV) {
-            say STDERR "$env --> $ENV{$env}";
-        }
-    }
-
-    # Disallow directly executing this script from the browser. This environment
-    # variable and value is set by jQuery by default.
+    # Restrict this script to AJAX calls only. This disallows directly executing
+    # this script from the browser. This environment variable and value is set
+    # by jQuery by default.
     if (exists $ENV{HTTP_X_REQUESTED_WITH} &&
                $ENV{HTTP_X_REQUESTED_WITH} eq "XMLHttpRequest") {
         # Looks good
     } else {
         # Return a message and exit
-        my $cgi = CGI->new();
+        my $q = CGI->new();
         print
-            $cgi->header(-status=>'400 Bad Request',-type=>'text/html'),
-            $cgi->start_html(-title=>'Bad Request'),
-            $cgi->h1('Bad Request'),
-            $cgi->end_html();
+            $q->header(-status=>'400 Bad Request',-type=>'text/html'),
+            $q->start_html(-title=>'Bad Request'),
+            $q->h1('Bad Request'),
+            $q->end_html();
         exit 0;
     }
 }
 
-use lib $ENV{'DOCUMENT_ROOT'}."/$F_ROOT/pm";
+#====================================================================
+# Generate JSON output
+#====================================================================
+use lib $ENV{DOCUMENT_ROOT}."/$F_ROOT/pm";
 use THYROSIM;
 
 # Create THYROSIM object
@@ -63,11 +63,11 @@ my $thsim = THYROSIM->new(setshow => 'default',
                           fRoot   => $F_ROOT);
 
 # New CGI object and read form values from UI.
-my $cgi = new CGI;
-my $dat = $cgi->param('data'); # Form values are passed as 1 string
+my $q = new CGI;
+my $dat = $q->param('data'); # Form values are passed as 1 string
 $thsim->processForm($dat);
 
-#--------------------------------------------------
+#----------------------------------------------------------
 # Define command. Currently using Java ODE solver. Command arguments are
 # generated in the section below.
 # Description of command arguments (zero-based):
@@ -78,11 +78,11 @@ $thsim->processForm($dat);
 # 25 - 26: Infusion values.
 # 27:      The thysim parameters to load.
 # 28:      Whether to initialize IC (recalculate IC).
-#--------------------------------------------------
+#----------------------------------------------------------
 my $solver = $thsim->getSolver();
 my $thysim = $thsim->getThysim();
 
-#--------------------------------------------------
+#----------------------------------------------------------
 # Decide whether to perform the 0th integration (i0).
 # When the SS values are already known or if recalculate IC is off, i0 is
 # skipped. Otherwise, perform i0. In either case, we must set the IC for the
@@ -92,7 +92,7 @@ my $thysim = $thsim->getThysim();
 # values of i0 are used as the IC of i1. We run i0 from 0-1008 hours so that it
 # is a multiple of 24. This solved an issue where the initial day didn't start
 # at exactly SS (i0 used to run from 0-1000 hours).
-#--------------------------------------------------
+#----------------------------------------------------------
 my $dials = $thsim->getDialString(); # Only needed once
 my $ickey = $thsim->getICKey();
 if ($thsim->hasICKey($ickey) || !$thsim->recalcIC()) { # Skipping i0
@@ -105,11 +105,11 @@ if ($thsim->hasICKey($ickey) || !$thsim->recalcIC()) { # Skipping i0
     $thsim->processResults(\@res,'0');
 }
 
-#--------------------------------------------------
+#----------------------------------------------------------
 # Perform i1 to iX integrations.
 # Integration intervals were determined in detIntSteps(), so here we retrieve
 # them and call the solver.
-#--------------------------------------------------
+#----------------------------------------------------------
 my $iXs = $thsim->getIntCount();
 foreach my $iThis (@$iXs) {
     my $start = $thsim->toHour($thsim->getIntStart('thisStep',$iThis));
@@ -122,8 +122,16 @@ foreach my $iThis (@$iXs) {
     $thsim->processResults(\@res,$iThis);
 }
 
-# Generate the browser object
+#----------------------------------------------------------
+# Convert to JSON and print to browser
+#----------------------------------------------------------
 my $browserObj = $thsim->getBrowserObj();
+print $q->header("text/html");
+print JSON::Syck::Dump($browserObj);
+
+#----------------------------------------------------------
+# Error checking
+#----------------------------------------------------------
 
 # Print results to log. Make sure included comps were set to show.
 #--------------------------------------------------
@@ -135,8 +143,6 @@ my $browserObj = $thsim->getBrowserObj();
 #--------------------------------------------------
 # my $log = $ENV{DOCUMENT_ROOT}."/$F_ROOT/tmp/log";
 # $thsim->printToLog($log,$thsim->{input},$thsim->{inputTime});
+# $thsim->printToLog($log,\%ENV);
 #--------------------------------------------------
 
-# Convert to JSON and print to browser
-print "content-type:text/html\n\n";
-print JSON::Syck::Dump($browserObj)."\n";

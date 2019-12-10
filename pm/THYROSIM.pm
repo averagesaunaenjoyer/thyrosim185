@@ -26,7 +26,7 @@ $Data::Dumper::Sortkeys = 1;
 #====================================================================
 sub new {
     my ($class,%params) = @_;
-    my $self;
+    my $self = {};
 
     #--------------------------------------------------
     # Define existing compartments. Must match java/Thyrosim.java.
@@ -1278,11 +1278,5 @@ sub getCompIdx {
 #====================================================================
 sub genericFunction {
 }
-
-
-
-
-
-
 
 1;
