@@ -113,21 +113,20 @@ a.header-buttons-link:link {
 }
 /* Define location of the highlight images */
 #hilite1 {
-  top: 290px;
-  left: 158px;
+  top: 315px;
+  left: 168px;
 }
 #hilite2 {
-  top: 183px;
-  left: 114px;
+  top: 208px;
+  left: 124px;
 }
 #hilite3 {
-  top: 290px;
-  left: 178px;
+  top: 315px;
+  left: 189px;
 }
 #hilite4 {
-  display: none;
-  top: 175px;
-  left: 120px;
+  top: 200px;
+  left: 131px;
 }
 /* Define location of the swallow pill images */
 .spill {
