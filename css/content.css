@@ -102,6 +102,40 @@ a.header-buttons-link:link {
   background-position: 50% 30%;
   border: 1px dashed #bbb;
 }
+#content div.parameditdiv {
+  background-color: white;
+  margin-top: 10px;
+  width: 372px;
+  height: 90%;
+  border-collapse: collapse;
+  border: 0px; /* To counteract 1px border from #content */
+}
+#content .paraminput {
+}
+#content label {
+  font-size: 12px;
+  display: inline-block;
+  width: 30%;
+}
+#content .paramcol {
+  font-size: 12px;
+  float: left;
+  width: 32.3%;
+  margin-left: 2px;
+  border-collapse: collapse;
+  border: 0px; /* To counteract 1px border from #content */
+}
+#content .paramrow {
+  width: 100%;
+  margin-top: 2px;
+  border-collapse: collapse;
+  border: 0px; /* To counteract 1px border from #content */
+}
+#content .paramrow:after {
+  content: "";
+  display: table;
+  clear: both;
+}
 /* Container for images */
 #content div.imgcontainer {
   position: absolute;

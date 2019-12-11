@@ -40,7 +40,8 @@ use THYROWEB;
 my $ts = THYROSIM->new(setshow => 'default',
                        docRoot => $ENV{DOCUMENT_ROOT},
                        fRoot   => $F_ROOT,
-                       thysim  => 'ThyrosimJr');
+                       thysim  => 'ThyrosimJr',
+                       loadParams => 1);
 my $tw = THYROWEB->new(THYROSIM => $ts);
 
 my $q = new CGI();

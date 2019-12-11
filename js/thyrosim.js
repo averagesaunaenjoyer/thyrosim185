@@ -453,7 +453,7 @@ function validateForm() {
         }
 
         // Checking for numeric
-        if (field.value.match(/^\+?[0-9]*\.?[0-9]+$/)) {
+        if (field.value.match(/^-?\+?[0-9]*\.?[0-9]+$/)) {
             $('#'+field.name).removeClass('error');
         } else {
             $('#'+field.name).addClass('error');
@@ -1278,3 +1278,15 @@ function togFreeHormoneButton() {
         $('#T3graph').removeClass('displaynone');
     }
 }
+
+//--------------------------------------------------
+// Function to toggle parameter list on and off
+//--------------------------------------------------
+function togParamListButton() {
+    if ($('#parameditdiv').hasClass('displaynone')) {
+        $('#parameditdiv').removeClass('displaynone');
+    } else {
+        $('#parameditdiv').addClass('displaynone');
+    }
+}
+

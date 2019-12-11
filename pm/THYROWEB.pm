@@ -93,7 +93,7 @@ sub initExamples {
                     without any input doses. Simulated for 5 days.',
         img     => '../img/experiment-default.png',
         alt     => 'Default Junior Example',
-        # NOTE
+        # TODO
         # Since Junior parameters are being tuned, we do not have an image for
         # the junior example. So, use the default image for now.
     };
@@ -215,7 +215,12 @@ return \%head;
 #====================================================================
 sub insertForm {
     my ($self) = @_;
-    my $examples = $self->insertExamples();
+
+    # Things to put into the form
+    my $examples  = $self->insertExamples();
+    my $paramList = $self->printParams();
+
+    # Put form together
     return <<END
 
 <form name="form">
@@ -412,6 +417,9 @@ sub insertForm {
 
       <!-- Diagram (center div) -->
       <div id="diagram" class="interface-diagram relative">
+        Toggle:
+        <button type="button" onclick="togParamListButton();">Parameters</button>
+        <div id="parameditdiv" class="parameditdiv displaynone">$paramList</div>
         <div id="hilite1" class="imgcontainer displaynone">
           <img src="../img/hilite.png">
         </div>
@@ -636,6 +644,57 @@ EOF
 ;
 
     return $snp;
+}
+
+#====================================================================
+# SUBROUTINE:   printParams
+# DESCRIPTION:
+#   Generate list of parameter inputs.
+#====================================================================
+sub printParams {
+    my ($self) = @_;
+    my $snp = "";
+    my $tmp = "";
+    my $mod = 3; # Want kdelay to be in its own row
+    foreach my $p (@{$self->sortParams()}) {
+        $tmp .= "<div class=\"paramcol\">"
+             .  $self->getParamInput($p,$self->{ts}->{params}->{$p})
+             .  "</div>";
+        if ($mod % 3 == 0) { # 3 per row
+            $snp .= "<div class=\"paramrow\">$tmp</div>";
+            $tmp = "";
+        }
+        $mod++;
+    }
+    return $snp;
+}
+
+#====================================================================
+# SUBROUTINE:   sortParams
+# DESCRIPTION:
+#   Returns arrayRef of parameters sorted numerically.
+#====================================================================
+sub sortParams {
+    my ($self) = @_;
+    my @params = keys %{$self->{ts}->{params}};
+    my @sorted = map { $_->[1] }
+                 sort { $a->[0] <=> $b->[0] }
+                 map { [ ($_ =~ /(\d+)/)[0] || 0, $_ ] }
+                 @params;
+    return \@sorted;
+}
+
+#====================================================================
+# SUBROUTINE:   getParamInput
+# DESCRIPTION:
+#   Helper function to generate an input for a given parameter.
+#====================================================================
+sub getParamInput {
+    my ($self,$p,$v) = @_;
+    return <<EOF
+<label>$p:</label>
+<input size="8" type="text" id="$p" name="$p" value="$v" class="paraminput">
+EOF
 }
 
 #====================================================================

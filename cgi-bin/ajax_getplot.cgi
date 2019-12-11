@@ -137,12 +137,12 @@ print JSON::Syck::Dump($browserObj);
 #--------------------------------------------------
 # my $reslog = $ENV{DOCUMENT_ROOT}."/$F_ROOT/tmp/reslog";
 # $thsim->printCompResults($reslog,"t","1","4","7","ft4","ft3");
-#--------------------------------------------------
+#-------------------------------------------------- 
 
 # Print objects to log
 #--------------------------------------------------
 # my $log = $ENV{DOCUMENT_ROOT}."/$F_ROOT/tmp/log";
 # $thsim->printToLog($log,$thsim->{input},$thsim->{inputTime});
 # $thsim->printToLog($log,\%ENV);
-#--------------------------------------------------
-
+# $thsim->printToLog($log,$thsim);
+#-------------------------------------------------- 

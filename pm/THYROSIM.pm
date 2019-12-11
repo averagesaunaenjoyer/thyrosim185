@@ -189,6 +189,9 @@ sub new {
     # Initialize compartments
     $self->initCompartments();
 
+    # Load parameter list if forced
+    $self->loadParams() if $params{loadParams};
+
     return $self;
 }
 
@@ -291,11 +294,17 @@ sub _processForm {
         } elsif ($key eq "recalcIC") {
             $self->setLvl1('recalcIC',$form->{$key});
         # Dials
-        } elsif ($key =~ m/dialinput(\d)/) {
+        } elsif ($key =~ m/^dialinput(\d)/) {
             $self->setLvl2('dial',$1,$form->{$key});
         # Thysim model
         } elsif ($key eq "thysim") {
             $self->setLvl1('thysim',$form->{$key});
+        # Parameter value - kdelay
+        } elsif ($key eq "kdelay") {
+            $self->setLvl2('params','kdelay',$form->{$key});
+        # Parameter values - p1-48
+        } elsif ($key =~ m/^p\d+/) {
+            $self->setLvl2('params',$key,$form->{$key});
         # Dosing information. Assume splittable by '-'
         } elsif ($key =~ m/(\w+)-(\d+)/) {
             $self->setLvl3('input',$2,$1,$form->{$key});
@@ -311,7 +320,9 @@ sub _processForm {
     $self->detIntSteps();
 
     # Load parameter list.
-    $self->loadParams();
+#--------------------------------------------------
+#     $self->loadParams();
+#-------------------------------------------------- 
 
     # Load conversion factors.
     $self->loadConversionFactors();
