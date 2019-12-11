@@ -168,7 +168,7 @@ sub new {
     $self->{simTime} = 5;
 
     # Define default thysim
-    $self->{thysim} = "Thyrosim";
+    $self->{thysim}  = $params{thysim}  // "Thyrosim";
 
     # Define default recalculate IC (1 for yes)
     $self->{recalcIC} = 1;

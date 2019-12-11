@@ -39,15 +39,16 @@ use THYROWEB;
 
 my $ts = THYROSIM->new(setshow => 'default',
                        docRoot => $ENV{DOCUMENT_ROOT},
-                       fRoot   => $F_ROOT);
-my $tw = THYROWEB->new();
+                       fRoot   => $F_ROOT,
+                       thysim  => 'Thyrosim');
+my $tw = THYROWEB->new(THYROSIM => $ts);
 
 my $q = new CGI();
 
 print $q->header("text/html");
 print $q->start_html($tw->getHead());
 
-print "hello world";
+print $tw->insertForm();
 
 print $q->end_html();
 
