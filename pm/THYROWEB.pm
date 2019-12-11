@@ -6,6 +6,13 @@ use v5.10; use strict; use warnings;
 # DESCRIPTION:
 #   Helper package for generating dynamic Thyrosim websites.
 #==============================================================================
+# TODO
+# Differences between Thyrosim and ThyrosimJr:
+# 1. Banner color
+# 2. Examples
+# 3. Parameters to load (not yet implemented)
+# 4. Form element thysim
+# 5. Combined ajaxfun.js and content.js into thyrosim.js for cgi
 
 package THYROWEB;
 
@@ -31,6 +38,7 @@ sub new {
     #--------------------------------------------------
 
     $self->initDisplay();
+    $self->initExamples();
 
     return $self;
 }
@@ -47,13 +55,59 @@ sub initDisplay {
     if ($self->{ts}->{thysim} eq "Thyrosim") {
         $self->{thysim}  = "Thyrosim";
         $self->{thysimD} = "THYROSIM";
+        $self->{headerstyle} = "";
+        $self->{examples} = ['experiment-default','experiment-DiJo19-1'];
     }
 
     # ThyrosimJr
     if ($self->{ts}->{thysim} eq "ThyrosimJr") {
         $self->{thysim}  = "ThyrosimJr";
         $self->{thysimD} = "THYROSIM Jr";
+        $self->{headerstyle} = "background-color: #CCFFE5";
+        $self->{examples} = ['experiment-default-jr'];
     }
+
+}
+
+#====================================================================
+# SUBROUTINE:   initExamples
+# DESCRIPTION:
+#   Initialize examples. See insertExample() for example snippet structure.
+#====================================================================
+sub initExamples {
+    my ($self) = @_;
+
+    $self->{experiments}->{'experiment-default'} = {
+        name    => 'experiment-default',
+        bold    => 'The Euthyroid Example',
+        text    => 'uses default thyroid hormone secretion/absorption values
+                    without any input doses. Simulated for 5 days.',
+        img     => '../img/experiment-default.png',
+        alt     => 'Default Example',
+    };
+
+    $self->{experiments}->{'experiment-default-jr'} = {
+        name    => 'experiment-default-jr',
+        bold    => 'The Junior Euthyroid Example',
+        text    => 'uses default thyroid hormone secretion/absorption values
+                    without any input doses. Simulated for 5 days.',
+        img     => '../img/experiment-default.png',
+        alt     => 'Default Junior Example',
+        # NOTE
+        # Since Junior parameters are being tuned, we do not have an image for
+        # the junior example. So, use the default image for now.
+    };
+
+    $self->{experiments}->{'experiment-DiJo19-1'} = {
+        name    => 'experiment-DiJo19-1',
+        bold    => 'The DiStefano-Jonklaas 2019 Example-1',
+        text    => 'reproduces Figure 1 of the DiStefano-Jonklaas 2019 paper.
+                    Specifically, the simulated hypothyroidic individual is
+                    given 123 &microg T<span class="textsub">4</span> and 6.5
+                    &microg T<span class="textsub">3</span> daily for 30 days.',
+        img     => '../img/experiment-DiJo19-1.png',
+        alt     => 'DiStefano-Jonklass Example 1',
+    };
 
 }
 
@@ -160,13 +214,15 @@ return \%head;
 # DESCRIPTION:
 #====================================================================
 sub insertForm {
+    my ($self) = @_;
+    my $examples = $self->insertExamples();
     return <<END
 
 <form name="form">
 <div id="wrapper">
 
   <!-- Header -->
-  <div id="header">
+  <div id="header" style="$self->{headerstyle}">
     <!-- About -->
     <div id="button-About" class="bank-left infoButton unselectable">
       <a id="link-About" class="color-black header-buttons-link" href="javascript:clickInfoButton('About');">DIRECTIONS</a>
@@ -254,40 +310,7 @@ sub insertForm {
         <p>
           <span class="infoButton-close bank-right" onClick="javascript:clickInfoButton('Example');">close</span><br>
 
-          <!-- Example default -->
-          <span class="bank-left margin-bot-10">
-            <span class="bank-left example-text">
-              <b>The Euthyroid Example</b> uses default thyroid hormone
-              secretion/absorption values without any input doses. Simulated for
-              5 days.
-              <br>
-              <button type="button" onclick="loadXMLDoc('experiment-default');
-                                             clickInfoButton('Example');">
-                Simulate
-              </button>
-            </span>
-            <img src="../img/experiment-default.png" alt="Default Example"
-            class="example-image" />
-          </span>
-
-          <!-- Example DiJo19-1 -->
-          <span class="bank-left margin-bot-10">
-            <span class="bank-left example-text">
-              <b>The DiStefano-Jonklaas 2019 Example-1</b> reproduces Figure 1
-              of the DiStefano-Jonklaas 2019 paper. Specifically, the simulated
-              hypothyroidic individual is given 123 &microg T<span class="textsub">4</span>
-              and 6.5 &microg T<span class="textsub">3</span> daily for 30 days.
-              <br>
-              <button type="button" onclick="loadXMLDoc('experiment-DiJo19-1');
-                                             clickInfoButton('Example');">
-                Simulate
-              </button>
-            </span>
-            <img src="../img/experiment-DiJo19-1.png" alt="DiStefano-Jonklass Example 1"
-            class="example-image" />
-          </span>
-
-          <!-- Example Next -->
+          $examples
 
         </p>
       </div>
@@ -513,7 +536,7 @@ sub insertForm {
     </div>
     <br>
     <div class="textaligncenter">
-      <input type="hidden" name="thysim" id="thysim" value="Thyrosim">
+      <input type="hidden" name="thysim" id="thysim" value="$self->{thysim}">
     </div>
     <div class="textaligncenter">
       <button type="button" onclick="loadXMLDoc();">SIMULATE</button>
@@ -574,15 +597,45 @@ END
 }
 
 #====================================================================
-# SUBROUTINE:   insertTest
+# SUBROUTINE:   insertExamples
 # DESCRIPTION:
+#   Insert examples associated with $thysim.
 #====================================================================
-sub insertTest {
-    return <<EOF
-<div>
-  hello world
-</div>
+sub insertExamples {
+    my ($self) = @_;
+    my $snp = "";
+    foreach my $key (@{$self->{examples}}) {
+        $snp .= $self->insertExample($self->{experiments}->{$key});
+    }
+    return $snp;
+}
+
+#====================================================================
+# SUBROUTINE:   insertExample
+# DESCRIPTION:
+#   Insert Example snippet.
+#====================================================================
+sub insertExample {
+    my ($self,$exp) = @_;
+    my $snp = <<EOF
+
+<!-- Example $exp->{name} -->
+<span class="bank-left margin-bot-10">
+  <span class="bank-left example-text">
+    <b>$exp->{bold}</b> $exp->{text}
+    <br>
+    <button type="button" onclick="loadXMLDoc('$exp->{name}');
+                                   clickInfoButton('Example');">
+      Simulate
+    </button>
+  </span>
+  <img src="$exp->{img}" alt="$exp->{alt}" class="example-image" />
+</span>
+
 EOF
+;
+
+    return $snp;
 }
 
 #====================================================================

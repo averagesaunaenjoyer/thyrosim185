@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use v5.10; use strict; use warnings;
 #==============================================================================
-# FILE:         index.cgi
+# FILE:         Thyrosim.cgi
 # AUTHOR:       Simon X. Han
 # DESCRIPTION:
 #   Hello
