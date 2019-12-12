@@ -928,7 +928,7 @@ sub getICKey {
 sub getICString {
     my ($self,$iThis) = @_;
     my $str = "";
-    foreach my $c ( 1 .. 19) {
+    foreach my $c ( @{$self->{qdots}} ) {
         $str .= $self->{IC}->{$iThis}->{$c}." ";
     }
     return $str;
@@ -1283,6 +1283,37 @@ sub getThysim {
 #====================================================================
 sub getCompIdx {
     return $_[0]->{compartment}->{$_[1]};
+}
+
+#====================================================================
+# SUBROUTINE:   getParams
+# DESCRIPTION:
+#   Get parameter values and format for use on the command line.
+#====================================================================
+sub getParams {
+    my ($self) = @_;
+    my $str = "";
+    foreach my $p (@{$self->sortParams()}) {
+        $str .= $self->{params}->{$p}." ";
+    }
+    return $str;
+}
+
+#====================================================================
+# SUBROUTINE:   sortParams
+# DESCRIPTION:
+#   Return arrayRef of parameter keys sorted alphanumerically:
+#   * kdelay
+#   * p1 - p48
+#====================================================================
+sub sortParams {
+    my ($self) = @_;
+    my @params = keys %{$self->{params}};
+    my @sorted = map  { $_->[1] }
+                 sort { $a->[0] <=> $b->[0] }
+                 map  { [ ($_ =~ /(\d+)/)[0] || 0, $_ ] }
+                 @params;
+    return \@sorted;
 }
 
 #====================================================================

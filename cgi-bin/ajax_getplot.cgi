@@ -78,9 +78,11 @@ $thsim->processForm($dat);
 # 25 - 26: Infusion values.
 # 27:      The thysim parameters to load.
 # 28:      Whether to initialize IC (recalculate IC).
+# 29 - 77: Parameters kdelay and p1 - p48.
 #----------------------------------------------------------
 my $solver = $thsim->getSolver();
 my $thysim = $thsim->getThysim();
+my $ps     = $thsim->getParams();
 
 #----------------------------------------------------------
 # Decide whether to perform the 0th integration (i0).
@@ -100,7 +102,7 @@ if ($thsim->hasICKey($ickey) || !$thsim->recalcIC()) { # Skipping i0
 } else {
     my $ICstr = $thsim->getICString('0');
 
-    my $cmd = "$solver $ICstr 0 1008 $dials 0 0 $thysim initic";
+    my $cmd = "$solver $ICstr 0 1008 $dials 0 0 $thysim initic $ps";
     my @res = `$cmd` or die "died: $!";
     $thsim->processResults(\@res,'0');
 }
@@ -117,7 +119,7 @@ foreach my $iThis (@$iXs) {
     my $ICstr = $thsim->getICString($iThis);
     my $u     = $thsim->getInfValue($iThis);
 
-    my $cmd = "$solver $ICstr $start $end $dials $u $thysim noinit";
+    my $cmd = "$solver $ICstr $start $end $dials $u $thysim noinit $ps";
     my @res = `$cmd` or die "died: $!";
     $thsim->processResults(\@res,$iThis);
 }

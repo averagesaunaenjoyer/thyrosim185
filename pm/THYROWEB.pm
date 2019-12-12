@@ -639,14 +639,15 @@ EOF
 #====================================================================
 # SUBROUTINE:   printParams
 # DESCRIPTION:
-#   Generate list of parameter inputs.
+#   Generate list of parameter inputs. Requires THYROSIM object for its
+#   THYROSIM::sortParams().
 #====================================================================
 sub printParams {
     my ($self) = @_;
     my $snp = "";
     my $tmp = "";
     my $mod = 3; # Want kdelay to be in its own row
-    foreach my $p (@{$self->sortParams()}) {
+    foreach my $p (@{$self->{ts}->sortParams()}) {
         $tmp .= "<div class=\"paramcol\">"
              .  $self->getParamInput($p,$self->{ts}->{params}->{$p})
              .  "</div>";
@@ -657,21 +658,6 @@ sub printParams {
         $mod++;
     }
     return $snp;
-}
-
-#====================================================================
-# SUBROUTINE:   sortParams
-# DESCRIPTION:
-#   Returns arrayRef of parameters sorted numerically.
-#====================================================================
-sub sortParams {
-    my ($self) = @_;
-    my @params = keys %{$self->{ts}->{params}};
-    my @sorted = map { $_->[1] }
-                 sort { $a->[0] <=> $b->[0] }
-                 map { [ ($_ =~ /(\d+)/)[0] || 0, $_ ] }
-                 @params;
-    return \@sorted;
 }
 
 #====================================================================
