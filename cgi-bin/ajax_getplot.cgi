@@ -144,5 +144,5 @@ print JSON::Syck::Dump($browserObj);
 # my $log = $ENV{DOCUMENT_ROOT}."/$F_ROOT/tmp/log";
 # $thsim->printToLog($log,$thsim->{input},$thsim->{inputTime});
 # $thsim->printToLog($log,\%ENV);
-# $thsim->printToLog($log,$thsim);
+# $thsim->printToLog($log,$thsim->{params});
 #-------------------------------------------------- 

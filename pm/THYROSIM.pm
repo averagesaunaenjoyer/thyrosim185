@@ -236,6 +236,10 @@ sub initCompartments {
 #
 #   For testing, can use a custom experiment, like:
 #   $data = $self->getExperiment("simple-3");
+#
+#   Additional initializations done here:
+#     loadParams() if 'data' is an experiment name
+#     loadConversionFactors()
 #====================================================================
 sub processForm {
     my ($self,$data) = @_;
@@ -246,9 +250,13 @@ sub processForm {
     # Check for experiment
     if (exists $form->{experiment}) {
         $self->_processForm($self->getExperiment($form->{experiment}));
+        $self->loadParams();
     } else {
         $self->_processForm($data);
     }
+
+    # Load conversion factors.
+    $self->loadConversionFactors();
 }
 
 #====================================================================
@@ -276,8 +284,6 @@ sub processForm {
 #   Additional initializations done here:
 #     setInitialIC()
 #     detIntSteps()
-#     loadParams()
-#     loadConversionFactors()
 # NOTES: $num is the $num-th input
 #====================================================================
 sub _processForm {
@@ -318,14 +324,6 @@ sub _processForm {
 
     # Determine intergration steps
     $self->detIntSteps();
-
-    # Load parameter list.
-#--------------------------------------------------
-#     $self->loadParams();
-#-------------------------------------------------- 
-
-    # Load conversion factors.
-    $self->loadConversionFactors();
 }
 
 #====================================================================
@@ -1128,6 +1126,10 @@ sub getFormParams {
 #
 #   Creates a string that looks like it came from the browser, with all the
 #   items needed to run Thyrosim.
+# NOTES:
+#   Predefined experiments do not come with parameter strings. Therefore, if
+#   detected that a predefined experiment is being run, then load the parameters
+#   associated with $thysim.
 #====================================================================
 sub getExperiment {
     my ($self,$exp) = @_;

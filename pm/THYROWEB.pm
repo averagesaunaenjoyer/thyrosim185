@@ -219,6 +219,7 @@ sub insertForm {
     # Things to put into the form
     my $examples  = $self->insertExamples();
     my $paramList = $self->printParams();
+    my $bottom    = $self->loadBottom();
 
     # Put form together
     return <<END
@@ -572,18 +573,7 @@ sub insertForm {
   <!-- References end -->
 
   <!-- Bottom -->
-  <div id="bottom">
-    <b>THYROSIM 2.0</b> &copy; 2013 by <a href="http://biocyb0.cs.ucla.edu/wp/" target="_blank">UCLA Biocybernetics Laboratory</a><br>
-    Free T<span class="textsub">4</span> and Free T<span class="textsub">3</span> alternatives to Total T<span class="textsub">3</span> and T<span class="textsub">4</span> added January 2019 (Toggle switch)<br>
-    JJ DiStefano III, Director<br>
-    Web App Design and Implementation by Simon X. Han<br>
-    Modeling and Analysis by Marisa Eisenberg,<br>
-    Rotem Ben-Shachar &amp; the DiStefano Lab Team<br>
-    Junior Model by Doug Dang, Aaron Hui, Sandy Kim, and Amanda Tsao<br>
-    Please send comments, bugs, criticisms to:
-    <a href="mailto:joed\@ucla.edu">joed\@ucla.edu</a><br>
-    Code repository: <a href="https://bitbucket.org/DistefanoLab/thyrosim/overview" target="_blank">click here</a>
-  </div>
+$bottom
   <!-- Bottom end -->
 
   <!-- Follows the cursor while simulator is running -->
@@ -695,6 +685,55 @@ sub getParamInput {
 <label>$p:</label>
 <input size="8" type="text" id="$p" name="$p" value="$v" class="paraminput">
 EOF
+}
+
+#====================================================================
+# SUBROUTINE:   loadBottom
+# DESCRIPTION:
+#   The bottom portion includes contacts and acknowledgements. Only include
+#   Junior credit in the Junior page.
+#====================================================================
+sub loadBottom {
+    my ($self) = @_;
+    my $thysim = $self->{thysim};
+    my $ack_jr = $self->{thysim} eq "ThyrosimJr"
+               ? "Junior Model by Doug Dang, Aaron Hui, Sandy Kim, and Amanda Tsao"
+               : "";
+    my $snp = <<EOF
+<div id="bottom">
+
+  <b>THYROSIM 2.1</b> &copy; 2013 by
+  <a href="http://biocyb0.cs.ucla.edu/wp/"
+     target="_blank">UCLA Biocybernetics Laboratory</a><br>
+
+  Free T<span class="textsub">4</span> and Free T<span class="textsub">3</span>
+  alternatives to Total T<span class="textsub">4</span> and
+  T<span class="textsub">3</span> added January 2019 (Toggle Free Hormone
+  Values)<br>
+
+  Parameter editor added December 2019 (Toggle Parameters)<br>
+
+  JJ DiStefano III, Director<br>
+
+  Web App Design and Implementation by Simon X. Han<br>
+
+  Modeling and Analysis by Marisa Eisenberg,<br>
+
+  Rotem Ben-Shachar &amp; the DiStefano Lab Team<br>
+
+  $ack_jr<br>
+
+  Please send comments, bugs, criticisms to:
+  <a href="mailto:joed\@ucla.edu">joed\@ucla.edu</a><br>
+  Code repository: <a href="https://bitbucket.org/DistefanoLab/thyrosim/overview"
+                      target="_blank">click here</a>
+
+</div>
+
+EOF
+;
+
+    return $snp;
 }
 
 #====================================================================
