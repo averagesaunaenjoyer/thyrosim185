@@ -3,7 +3,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Properties;
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations;
 import org.apache.commons.math3.ode.FirstOrderIntegrator;
@@ -25,7 +24,20 @@ public class Thyrosim implements FirstOrderDifferentialEquations
     // Functions that Java ODE solver needs
     // Declare parameters
     public Thyrosim(double dial1, double dial2, double dial3, double dial4,
-                    double inf1,  double inf4,  String thysim)
+                    double inf1,  double inf4,
+                    double _kdelay,
+                    double _p1,  double _p2,  double _p3,  double _p4,
+                    double _p5,  double _p6,  double _p7,  double _p8,
+                    double _p9,  double _p10, double _p11, double _p12,
+                    double _p13, double _p14, double _p15, double _p16,
+                    double _p17, double _p18, double _p19, double _p20,
+                    double _p21, double _p22, double _p23, double _p24,
+                    double _p25, double _p26, double _p27, double _p28,
+                    double _p29, double _p30, double _p31, double _p32,
+                    double _p33, double _p34, double _p35, double _p36,
+                    double _p37, double _p38, double _p39, double _p40,
+                    double _p41, double _p42, double _p43, double _p44,
+                    double _p45, double _p46, double _p47, double _p48)
     {
         u1 = inf1;  // Infusion into plasma T4
         u4 = inf4;  // Infusion into plasma T3
@@ -34,75 +46,57 @@ public class Thyrosim implements FirstOrderDifferentialEquations
         d3 = dial3;
         d4 = dial4;
 
-        // Load properties
-        Properties prop = new Properties();
-        String paramsfile = "../config/" + thysim + ".params";
-        InputStream pis = null;
+        kdelay = _kdelay;
+        p1     = _p1;
+        p2     = _p2;
+        p3     = _p3;
+        p4     = _p4;
+        p5     = _p5;
+        p6     = _p6;
+        p7     = _p7;
+        p8     = _p8;
+        p9     = _p9;
+        p10    = _p10;
+        p11    = _p11;
+        p12    = _p12;
+        p13    = _p13;
+        p14    = _p14;
+        p15    = _p15;
+        p16    = _p16;
+        p17    = _p17;
+        p18    = _p18;
+        p19    = _p19;
+        p20    = _p20;
+        p21    = _p21;
+        p22    = _p22;
+        p23    = _p23;
+        p24    = _p24;
+        p25    = _p25;
+        p26    = _p26;
+        p27    = _p27;
+        p28    = _p28;
+        p29    = _p29;
+        p30    = _p30;
+        p31    = _p31;
+        p32    = _p32;
+        p33    = _p33;
+        p34    = _p34;
+        p35    = _p35;
+        p36    = _p36;
+        p37    = _p37;
+        p38    = _p38;
+        p39    = _p39;
+        p40    = _p40;
+        p41    = _p41;
+        p42    = _p42;
+        p43    = _p43;
+        p44    = _p44;
+        p45    = _p45;
+        p46    = _p46;
+        p47    = _p47;
+        p48    = _p48;
 
-        try {
-            pis = new FileInputStream(paramsfile);
-        } catch (FileNotFoundException ex) {
-            System.out.println("File not found: " + paramsfile);
-        }
-
-        try {
-            prop.load(pis);
-        } catch (IOException io) {
-            io.printStackTrace();
-        }
-
-        // Convert properties to double
-        kdelay = Double.valueOf(prop.getProperty("kdelay"));
-        p1  = Double.valueOf(prop.getProperty("p1"));
-        p2  = Double.valueOf(prop.getProperty("p2"));
-        p3  = Double.valueOf(prop.getProperty("p3"));
-        p4  = Double.valueOf(prop.getProperty("p4"));
-        p5  = Double.valueOf(prop.getProperty("p5"));
-        p6  = Double.valueOf(prop.getProperty("p6"));
-        p7  = Double.valueOf(prop.getProperty("p7"));
-        p8  = Double.valueOf(prop.getProperty("p8"));
-        p9  = Double.valueOf(prop.getProperty("p9"));
-        p10 = Double.valueOf(prop.getProperty("p10"));
-        p11 = Double.valueOf(prop.getProperty("p11"));
-        p12 = Double.valueOf(prop.getProperty("p12"));
-        p13 = Double.valueOf(prop.getProperty("p13"));
-        p14 = Double.valueOf(prop.getProperty("p14"));
-        p15 = Double.valueOf(prop.getProperty("p15"));
-        p16 = Double.valueOf(prop.getProperty("p16"));
-        p17 = Double.valueOf(prop.getProperty("p17"));
-        p18 = Double.valueOf(prop.getProperty("p18"));
-        p19 = Double.valueOf(prop.getProperty("p19"));
-        p20 = Double.valueOf(prop.getProperty("p20"));
-        p21 = Double.valueOf(prop.getProperty("p21"));
-        p22 = Double.valueOf(prop.getProperty("p22"));
-        p23 = Double.valueOf(prop.getProperty("p23"));
-        p24 = Double.valueOf(prop.getProperty("p24"));
-        p25 = Double.valueOf(prop.getProperty("p25"));
-        p26 = Double.valueOf(prop.getProperty("p26"));
-        p27 = Double.valueOf(prop.getProperty("p27"));
-        p28 = Double.valueOf(prop.getProperty("p28"));
-        p29 = Double.valueOf(prop.getProperty("p29"));
-        p30 = Double.valueOf(prop.getProperty("p30"));
-        p31 = Double.valueOf(prop.getProperty("p31"));
-        p32 = Double.valueOf(prop.getProperty("p32"));
-        p33 = Double.valueOf(prop.getProperty("p33"));
-        p34 = Double.valueOf(prop.getProperty("p34"));
-        p35 = Double.valueOf(prop.getProperty("p35"));
-        p36 = Double.valueOf(prop.getProperty("p36"));
-        p37 = Double.valueOf(prop.getProperty("p37"));
-        p38 = Double.valueOf(prop.getProperty("p38"));
-        p39 = Double.valueOf(prop.getProperty("p39"));
-        p40 = Double.valueOf(prop.getProperty("p40"));
-        p41 = Double.valueOf(prop.getProperty("p41"));
-        p42 = Double.valueOf(prop.getProperty("p42"));
-        p43 = Double.valueOf(prop.getProperty("p43"));
-        p44 = Double.valueOf(prop.getProperty("p44"));
-        p45 = Double.valueOf(prop.getProperty("p45"));
-        p46 = Double.valueOf(prop.getProperty("p46"));
-        p47 = Double.valueOf(prop.getProperty("p47"));
-        p48 = Double.valueOf(prop.getProperty("p48"));
-
-        // Post prop load modification
+        // Post param load modification
         p44 = p44 * d2;
         p46 = p46 * d4;
     }
@@ -185,9 +179,66 @@ qDot[18] = kdelay*(q[17] -q[18]);                                  // delay6
         double inf4   = Double.parseDouble(args[26]);
         String thysim = String.valueOf(args[27]);
         final String initic = String.valueOf(args[28]);
+        double _kdelay = Double.parseDouble(args[29]);
+        double _p1     = Double.parseDouble(args[30]);
+        double _p2     = Double.parseDouble(args[31]);
+        double _p3     = Double.parseDouble(args[32]);
+        double _p4     = Double.parseDouble(args[33]);
+        double _p5     = Double.parseDouble(args[34]);
+        double _p6     = Double.parseDouble(args[35]);
+        double _p7     = Double.parseDouble(args[36]);
+        double _p8     = Double.parseDouble(args[37]);
+        double _p9     = Double.parseDouble(args[38]);
+        double _p10    = Double.parseDouble(args[39]);
+        double _p11    = Double.parseDouble(args[40]);
+        double _p12    = Double.parseDouble(args[41]);
+        double _p13    = Double.parseDouble(args[42]);
+        double _p14    = Double.parseDouble(args[43]);
+        double _p15    = Double.parseDouble(args[44]);
+        double _p16    = Double.parseDouble(args[45]);
+        double _p17    = Double.parseDouble(args[46]);
+        double _p18    = Double.parseDouble(args[47]);
+        double _p19    = Double.parseDouble(args[48]);
+        double _p20    = Double.parseDouble(args[49]);
+        double _p21    = Double.parseDouble(args[50]);
+        double _p22    = Double.parseDouble(args[51]);
+        double _p23    = Double.parseDouble(args[52]);
+        double _p24    = Double.parseDouble(args[53]);
+        double _p25    = Double.parseDouble(args[54]);
+        double _p26    = Double.parseDouble(args[55]);
+        double _p27    = Double.parseDouble(args[56]);
+        double _p28    = Double.parseDouble(args[57]);
+        double _p29    = Double.parseDouble(args[58]);
+        double _p30    = Double.parseDouble(args[59]);
+        double _p31    = Double.parseDouble(args[60]);
+        double _p32    = Double.parseDouble(args[61]);
+        double _p33    = Double.parseDouble(args[62]);
+        double _p34    = Double.parseDouble(args[63]);
+        double _p35    = Double.parseDouble(args[64]);
+        double _p36    = Double.parseDouble(args[65]);
+        double _p37    = Double.parseDouble(args[66]);
+        double _p38    = Double.parseDouble(args[67]);
+        double _p39    = Double.parseDouble(args[68]);
+        double _p40    = Double.parseDouble(args[69]);
+        double _p41    = Double.parseDouble(args[70]);
+        double _p42    = Double.parseDouble(args[71]);
+        double _p43    = Double.parseDouble(args[72]);
+        double _p44    = Double.parseDouble(args[73]);
+        double _p45    = Double.parseDouble(args[74]);
+        double _p46    = Double.parseDouble(args[75]);
+        double _p47    = Double.parseDouble(args[76]);
+        double _p48    = Double.parseDouble(args[77]);
 
         // Get ODEs and parameters
-        Thyrosim ode = new Thyrosim(dial1,dial2,dial3,dial4,inf1,inf4,thysim);
+        Thyrosim ode = new Thyrosim(dial1, dial2, dial3, dial4, inf1, inf4,
+                                    _kdelay,
+                                    _p1,  _p2,  _p3,  _p4,  _p5,  _p6,  _p7,
+                                    _p8,  _p9,  _p10, _p11, _p12, _p13, _p14,
+                                    _p15, _p16, _p17, _p18, _p19, _p20, _p21,
+                                    _p22, _p23, _p24, _p25, _p26, _p27, _p28,
+                                    _p29, _p30, _p31, _p32, _p33, _p34, _p35,
+                                    _p36, _p37, _p38, _p39, _p40, _p41, _p42,
+                                    _p43, _p44, _p45, _p46, _p47, _p48);
         int t1 = (int)Math.round(t1d);
         int t2 = (int)Math.round(t2d);
         double[] q = new double[] {IC1, IC2, IC3, IC4, IC5, IC6,
@@ -196,8 +247,8 @@ qDot[18] = kdelay*(q[17] -q[18]);                                  // delay6
 
         // Initialize a StepHandler for continuous output. If initic is enabled,
         // then only print the end values. Otherwise, print all values.
-        final double[] p = new double[] { ode.p7,  ode.p8,  ode.p9,  ode.p10,
-                                          ode.p24, ode.p25, ode.p26, ode.p27 };
+        final double[] p = new double[] { _p7,  _p8,  _p9,  _p10,
+                                          _p24, _p25, _p26, _p27 };
         StepHandler stepHandler = new StepHandler()
         {
             public void init(double t0, double[] y0, double t)
@@ -244,4 +295,78 @@ qDot[18] = kdelay*(q[17] -q[18]);                                  // delay6
         sb.append(Double.toString(ft3)+" ");
         return sb.toString();
     }
+
+    // Can alternatively read parameter values in from the config file. Not
+    // currently used.
+    public double[] readConfig(String thysim)
+    {
+        // Load properties
+        Properties prop = new Properties();
+        String configFile = "../config/" + thysim + ".params";
+        InputStream pis = null; // Param InputStream
+
+        try {
+            pis = new FileInputStream(configFile);
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found: " + configFile);
+        }
+
+        try {
+            prop.load(pis);
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
+
+        double[] p = new double[] { Double.valueOf(prop.getProperty("kdelay")),
+                                    Double.valueOf(prop.getProperty("p1")),
+                                    Double.valueOf(prop.getProperty("p2")),
+                                    Double.valueOf(prop.getProperty("p3")),
+                                    Double.valueOf(prop.getProperty("p4")),
+                                    Double.valueOf(prop.getProperty("p5")),
+                                    Double.valueOf(prop.getProperty("p6")),
+                                    Double.valueOf(prop.getProperty("p7")),
+                                    Double.valueOf(prop.getProperty("p8")),
+                                    Double.valueOf(prop.getProperty("p9")),
+                                    Double.valueOf(prop.getProperty("p10")),
+                                    Double.valueOf(prop.getProperty("p11")),
+                                    Double.valueOf(prop.getProperty("p12")),
+                                    Double.valueOf(prop.getProperty("p13")),
+                                    Double.valueOf(prop.getProperty("p14")),
+                                    Double.valueOf(prop.getProperty("p15")),
+                                    Double.valueOf(prop.getProperty("p16")),
+                                    Double.valueOf(prop.getProperty("p17")),
+                                    Double.valueOf(prop.getProperty("p18")),
+                                    Double.valueOf(prop.getProperty("p19")),
+                                    Double.valueOf(prop.getProperty("p20")),
+                                    Double.valueOf(prop.getProperty("p21")),
+                                    Double.valueOf(prop.getProperty("p22")),
+                                    Double.valueOf(prop.getProperty("p23")),
+                                    Double.valueOf(prop.getProperty("p24")),
+                                    Double.valueOf(prop.getProperty("p25")),
+                                    Double.valueOf(prop.getProperty("p26")),
+                                    Double.valueOf(prop.getProperty("p27")),
+                                    Double.valueOf(prop.getProperty("p28")),
+                                    Double.valueOf(prop.getProperty("p29")),
+                                    Double.valueOf(prop.getProperty("p30")),
+                                    Double.valueOf(prop.getProperty("p31")),
+                                    Double.valueOf(prop.getProperty("p32")),
+                                    Double.valueOf(prop.getProperty("p33")),
+                                    Double.valueOf(prop.getProperty("p34")),
+                                    Double.valueOf(prop.getProperty("p35")),
+                                    Double.valueOf(prop.getProperty("p36")),
+                                    Double.valueOf(prop.getProperty("p37")),
+                                    Double.valueOf(prop.getProperty("p38")),
+                                    Double.valueOf(prop.getProperty("p39")),
+                                    Double.valueOf(prop.getProperty("p40")),
+                                    Double.valueOf(prop.getProperty("p41")),
+                                    Double.valueOf(prop.getProperty("p42")),
+                                    Double.valueOf(prop.getProperty("p43")),
+                                    Double.valueOf(prop.getProperty("p44")),
+                                    Double.valueOf(prop.getProperty("p45")),
+                                    Double.valueOf(prop.getProperty("p46")),
+                                    Double.valueOf(prop.getProperty("p47")),
+                                    Double.valueOf(prop.getProperty("p48"))};
+        return p;
+    }
 }
+

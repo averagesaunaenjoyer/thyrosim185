@@ -14,9 +14,11 @@ use Data::Dumper;
 use lib "../pm";
 use THYROSIM;
 
-my $thsim = THYROSIM->new(setshow => 'default',
-                          docRoot => '/home/www',
-                          fRoot   => 'thyrosimon');
+my $thsim = THYROSIM->new(setshow    => 'default',
+                          docRoot    => '/home/www',
+                          fRoot      => 'thyrosimon',
+                          thysim     => 'Thyrosim',
+                          loadParams => 1);
 
 # In a normal browser setting, these are done in $thsim->_processForm().
 $thsim->loadParams();
@@ -30,16 +32,13 @@ my $cmd = "java -cp .:/home/www/thyrosimon/java/commons-math3-3.6.1.jar:"
         . " 1.7882958476437 7.05727560072869 7.05714474742141 0 0 0 0"
         . " 3.34289716182018 3.69277248068433 3.87942133769244"
         . " 3.90061903207543 3.77875734283571 3.55364471589659"
-        . " 0 1008 1 1 1 1 0 0 Thyrosim noinit";
+        . " 0 1008 1 1 1 1 0 0 $thsim->{thysim} noinit"
+        . " " . $thsim->getParams();
 
 my @res = `$cmd`;
 $thsim->processResults(\@res,'1');
 $thsim->getBrowserObj();
 
-# Note that printLog() here is only going to print mols. This is because
-# conversion factors have not been loaded yet. Alternatively, I can use a custom
-# experiment and force a processing of form inputs.
-my $log = "../tmp/log";
-open my $fh, '>', $log;
-$thsim->printLog($fh,"t","1","4","7","ft4","ft3");
-close $fh;
+# Print results to log. Make sure included comps were set to show.
+my $reslog = "log";
+$thsim->printCompResults($reslog,"t","1","4","7","ft4","ft3");
