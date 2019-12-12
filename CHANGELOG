@@ -1,4 +1,9 @@
 Change log
+2019-12-12
+1. Added parameter editor to the UI
+2. Original html links now redirect to cgi versions
+3. Thyrosim set to version 2.1
+
 2019-11-24
 1. Added additional examples with images
 2. Updated d3, jquery, and jquery-ui libraries
