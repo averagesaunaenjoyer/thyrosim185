@@ -480,9 +480,14 @@ function validateForm() {
 //===================================================================
 function getExperimentStr(exp) {
 
-    // The default example. For all Thyroid Simulators.
+    // The default Thyrosim example.
     if (exp == "experiment-default") {
-        return "experiment="+exp+"&thysim="+$('#thysim').val();
+        return "experiment="+exp+"&thysim=Thyrosim";
+    }
+
+    // The default ThyrosimJr example.
+    if (exp == "experiment-default-jr") {
+        return "experiment="+exp+"&thysim=ThyrosimJr";
     }
 
     // The DiStefano-Jonklaas 2019 Example-1. Only relevant for Thyrosim.
