@@ -8,11 +8,7 @@ use v5.10; use strict; use warnings;
 #==============================================================================
 # TODO
 # Differences between Thyrosim and ThyrosimJr:
-# 1. Banner color
-# 2. Examples
-# 3. Parameters to load (not yet implemented)
-# 4. Form element thysim
-# 5. Combined ajaxfun.js and content.js into thyrosim.js for cgi
+# 1. Examples
 
 package THYROWEB;
 
@@ -151,7 +147,7 @@ sub getHead {
 }),
 -style      => {
     'src'           => [
-        '../css/content.css',
+        '../css/thyrosim.css',
         '../css/fonts-min.css',
         '../css/ui-lightness/jquery-ui.min.css',
         #'../css/bootstrap.min.css'
@@ -181,16 +177,6 @@ sub getHead {
         -type => 'text/javascript',
         -src  => '../js/d3.min.js'
     },
-#--------------------------------------------------
-#     {
-#         -type => 'text/javascript',
-#         -src  => '../js/content.js'
-#     },
-#     {
-#         -type => 'text/javascript',
-#         -src  => '../js/ajaxfun.js'
-#     },
-#-------------------------------------------------- 
     {
         -type => 'text/javascript',
         -src  => '../js/thyrosim.js'
