@@ -12,68 +12,58 @@
 // Sub-section
 //---------------------------------------------------------
 
-//--------------------------------------------------
-// FILE:        ajaxfun.js
-// AUTHOR:      Simon X. Han
-// DESCRIPTION:
-//   Functions relating to AJAX will go in here. Currently this involves sending
-//   and receiving the request object and graphing related functions.
-//--------------------------------------------------
-
-// Required for ajax, so load on file load
-var xmlhttp;
-if (window.XMLHttpRequest) {
-    // code for IE7+, Firefox, Chrome, Opera, Safari
-    xmlhttp=new XMLHttpRequest();
-} else {
-    // code for IE6, IE5
-    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-}
-
-// Run the server-side script and retrieve plotting data and configurations
-// in a JSON data structure
+//===================================================================
+// Validate and submit form. Retrieve JSON plotting data and graph.
+//===================================================================
 var ThyrosimGraph = new ThyrosimGraph();
-function loadXMLDoc(e) {
-    var followId = getFollowId();
-    startLoading(followId); // shows "loading.gif"
+function loadXMLDoc(exp) {
 
-    // Validate form and stop if there are errors
-    var nomatch = validateForm();
-    if (nomatch) {
+    // Needed variables
+    var followId = getFollowId();
+
+    // Display loading message
+    startLoading(followId);
+
+    //---------------------------------------------------------
+    // Validate form
+    //---------------------------------------------------------
+    var hasFormError = validateForm();
+    if (hasFormError) {
         stopLoading(followId);
         return false;
     }
 
-    // Serialize form inputs and inputs are processed server side. JQuery can't
-    // convert JS objects to JSON and would require an additional file that I
-    // don't want to include.
-    var formdata = $("form").serialize();
-    // If the user selected to run default behavior, override formdata
-    if (e == "experiment-default") {
-      formdata="experiment="+e+"&thysim="+$('#thysim').val();
-    }
-    if (e == "experiment-DiJo19-1") {
-      formdata="experiment="+e+"&thysim=Thyrosim";
+    //---------------------------------------------------------
+    // Generate form data for processing server side. For specific experiments,
+    // return a predefined string. Otherwise serialize form inputs.
+    //---------------------------------------------------------
+    var formdata;
+    if (exp) {
+        formdata = getExperimentStr(exp);
+    } else {
+        formdata = $("form").serialize();
     }
 
-    var start = new Date().getTime();
+    //---------------------------------------------------------
     // Submit to server and process response
-    $.ajax({
-        type: "POST",
-        url:  "ajax_getplot.cgi",
-        data: { data: formdata }
-    }).done(function(msg) {
-//        alert(msg);
-        var responseObj = jQuery.parseJSON(msg);
-        var runRadioVal = $('input:radio[name=runRadio]:checked').val();
-        ThyrosimGraph.setObj(runRadioVal,responseObj);
+    //---------------------------------------------------------
+    var start = new Date().getTime();
+    $.post( "ajax_getplot.cgi", { data: formdata })
+      .done(function( data ) {
+
+        // Graph results from this run
+        var rdata = jQuery.parseJSON(data); // Run data
+        var color = $('input:radio[name=runRadio]:checked').val();
+        ThyrosimGraph.setRun(color,rdata);
         graphthis();
-        stopLoading(followId); // hides "loading.gif"
+
+        // Finish up
+        stopLoading(followId); // Hide loading message
         var end = new Date().getTime();
         var time = Math.floor((end - start)/1000);
         alert('Execution time (sec): '+time);
         runRadioNext();
-    });
+      });
 }
 
 //--------------------------------------------------
@@ -282,10 +272,10 @@ function graph(hormone,addlabel,initgraph) {
             graph.select("svg").select("g").selectAll(".dot"+color)
                 .data(valuesD).exit().remove();
 
-            if (ThyrosimGraph.checkObjTypeExist(color)) {
+            if (ThyrosimGraph.checkRunColorExist(color)) {
                 // Real data values
-                valuesD = ThyrosimGraph.getObjData(color,comp);
-                valuesT = ThyrosimGraph.getObjData(color,"t");
+                valuesD = ThyrosimGraph.getRunData(color,comp);
+                valuesT = ThyrosimGraph.getRunData(color,"t");
             }
 
             // Line
@@ -476,6 +466,24 @@ function validateForm() {
 }
 
 //--------------------------------------------------------------------
+// Get predefined strings for specific experiments.
+//--------------------------------------------------------------------
+function getExperimentStr(exp) {
+
+    // The default example. For all Thyroid Simulators.
+    if (exp == "experiment-default") {
+        return "experiment="+exp+"&thysim="+$('#thysim').val();
+    }
+
+    // The DiStefano-Jonklaas 2019 Example-1. Only relevant for Thyrosim.
+    if (exp == "experiment-DiJo19-1") {
+        return "experiment="+exp+"&thysim=Thyrosim";
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------
 // Maintain both Blue and Green response objects
 //--------------------------------------------------------------------
 function ThyrosimGraph() {
@@ -548,54 +556,54 @@ function ThyrosimGraph() {
     this.settings = settings;
 
     // Sets an obj
-    this.setObj = setObj;
-    function setObj(type,responseObj) {
-        this.objs[type] = responseObj;
-        if (typeof responseObj !== 'undefined') {
-            this.exists[type] = true;
+    this.setRun = setRun;
+    function setRun(color,rdata) {
+        this.objs[color] = rdata;
+        if (typeof rdata !== 'undefined') {
+            this.exists[color] = true;
         } else {
-            this.exists[type] = false;
+            this.exists[color] = false;
         }
     }
 
     // Gets an obj
-    this.getObj = getObj;
-    function getObj(type) {
-        return this.objs[type];
+    this.getRun = getRun;
+    function getRun(color) {
+        return this.objs[color];
     }
 
     // Get an obj's data
-    this.getObjData = getObjData;
-    function getObjData(type,comp) {
-        return this.objs[type].data[comp].values;
+    this.getRunData = getRunData;
+    function getRunData(color,comp) {
+        return this.objs[color].data[comp].values;
     }
 
     // Get an obj's max val
-    this.getObjMaxVal = getObjMaxVal;
-    function getObjMaxVal(type,comp) {
-        return this.objs[type].data[comp].max;
+    this.getRunMaxVal = getRunMaxVal;
+    function getRunMaxVal(color,comp) {
+        return this.objs[color].data[comp].max;
     }
 
     // Get an obj's min val
-    this.getObjMinVal = getObjMinVal;
-    function getObjMinVal(type,comp) {
-        return this.objs[type].data[comp].min;
+    this.getRunMinVal = getRunMinVal;
+    function getRunMinVal(color,comp) {
+        return this.objs[color].data[comp].min;
     }
 
-    // Checks whether an object of type exists
-    this.checkObjTypeExist = checkObjTypeExist;
-    function checkObjTypeExist(type) {
-        return exists[type];
+    // Check whether the run data of color exists
+    this.checkRunColorExist = checkRunColorExist;
+    function checkRunColorExist(color) {
+        return exists[color];
     }
 
     // Return max X value
     this.getXVal = getXVal;
     function getXVal(comp) {
         var maxX = 0;
-        $.each(colors,function(idx,type) {
-            if (checkObjTypeExist(type)) {
-                if (parseFloat(objs[type].simTime) > maxX) {
-                    maxX = objs[type].simTime;
+        $.each(colors,function(idx,color) {
+            if (checkRunColorExist(color)) {
+                if (parseFloat(objs[color].simTime) > maxX) {
+                    maxX = objs[color].simTime;
                 }
             }
         });
@@ -613,10 +621,10 @@ function ThyrosimGraph() {
         var thysim = $('#thysim').val();
         var maxY = settings[hormone].ymin[thysim];
 
-        $.each(colors,function(idx,type) {
-            if (checkObjTypeExist(type)) {
-                if (parseFloat(objs[type].data[comp].max) > maxY) {
-                    maxY = objs[type].data[comp].max;
+        $.each(colors,function(idx,color) {
+            if (checkRunColorExist(color)) {
+                if (parseFloat(objs[color].data[comp].max) > maxY) {
+                    maxY = objs[color].data[comp].max;
                 }
             }
         });
@@ -710,8 +718,8 @@ function normRangeCalc(yMax,y2,y1) {
 //--------------------------------------------------
 // Erase a drawn line
 //--------------------------------------------------
-function resetObj(type) {
-    ThyrosimGraph.setObj(type,undefined);
+function resetRun(color) {
+    ThyrosimGraph.setRun(color,undefined);
     graphthis();
 }
 
