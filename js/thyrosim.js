@@ -41,6 +41,7 @@ function ajax_getplot(exp) {
     var formdata;
     if (exp) {
         formdata = getExperimentStr(exp);
+        executeExperiment(exp);
     } else {
         formdata = $("form").serialize();
     }
@@ -491,6 +492,78 @@ function getExperimentStr(exp) {
 
     return false;
 }
+
+//===================================================================
+// DESC:    Change the UI to match the experiment ran.
+// ARGS:
+//   exp:   The experiment name
+//===================================================================
+function executeExperiment(exp) {
+    // Clear the input space
+    $('#footer-input').empty();
+
+    if (exp == "experiment-default") {
+        $('#simtime').val(5);
+        tuneDials(100,88,100,88);
+    }
+
+    if (exp == "experiment-DiJo19-1") {
+        $('#simtime').val(30);
+        tuneDials(25,88,25,88);
+        addInputOral('T4',123,1,false,1,30);
+        addInputOral('T3',6.5,1,false,1,30);
+    }
+
+}
+
+//===================================================================
+// DESC:    Helper function to change dialinput and slider values.
+// ARGS:
+//   a:     Dial/Slider 1 value
+//   b:     Dial/Slider 2 value
+//   c:     Dial/Slider 3 value
+//   d:     Dial/Slider 4 value
+//===================================================================
+function tuneDials(a,b,c,d) {
+    $('#dialinput1').val(a); $('#slider1').slider('value',a);
+    $('#dialinput2').val(b); $('#slider2').slider('value',b);
+    $('#dialinput3').val(c); $('#slider3').slider('value',c);
+    $('#dialinput4').val(d); $('#slider4').slider('value',d);
+}
+
+//===================================================================
+// DESC:    Helper function to add oral inputs.
+// ARGS:
+//   hormone:   'T4' or 'T3'
+//   dose:      Dose
+//   interval:  Dosing interval
+//   singledose: Whether to use a single dose - true/false value
+//   start:     Start time
+//   end:       End time
+// NOTE:
+//   When singledose is true, interval and end can be ''.
+//===================================================================
+function addInputOral(hormone,dose,interval,singledose,start,end) {
+    addInput(hormone+'-Oral');
+    var parsedID = $('#footer-input').children().last().attr('id').split("-");
+    var idNum = parsedID[1];
+    $('#dose-' + idNum).val(dose);
+    $('#int-'  + idNum).val(interval);
+    $('#start-'+ idNum).val(start);
+    $('#end-'  + idNum).val(end);
+    if (singledose) {
+        $('#singledose-'+idNum).prop('checked', true);
+        useSingleDose(idNum);
+    }
+}
+
+//===================================================================
+// DESC:    Helper function to add IV inputs.
+//===================================================================
+
+//===================================================================
+// DESC:    Helper function to add infusion inputs.
+//===================================================================
 
 //===================================================================
 // DESC:    Manages plotting data as Blue or Green plots.
@@ -1054,9 +1127,9 @@ function enDisInput(id) {
     }
 }
 
-//--------------------------------------------------
-// Show or hide the scroll bars for secretion/absorption adjustment
-//--------------------------------------------------
+//===================================================================
+// DESC:    Show/Hide the scroll bars for secretion/absorption adjustment.
+//===================================================================
 function showhidescrollbars() {
     if ($(".slidercontainer").css("display") == "none") {
         $(".slidercontainer").css("display","block");
@@ -1068,17 +1141,16 @@ function showhidescrollbars() {
                                .attr("alt","show scroll bars");
     }
 }
-//--------------------------------------------------
-// highlight or un-highlight the corresponding black dot in the diagram
-// when mousing over a T4/3 secretion/absorption edit box.
-//--------------------------------------------------
+
+//===================================================================
+// DESC:    Highlight or un-highlight the corresponding black dot in the diagram
+//          when mousing over a T4/3 secretion/absorption edit box.
+//===================================================================
 function hilite(id) {
-    var ele = "#hilite" + id;
-    $(ele).css("display","block");
+    $('#hilite'+id).css("display","block");
 }
 function lolite(id) {
-    var ele = "#hilite" + id;
-    $(ele).css("display","none");
+    $('#hilite'+id).css("display","none");
 }
 
 //--------------------------------------------------

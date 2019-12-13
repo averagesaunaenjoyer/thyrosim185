@@ -6,9 +6,6 @@ use v5.10; use strict; use warnings;
 # DESCRIPTION:
 #   Helper package for generating dynamic Thyrosim websites.
 #==============================================================================
-# TODO
-# Differences between Thyrosim and ThyrosimJr:
-# 1. Examples
 
 package THYROWEB;
 
@@ -98,9 +95,10 @@ sub initExamples {
         name    => 'experiment-DiJo19-1',
         bold    => 'The DiStefano-Jonklaas 2019 Example-1',
         text    => 'reproduces Figure 1 of the DiStefano-Jonklaas 2019 paper.
-                    Specifically, the simulated hypothyroidic individual is
-                    given 123 &microg T<span class="textsub">4</span> and 6.5
-                    &microg T<span class="textsub">3</span> daily for 30 days.',
+                    Specifically, the simulated hypothyroidic individual (25%
+                    thyroid function) is given 123 &microg
+                    T<span class="textsub">4</span> and 6.5 &microg
+                    T<span class="textsub">3</span> daily for 30 days.',
         img     => '../img/experiment-DiJo19-1.png',
         alt     => 'DiStefano-Jonklass Example 1',
     };
@@ -675,7 +673,11 @@ sub insertForm {
   <div id="footer">
     <div class="textaligncenter">
       Please send comments, bugs, criticisms to:
-      <a href="mailto:joed\@ucla.edu">joed\@ucla.edu</a><br>
+      <a href="mailto:joed\@ucla.edu">joed\@ucla.edu</a>
+      <a href="mailto:joed\@ucla.edu">
+        <span class="ui-icon ui-icon-mail-closed"></span>
+      </a>
+      <br>
       Code repository:
       <a href="https://bitbucket.org/DistefanoLab/thyrosim/overview"
          target="_blank">click here</a>

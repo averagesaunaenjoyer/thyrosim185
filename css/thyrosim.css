@@ -67,7 +67,7 @@ html * {
  * will keep this CSS */
 #content div.interface-input-options {
   display: none;
-  border: 1px dashed #bbb;
+  border: none;
   margin-bottom: 10px;
   width: 42px;
 }
@@ -90,6 +90,9 @@ a.header-buttons-link:hover {
   color: inherit;
 }
 a.header-buttons-link:link {
+  border-bottom: none;
+}
+.interface-input-options a:link {
   border-bottom: none;
 }
 #content div.interface-diagram {
