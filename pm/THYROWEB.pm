@@ -186,7 +186,7 @@ sub getHead {
         -code => $self->ga()
     },
 ],
--onload     => 'graphAll();loadToolTip();',
+-onload     => 'graphAll();',
 -ontouchstart => ''
 
 );
@@ -632,13 +632,14 @@ sub insertForm {
       <div class="subdivlist">
         <ol>
           <li>
-            Parameter editor added December 2019 (Toggle: Parameters)
+            December 2019: Added parameter editor (Toggle: Parameters)
           </li>
           <li>
+            January 2019: Added
             Free T<span class="textsub">4</span> and
             Free T<span class="textsub">3</span> alternatives to Total
             T<span class="textsub">4</span> and
-            T<span class="textsub">3</span> added January 2019
+            T<span class="textsub">3</span>
             (Toggle: Free Hormone Values)
           </li>
         </ol>

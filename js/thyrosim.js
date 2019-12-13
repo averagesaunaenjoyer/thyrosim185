@@ -685,9 +685,9 @@ function ThyrosimGraph() {
     }
 }
 
-//--------------------------------------------------
-// Range box
-//--------------------------------------------------
+//===================================================================
+// DESC:    Range box
+//===================================================================
 function normRangeCalc(yMax,y2,y1) {
 
     if (y1 > yMax) {
@@ -703,18 +703,17 @@ function normRangeCalc(yMax,y2,y1) {
     return { y2: y2, y1: y1, height: height, offset: offset };
 }
 
-//--------------------------------------------------
-// Erase a drawn line
-//--------------------------------------------------
+//===================================================================
+// DESC:    Erase a drawn line
+//===================================================================
 function resetRun(color) {
     ThyrosimGraph.setRun(color,undefined);
     graphAll();
 }
 
-//--------------------------------------------------
-// Select the next run color
-// Since we only have 2 colors, this would work
-//--------------------------------------------------
+//===================================================================
+// DESC:    Select the next run color. Since we only have 2 colors, this works.
+//===================================================================
 function runRadioNext() {
     var runRadio = $('input[name=runRadio]');
     if (runRadio[0].checked == true) {
@@ -724,21 +723,17 @@ function runRadioNext() {
     }
 }
 
-//--------------------------------------------------
-// FILE:        content.js
-// AUTHOR:      Simon X. Han
-// DESCRIPTION:
-//   This file deals with user interactions and animation effects on the main
-//   page.
-//-------------------------------------------------- 
+//========================================================================
+// TASK:        Functions for UI interactions and animations.
+//========================================================================
 
-// Animation object
 var animeObj = new animation();
 
-//--------------------------------------------------
-// Uses JQuery to dynamically add a span that contains
-// simulation conditions.
-//-------------------------------------------------- 
+//===================================================================
+// DESC:    Create an input and append to footer.
+// ARGS:
+//   type:  The input type
+//===================================================================
 function addInput(type) {
 
     // Get the ID the next input should have
@@ -756,11 +751,9 @@ function addInput(type) {
     var parsed = parseInput(type);
     var footer = "#footer-input";
 
-    //-------------------------------------------------- 
-    // Append the new input span to the end of footer.
-    // When adding inputs, the BR element must be inside the input span.
-    // Otherwise, BR will be counted as an element of footer.
-    //-------------------------------------------------- 
+    //---------------------------------------------------------
+    // Append the new input span to the end of footer
+    //---------------------------------------------------------
 
     // Add oral input
     if (parsed.type == "Oral") {
@@ -797,10 +790,12 @@ function addInput(type) {
     // 3200 ms because each gif has 8 frames of 0.4 sec each
 }
 
-//--------------------------------------------------
-// Input for repeating oral dose
-// It is expected to have dose, dosing interval, start, and end days
-//-------------------------------------------------- 
+//===================================================================
+// DESC:    Generate html for a repeating/single oral dose.
+// ARGS:
+//   parsed:    An input object
+//   id:        The number the input should have
+//===================================================================
 function OralInput(parsed,id) {
     return '<span class="inputs" id="label-' + id + '" name="label-' + id + '">Input ' + id + ' (' + parsed.TH + '-' + parsed.type + '):</span><br />'
          + '<input type="hidden" class="inputs" name="hormone-' + id + '" id="hormone-' + id + '" value="' + parsed.ID + '" />'
@@ -1131,34 +1126,29 @@ function hideAnimation(hormoneID,inputID) {
     }
 }
 
-//--------------------------------------------------
-// Maintain an animation object to help organize the show/hide animation logic.
-//--------------------------------------------------
+//===================================================================
+// DESC:        Animation manager.
+//===================================================================
 function animation() {
 
     // Define animation element ids based on hormone and type here
-    // hormones: T3/T4, types: Oral/IV/Infusion
-    this.element = new Array();
-    this.element.Oral = new Array();
-    this.element.IV = new Array();
-    this.element.Infusion = new Array();
-    this.element.Oral.T3 = 'spill1';
-    this.element.Oral.T4 = 'spill2';
-    this.element.Oral.cat = 'spill'; // category
-    this.element.IV.T3 = 'inject1';
-    this.element.IV.T4 = 'inject2';
-    this.element.IV.cat = 'inject';
-    this.element.Infusion.T3 = 'infuse1';
-    this.element.Infusion.T4 = 'infuse2';
-    this.element.Infusion.cat = 'infuse';
+    // hormones: T3/T4, types: Oral/IV/Infusion, cat: category
+    var element = {
+        Oral:     { T3: 'spill1',  T4: 'spill2',  cat: 'spill'  },
+        IV:       { T3: 'inject1', T4: 'inject2', cat: 'inject' },
+        Infusion: { T3: 'infuse1', T4: 'infuse2', cat: 'infuse' }
+    };
+    this.element = element;
 
-    //--------------------------------------------------
-    // Create a container div and append an image (animation) in it. Then,
-    // append the container div to #diagram.
-    // The image src has a '?+id', this is so browsers are forced to reload the
-    // image. Otherwise, they will use a cached image and the animation will
-    // appear out of sync.
-    //--------------------------------------------------
+    //---------------------------------------------------------
+    // 1. Create a container div and append an image (animation) in it. Then,
+    //    append the container div to #diagram.
+    // 2. The image src has a '?+id', this is so browsers are forced to reload
+    //    the image. Otherwise, the browser uses a cached image and the
+    //    animation will appear out of sync.
+    // 3. Animation positions are defined in thyrosim.css under the category's
+    //    name.
+    //---------------------------------------------------------
     this.showAnimation = showAnimation;
     function showAnimation(cat,ele) {
         var id = new Date().getTime().toString();
@@ -1175,48 +1165,41 @@ function animation() {
         return id;
     }
 
-    //--------------------------------------------------
-    // Removes the container div ('hiding' the image)
-    //--------------------------------------------------
+    //---------------------------------------------------------
+    // Remove the container div ('hiding' the image)
+    //---------------------------------------------------------
     this.hideAnimation = hideAnimation;
     function hideAnimation(cat,id) {
         $('#'+cat+'-'+id).remove();
     }
 
-    //--------------------------------------------------
-    // For a given hormone and input type, get the gif file name (without file
-    // extension)
-    //--------------------------------------------------
+    //---------------------------------------------------------
+    // For a given hormone and input type, get the file name
+    //---------------------------------------------------------
     this.getAnimationEle = getAnimationEle;
     function getAnimationEle(hormone,type) {
         return this.element[type][hormone];
     }
 
-    //--------------------------------------------------
-    // Get the animation category for the input type.
-    // Oral is always 'spill' (swallow pill)
-    // IV is always 'ivenous' (intravenous)
-    // Infusion is always 'infus'
-    //--------------------------------------------------
+    //---------------------------------------------------------
+    // Get the animation category for the input type
+    //---------------------------------------------------------
     this.getAnimationCat = getAnimationCat;
     function getAnimationCat(type) {
         return this.element[type]['cat'];
     }
 }
 
-//--------------------------------------------------
-// jQuery function required to make tooltips work
-//--------------------------------------------------
-function loadToolTip() {
-    $(function() {
-        $( document ).tooltip();
-    });
-}
+//===================================================================
+// DESC:        Required for jQuery UI tooltips.
+//===================================================================
+$(function() {
+    $( document ).tooltip();
+});
 
-//--------------------------------------------------
-// Functions that define the sliders.
-// sliderObj defines slider properties and the function sets them.
-//-------------------------------------------------- 
+//===================================================================
+// DESC:        Define sliders and tie slider values to dial input values.
+//===================================================================
 var sliderObj = {
     // T4 Secretion
     '1': { 'range' : 'min',
@@ -1256,13 +1239,13 @@ $(function() {
         // Changes slider value when changing dialinput
         $(d).change(function() {
             $(s).slider('value',this.value);
-        }); 
+        });
     });
 });
 
-//--------------------------------------------------
-// Function to show/hide inputs
-//--------------------------------------------------
+//===================================================================
+// DESC:        Function to show/hide list of hormone input icons.
+//===================================================================
 function show_hide(H) {
     if($('#'+H+'input').css("display") == "block") {
         $('#'+H+'input').css("display","none");
@@ -1273,9 +1256,9 @@ function show_hide(H) {
     }
 }
 
-//--------------------------------------------------
-// Function to show/hide rollover divs
-//--------------------------------------------------
+//===================================================================
+// DESC:        Function to show/hide navbar divs.
+//===================================================================
 function clickInfoButton(id) {
     if ($('#button-'+id).hasClass('infoButton-clicked')) {
         $('#button-'+id).removeClass('infoButton-clicked');
@@ -1286,9 +1269,9 @@ function clickInfoButton(id) {
     }
 }
 
-//--------------------------------------------------
-// Function to toggle free hormone graph divs
-//--------------------------------------------------
+//===================================================================
+// DESC:        Function to toggle free hormone graph divs.
+//===================================================================
 function togFreeHormoneButton() {
     if ($('#FT4graph').hasClass('displaynone')) {
         $('#FT4graph').removeClass('displaynone');
@@ -1303,9 +1286,9 @@ function togFreeHormoneButton() {
     }
 }
 
-//--------------------------------------------------
-// Function to toggle parameter list on and off
-//--------------------------------------------------
+//===================================================================
+// DESC:        Function to toggle parameter list on and off.
+//===================================================================
 function togParamListButton() {
     if ($('#parameditdiv').hasClass('displaynone')) {
         $('#parameditdiv').removeClass('displaynone');
