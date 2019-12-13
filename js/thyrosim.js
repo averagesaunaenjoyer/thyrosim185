@@ -1,11 +1,16 @@
-//--------------------------------------------------
+"use strict";
+//=============================================================================
 // FILE:        thyrosim.js
 // AUTHOR:      Simon X. Han
 // DESCRIPTION:
 //   Javascript functions in Thyrosim.
-//-------------------------------------------------- 
-
-"use strict"; // enable strict mode
+//=============================================================================
+//===================================================================
+// Section
+//===================================================================
+//---------------------------------------------------------
+// Sub-section
+//---------------------------------------------------------
 
 //--------------------------------------------------
 // FILE:        ajaxfun.js
@@ -77,43 +82,34 @@ function loadXMLDoc(e) {
 //--------------------------------------------------
 function graphthis() {
 
-    // Create hormone objects
-    // Hormone, Compartment, Unit Label, Lower & Upper normal range
-    var FT4 = new Hormone("FT4","ft4","ng/L"     ,"8"  ,"17");
-    var FT3 = new Hormone("FT3","ft3","ng/L"     ,"2.2","4.4");
-    var T4  = new Hormone("T4" ,"1"  ,"\u03BCg/L","45" ,"105");
-    var T3  = new Hormone("T3" ,"4"  ,"\u03BCg/L",".6" ,"1.8");
-    var TSH = new Hormone("TSH","7"  ,"mU/L"     ,".4" ,"4"  );
-
     // Need to initialize the graph?
     if (ThyrosimGraph.initGraph) {
-        graph(FT4,"" ,"1");
-        graph(FT3,"" ,"1");
-        graph(T4 ,"" ,"1");
-        graph(T3 ,"" ,"1");
-        graph(TSH,"1","1");
+        graph("FT4","" ,"1");
+        graph("FT3","" ,"1");
+        graph("T4" ,"" ,"1");
+        graph("T3" ,"" ,"1");
+        graph("TSH","1","1");
         ThyrosimGraph.initGraph = false;
     // Plot the graph
     } else {
-        graph(FT4,"" );
-        graph(FT3,"" );
-        graph(T4 ,"" );
-        graph(T3 ,"" );
-        graph(TSH,"1");
+        graph("FT4","" );
+        graph("FT3","" );
+        graph("T4" ,"" );
+        graph("T3" ,"" );
+        graph("TSH","1");
     }
 }
 
 //--------------------------------------------------
 // d3 line graph
 //--------------------------------------------------
-//function graph(hormone,comp,unit,addlabel,initgraph) {
-function graph(hormoneObj,addlabel,initgraph) {
+function graph(hormone,addlabel,initgraph) {
 
-    var hormone = hormoneObj.hormone;
-    var comp = hormoneObj.comp;
-    var unit = hormoneObj.unit;
-    var eRLo = hormoneObj.lowerBound;
-    var eRHi = hormoneObj.upperBound;
+    var thysim = $('#thysim').val();
+    var comp = ThyrosimGraph.settings[hormone].comp;
+    var unit = ThyrosimGraph.settings[hormone].unit;
+    var eRLo = ThyrosimGraph.settings[hormone].bounds[thysim].lo;
+    var eRHi = ThyrosimGraph.settings[hormone].bounds[thysim].hi;
 
     // Graph size
     var w = 350; // width in pixels of the graph
@@ -121,7 +117,7 @@ function graph(hormoneObj,addlabel,initgraph) {
 
     // Scales
     var xVal = ThyrosimGraph.getXVal(comp);
-    var yVal = ThyrosimGraph.getYVal(comp);
+    var yVal = ThyrosimGraph.getYVal(hormone,comp);
     var yEnd = ThyrosimGraph.getEndVal(yVal);
     var x = d3.scale.linear().domain([0,xVal]).range([0,w]);
     var y = d3.scale.linear().domain([0,yEnd]).range([h,0]);
@@ -480,17 +476,6 @@ function validateForm() {
 }
 
 //--------------------------------------------------------------------
-// Hormone object
-//--------------------------------------------------------------------
-function Hormone(hormone,comp,unit,lowerBound,upperBound) {
-    this.hormone = hormone;
-    this.comp = comp;
-    this.unit = unit;
-    this.lowerBound = lowerBound; // These are expected ranges
-    this.upperBound = upperBound;
-}
-
-//--------------------------------------------------------------------
 // Maintain both Blue and Green response objects
 //--------------------------------------------------------------------
 function ThyrosimGraph() {
@@ -509,6 +494,58 @@ function ThyrosimGraph() {
     this.objs = objs;
     var exists = {Blue:false,Green:false};
     this.exists = exists;
+
+    // Graph default settings
+    // Note that ymin values are rounded up by the largest digit. See
+    // getEndVal().
+    var settings = {
+        FT4: {
+            comp: 'ft4',
+            unit: 'ng/L',
+            ymin: { Thyrosim: 17, ThyrosimJr: 17 },
+            bounds: {
+                Thyrosim:   { lo: 8, hi: 17 },
+                ThyrosimJr: { lo: 8, hi: 17 }
+            }
+        },
+        FT3: {
+            comp: 'ft3',
+            unit: 'ng/L',
+            ymin: { Thyrosim: 4, ThyrosimJr: 4 },
+            bounds: {
+                Thyrosim:   { lo: 2.2, hi: 4.4 },
+                ThyrosimJr: { lo: 2.2, hi: 4.4 },
+            }
+        },
+        T4: {
+            comp: '1',
+            unit: '\u03BCg/L',
+            ymin: { Thyrosim: 110, ThyrosimJr: 110 },
+            bounds: {
+                Thyrosim:   { lo: 45, hi: 105 },
+                ThyrosimJr: { lo: 45, hi: 105 },
+            }
+        },
+        T3: {
+            comp: '4',
+            unit: '\u03BCg/L',
+            ymin: { Thyrosim: 1, ThyrosimJr: 2 },
+            bounds: {
+                Thyrosim:   { lo: 0.6, hi: 1.8 },
+                ThyrosimJr: { lo: 0.6, hi: 1.8 },
+            }
+        },
+        TSH: {
+            comp: '7',
+            unit: 'mU/L',
+            ymin: { Thyrosim: 4, ThyrosimJr: 4 },
+            bounds: {
+                Thyrosim:   { lo: 0.4, hi: 4 },
+                ThyrosimJr: { lo: 0.4, hi: 4 },
+            }
+        },
+    };
+    this.settings = settings;
 
     // Sets an obj
     this.setObj = setObj;
@@ -571,19 +608,10 @@ function ThyrosimGraph() {
 
     // Return max Y value
     this.getYVal = getYVal;
-    function getYVal(comp) {
-        // Minimum Y values
-        var ft4min = 17;  // Rounds to 18
-        var ft3min = 4;   // Rounds to 5
-        var q1min  = 110; // Rounds to 120
-        var q4min  = 1;   // Rounds to 2
-        var q7min  = 4;   // Rounds to 5
-        var maxY = 0;
-        if (comp == "ft4") {maxY = ft4min;}
-        if (comp == "ft3") {maxY = ft3min;}
-        if (comp == "1")   {maxY = q1min; }
-        if (comp == "4")   {maxY = q4min; }
-        if (comp == "7")   {maxY = q7min; }
+    function getYVal(hormone,comp) {
+        // Retrieve the initial ymin value
+        var thysim = $('#thysim').val();
+        var maxY = settings[hormone].ymin[thysim];
 
         $.each(colors,function(idx,type) {
             if (checkObjTypeExist(type)) {
