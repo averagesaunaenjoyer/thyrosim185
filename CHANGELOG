@@ -1,4 +1,7 @@
 Change log
+2019-12-13
+1. The UI (simtime, dials, inputs) now match the experiment run
+
 2019-12-12
 1. Added parameter editor to the UI
 2. Original html links now redirect to cgi versions
