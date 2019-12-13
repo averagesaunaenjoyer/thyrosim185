@@ -186,7 +186,7 @@ sub getHead {
         -code => $self->ga()
     },
 ],
--onload     => 'graphthis();loadToolTip();',
+-onload     => 'graphAll();loadToolTip();',
 -ontouchstart => ''
 
 );
@@ -540,10 +540,10 @@ sub insertForm {
       </label>
       <br>
 
-      <button id="resetBlueObj" type="button" onclick="resetObj('Blue');">
+      <button id="resetBlueRun" type="button" onclick="resetRun('Blue');">
         Delete Blue Run
       </button>
-      <button id="resetGreenObj" type="button" onclick="resetObj('Green');">
+      <button id="resetGreenRun" type="button" onclick="resetRun('Green');">
         Delete Green Run
       </button>
 
@@ -556,7 +556,7 @@ sub insertForm {
       <input type="hidden" name="thysim" id="thysim" value="$self->{thysim}">
     </div>
     <div class="textaligncenter">
-      <button type="button" onclick="loadXMLDoc();">SIMULATE</button>
+      <button type="button" onclick="ajax_getplot();">SIMULATE</button>
       <button type="button" onclick="location.reload();">RESET ALL</button>
       <button type="button" id="togNormRange">TOGGLE NORMAL RANGE</button>
     </div>
@@ -730,13 +730,14 @@ sub insertExample {
   <span class="bank-left example-text">
     <b>$exp->{bold}</b> $exp->{text}
     <br>
-    <button type="button" onclick="loadXMLDoc('$exp->{name}');
+    <button type="button" onclick="ajax_getplot('$exp->{name}');
                                    clickInfoButton('Example');">
       Simulate
     </button>
   </span>
   <img src="$exp->{img}" alt="$exp->{alt}" class="example-image" />
 </span>
+<!-- Example $exp->{name} end -->
 
 EOF
 ;

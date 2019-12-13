@@ -5,31 +5,32 @@
 // DESCRIPTION:
 //   Javascript functions in Thyrosim.
 //=============================================================================
-//===================================================================
-// Section
-//===================================================================
-//---------------------------------------------------------
-// Sub-section
-//---------------------------------------------------------
+
+//========================================================================
+// TASK:        Functions for ajax calls.
+//========================================================================
+
+var ThyrosimGraph = new ThyrosimGraph();
 
 //===================================================================
-// Validate and submit form. Retrieve JSON plotting data and graph.
+// DESC:    Validate and submit form. Retrieve JSON plotting data and graph.
+// ARGS:
+//   exp:   An optional experiment
 //===================================================================
-var ThyrosimGraph = new ThyrosimGraph();
-function loadXMLDoc(exp) {
+function ajax_getplot(exp) {
 
     // Needed variables
-    var followId = getFollowId();
+    var msgBoxId = getMsgBoxId();
 
     // Display loading message
-    startLoading(followId);
+    showLoadingMsg(msgBoxId);
 
     //---------------------------------------------------------
     // Validate form
     //---------------------------------------------------------
     var hasFormError = validateForm();
     if (hasFormError) {
-        stopLoading(followId);
+        hideLoadingMsg(msgBoxId);
         return false;
     }
 
@@ -55,10 +56,10 @@ function loadXMLDoc(exp) {
         var rdata = jQuery.parseJSON(data); // Run data
         var color = $('input:radio[name=runRadio]:checked').val();
         ThyrosimGraph.setRun(color,rdata);
-        graphthis();
+        graphAll();
 
         // Finish up
-        stopLoading(followId); // Hide loading message
+        hideLoadingMsg(msgBoxId); // Hide loading message
         var end = new Date().getTime();
         var time = Math.floor((end - start)/1000);
         alert('Execution time (sec): '+time);
@@ -66,11 +67,14 @@ function loadXMLDoc(exp) {
       });
 }
 
-//--------------------------------------------------
-// Wrapper to call the graphing function based on the hormone.
-// Should be okay because JavaScript passes objects as references.
-//--------------------------------------------------
-function graphthis() {
+//========================================================================
+// TASK:        Functions for graphing.
+//========================================================================
+
+//===================================================================
+// DESC:    Wrapper to call the graphing function for each hormone.
+//===================================================================
+function graphAll() {
 
     // Need to initialize the graph?
     if (ThyrosimGraph.initGraph) {
@@ -90,9 +94,13 @@ function graphthis() {
     }
 }
 
-//--------------------------------------------------
-// d3 line graph
-//--------------------------------------------------
+//===================================================================
+// DESC:    Use d3 to graph a hormone.
+// ARGS:
+//   hormone:   Hormone name
+//   addlabel:  Binary for whether to include x-axis label
+//   initgraph: Binary for whether to initialize
+//===================================================================
 function graph(hormone,addlabel,initgraph) {
 
     var thysim = $('#thysim').val();
@@ -209,7 +217,7 @@ function graph(hormone,addlabel,initgraph) {
             .call(yAxis);
 
         // Add hidden paths to graph
-        $.each(ThyrosimGraph.colors,function(idx,color) {
+        $.each(ThyrosimGraph.colors,function(color) {
             // Empty data values
             var data = [0];
 
@@ -226,7 +234,7 @@ function graph(hormone,addlabel,initgraph) {
                 .attr("stroke",color)
                 .attr("stroke-width","1.5")
                 .attr("fill","none")
-                .style("stroke-dasharray",ThyrosimGraph.lineStyle[color]);
+                .style("stroke-dasharray",ThyrosimGraph.getLinestyle(color));
 
             // Append dummy circle for tooltip
             graph.selectAll("circle.dot"+color)
@@ -237,6 +245,9 @@ function graph(hormone,addlabel,initgraph) {
                 .attr("cx",function(d,i) {return x(i);})
                 .attr("cy",function(d,i) {return y(d);});
         });
+
+        // Turn range values on by default
+        toggleRangeBox();
 
     // Update the graph
     } else {
@@ -263,7 +274,7 @@ function graph(hormone,addlabel,initgraph) {
             .attr("height",h-y(rangeVals.height));
 
         // Update data points for each color
-        $.each(ThyrosimGraph.colors,function(idx,color) {
+        $.each(ThyrosimGraph.colors,function(color) {
             // Empty data values
             var valuesD = [0];
             var valuesT = [0];
@@ -274,8 +285,8 @@ function graph(hormone,addlabel,initgraph) {
 
             if (ThyrosimGraph.checkRunColorExist(color)) {
                 // Real data values
-                valuesD = ThyrosimGraph.getRunData(color,comp);
-                valuesT = ThyrosimGraph.getRunData(color,"t");
+                valuesD = ThyrosimGraph.getRunValues(color,comp);
+                valuesT = ThyrosimGraph.getRunValues(color,"t");
             }
 
             // Line
@@ -370,26 +381,19 @@ function graph(hormone,addlabel,initgraph) {
             .text(thisXLabel);
     }
 
-    // Turn default range values on by default
-    if (initgraph)
-        toggleRangeBox();
-
     d3.select("#togNormRange").on("click",toggleRangeBox);
     d3.select("#togXAxisDisp").on("click",toggleXAxis);
     // Currently, not using this toggle button. While the graph labels change
     // correctly, the pop-up when hovering over graph values does not update.
 }
 
-//--------------------------------------------------
-// While the ajax call is being made, have loading.gif follow the mouse cursor.
-// If dialinput values are default, show follow1 message. If not, check whether
-// recalculate IC checkbox is checked.
-// The +5 offsets the image so that the gif doesn't interfere with clicking. The
-// image is hidden at first, so set css to block to show.
-// The 'click' event is needed so loading.gif shows up when "Simulate" is
-// pressed. Otherwise, loading.gif will only show after the mouse is moved.
-//--------------------------------------------------
-function getFollowId() {
+//===================================================================
+// DESC:    While the ajax call is running, display a 'wait' message box.
+//          Depending on dial values and whether recalculate IC is checked, the
+//          message is different. The message box follows the cursor. This
+//          function returns the id of the selected message.
+//===================================================================
+function getMsgBoxId() {
     var s = '#dialinput';
     if ($(s+'1').prop('defaultValue') == $(s+'1').prop('value') &&
         $(s+'2').prop('defaultValue') == $(s+'2').prop('value') &&
@@ -399,32 +403,35 @@ function getFollowId() {
     }
     return $('#recalcIC').prop('checked') ? 'follow2' : 'follow1';
 }
-function startLoading(fid) {
+
+//===================================================================
+// DESC:    Show/Hide the loading message box. The +5 offsets the box so that it
+//          doesn't interfere with mouse clicks.
+// ARGS:
+//   mid:   Message box id
+//===================================================================
+function showLoadingMsg(mid) {
     $(window).click(function(e){
-        $('#'+fid).css('display','block')
+        $('#'+mid).css('display','block')
                   .css('top',    e.pageY + 5)
                   .css('left',   e.pageX + 5);
     });
     $(window).mousemove(function(e){
-        $('#'+fid).css('display','block')
+        $('#'+mid).css('display','block')
                   .css('top',    e.pageY + 5)
                   .css('left',   e.pageX + 5);
     });
 }
-
-//--------------------------------------------------
-// After the graph is loaded, unbind the events and hide "Loading" image.
-//--------------------------------------------------
-function stopLoading(fid) {
+function hideLoadingMsg(mid) {
     $(window).unbind();
-    $('#'+fid).css('display','none');
+    $('#'+mid).css('display','none');
 }
 
-//--------------------------------------------------
-// Validate form.
-//--------------------------------------------------
+//===================================================================
+// DESC:    Validate the form. Returns 1 if validation fails.
+//===================================================================
 function validateForm() {
-    var nomatch = 0;
+    var fail = 0;
 
     // Make sure each input is a number. Decimals okay.
     $.each($("form").serializeArray(), function(i, field) {
@@ -443,7 +450,7 @@ function validateForm() {
             $('#'+field.name).removeClass('error');
         } else {
             $('#'+field.name).addClass('error');
-            nomatch = 1;
+            fail = 1;
         }
     });
 
@@ -460,14 +467,16 @@ function validateForm() {
     // Make sure simulation time is <100 days
     if ($('#simtime').prop('value') > 100) {
         $('#simtime').addClass('error');
-        nomatch = 1;
+        fail = 1;
     }
-    return nomatch;
+    return fail;
 }
 
-//--------------------------------------------------------------------
-// Get predefined strings for specific experiments.
-//--------------------------------------------------------------------
+//===================================================================
+// DESC:    Get predefined string for a specific experiment.
+// ARGS:
+//   exp:   The experiment name
+//===================================================================
 function getExperimentStr(exp) {
 
     // The default example. For all Thyroid Simulators.
@@ -483,27 +492,20 @@ function getExperimentStr(exp) {
     return false;
 }
 
-//--------------------------------------------------------------------
-// Maintain both Blue and Green response objects
-//--------------------------------------------------------------------
+//===================================================================
+// DESC:    Manages plotting data as Blue or Green plots.
+//===================================================================
 function ThyrosimGraph() {
     this.initGraph = true;
 
-    // Colors
-    var colors = ["Blue","Green"];
+    // Default color settings
+    var colors = {
+        Blue:  { linestyle: "",    rdata: undefined, exist: false },
+        Green: { linestyle: "5,3", rdata: undefined, exist: false }
+    };
     this.colors = colors;
 
-    // Line style
-    var lineStyle = {Blue:"",Green:"5,3"};
-    this.lineStyle = lineStyle;
-
-    // Objects
-    var objs = {Blue:undefined,Green:undefined};
-    this.objs = objs;
-    var exists = {Blue:false,Green:false};
-    this.exists = exists;
-
-    // Graph default settings
+    // Default graph settings
     // Note that ymin values are rounded up by the largest digit. See
     // getEndVal().
     var settings = {
@@ -555,55 +557,37 @@ function ThyrosimGraph() {
     };
     this.settings = settings;
 
-    // Sets an obj
+    // Set run data
     this.setRun = setRun;
     function setRun(color,rdata) {
-        this.objs[color] = rdata;
+        this.colors[color].rdata = rdata;
         if (typeof rdata !== 'undefined') {
-            this.exists[color] = true;
+            this.colors[color].exist = true;
         } else {
-            this.exists[color] = false;
+            this.colors[color].exist = false;
         }
     }
 
-    // Gets an obj
-    this.getRun = getRun;
-    function getRun(color) {
-        return this.objs[color];
-    }
-
-    // Get an obj's data
-    this.getRunData = getRunData;
-    function getRunData(color,comp) {
-        return this.objs[color].data[comp].values;
-    }
-
-    // Get an obj's max val
-    this.getRunMaxVal = getRunMaxVal;
-    function getRunMaxVal(color,comp) {
-        return this.objs[color].data[comp].max;
-    }
-
-    // Get an obj's min val
-    this.getRunMinVal = getRunMinVal;
-    function getRunMinVal(color,comp) {
-        return this.objs[color].data[comp].min;
+    // Get run data's values
+    this.getRunValues = getRunValues;
+    function getRunValues(color,comp) {
+        return this.colors[color].rdata.data[comp].values;
     }
 
     // Check whether the run data of color exists
     this.checkRunColorExist = checkRunColorExist;
     function checkRunColorExist(color) {
-        return exists[color];
+        return this.colors[color].exist;
     }
 
-    // Return max X value
+    // Get the max X value over all colors
     this.getXVal = getXVal;
     function getXVal(comp) {
         var maxX = 0;
-        $.each(colors,function(idx,color) {
-            if (checkRunColorExist(color)) {
-                if (parseFloat(objs[color].simTime) > maxX) {
-                    maxX = objs[color].simTime;
+        $.each(colors,function(color,o) {
+            if (o.exist) {
+                if (parseFloat(o.rdata.simTime) > maxX) {
+                    maxX = o.rdata.simTime;
                 }
             }
         });
@@ -614,17 +598,17 @@ function ThyrosimGraph() {
         return "5";
     }
 
-    // Return max Y value
+    // Get the max Y value over all colors
     this.getYVal = getYVal;
     function getYVal(hormone,comp) {
         // Retrieve the initial ymin value
         var thysim = $('#thysim').val();
         var maxY = settings[hormone].ymin[thysim];
 
-        $.each(colors,function(idx,color) {
-            if (checkRunColorExist(color)) {
-                if (parseFloat(objs[color].data[comp].max) > maxY) {
-                    maxY = objs[color].data[comp].max;
+        $.each(colors,function(color,o) {
+            if (o.exist) {
+                if (parseFloat(o.rdata.data[comp].max) > maxY) {
+                    maxY = o.rdata.data[comp].max;
                 }
             }
         });
@@ -671,8 +655,12 @@ function ThyrosimGraph() {
         return numR;
     }
 
-    // Function to repeat a string
-    // Essentially, "n" x 3 = "nnn"
+    this.getLinestyle = getLinestyle;
+    function getLinestyle(color) {
+        return this.colors[color].linestyle;
+    }
+
+    // Function to repeat a string. Essentially, "n" x 3 = "nnn".
     this.repeat = repeat;
     function repeat(pattern,count) {
         if (count < 1) return '';
@@ -720,7 +708,7 @@ function normRangeCalc(yMax,y2,y1) {
 //--------------------------------------------------
 function resetRun(color) {
     ThyrosimGraph.setRun(color,undefined);
-    graphthis();
+    graphAll();
 }
 
 //--------------------------------------------------
@@ -1325,4 +1313,11 @@ function togParamListButton() {
         $('#parameditdiv').addClass('displaynone');
     }
 }
+
+//===================================================================
+// Section
+//===================================================================
+//---------------------------------------------------------
+// Sub-section
+//---------------------------------------------------------
 
