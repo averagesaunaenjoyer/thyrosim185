@@ -59,7 +59,7 @@ html * {
 #content-right div {
   border-collapse: collapse;
   border: 0px; /* To counteract 1px border from above */
-  /* height and width of the graphs are defined in ajaxfun.js 
+  /* height and width of the graphs are defined in thyrosim.js 
    * where D3 is defined */
 }
 /* These are made into classes because id 'drag' is needed for the drag and drop
@@ -214,27 +214,35 @@ a.header-buttons-link:link {
   border: 1px solid #bbb;
   width: 878px;
 }
-#ref {
+.subdiv {
   float: left;
   margin-top: 10px;
-  width: 878px;
+  margin-left: -30px;
+  padding-left: 10px;
+  width: 35%;
 }
-#ref .reflist {
-  margin-top: -20px;
+.subdiv .subdivtitle {
+  margin-left: 50px;
 }
-#ref a {
+.subdiv .subdivlist {
+  margin-top: -10px;
+  margin-left: 10px;
+  margin-right: 20px;
+}
+.subdiv a {
   font-size: 12px;
 }
-#ref ol {
+.subdiv ol {
   list-style: none;
   counter-reset: item;
 }
-#ref li {
+.subdiv ol li {
   counter-increment: item;
-  margin-bottom: -5px;
+  font-size: 12px;
 }
-#ref li:before {
-  margin-right: 10px;
+.subdiv ol li:before {
+  position: absolute;
+  margin-left: -20px;
   content: counter(item);
   background: lightblue;
   border-radius: 100%;
@@ -243,11 +251,6 @@ a.header-buttons-link:link {
   text-align: center;
   display: inline-block;
   font-size: 11px;
-}
-#bottom {
-  clear: both;
-  font-size: 13px;
-  text-align: center;
 }
 .padding-10 {
   padding: 10px;
@@ -278,7 +281,7 @@ a.header-buttons-link:link {
  * the elements to rename when deleting inputs */
 .inputs {
 }
-/* Added and removed by ajaxfun.js for invalid inputs */
+/* Added and removed by thyrosim.js for invalid inputs */
 .error {
   border: 2px solid red;
 }

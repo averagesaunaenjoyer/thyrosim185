@@ -205,7 +205,7 @@ sub insertForm {
     # Things to put into the form
     my $examples  = $self->insertExamples();
     my $paramList = $self->printParams();
-    my $bottom    = $self->loadBottom();
+    my $jr_ack    = $self->juniorAcknowledge();
 
     # Put form together
     return <<END
@@ -217,11 +217,14 @@ sub insertForm {
   <div id="header" style="$self->{headerstyle}">
     <!-- About -->
     <div id="button-About" class="bank-left infoButton unselectable">
-      <a id="link-About" class="color-black header-buttons-link" href="javascript:clickInfoButton('About');">DIRECTIONS</a>
+      <a id="link-About"
+         class="color-black header-buttons-link"
+         href="javascript:clickInfoButton('About');">DIRECTIONS</a>
       <div id="dp-About" class="popup-rollover">
         <p>
-          <span class="infoButton-close bank-right" onClick="javascript:clickInfoButton('About');">close</span><br>
-          <span style="color:red">THYROSIM</span>
+          <span class="infoButton-close bank-right"
+                onClick="javascript:clickInfoButton('About');">close</span><br>
+          <span style="color:red">$self->{thysimD}</span>
 
           is a tool for simulating a well-validated human thyroid hormone (TH)
           feedback regulation system model*.
@@ -242,17 +245,17 @@ sub insertForm {
           Minimum Usage:<br>
           <ol>
             <li>
-              To see normal thyroid hormone behavior: click "RUN"
+              To see normal thyroid hormone behavior: click "RUN".
             </li>
             <li>
               To simulate hypo/hyperthyroidism: change
               T<span class="textsub">3</span>/T<span class="textsub">4</span>
-              secretion
+              secretion.
             </li>
             <li>
               To modify oral input absorption: change
               T<span class="textsub">3</span>/T<span class="textsub">4</span>
-              absorption
+              absorption.
             </li>
             <li>
               Simulate treatment options:
@@ -260,7 +263,7 @@ sub insertForm {
                 <li>
                   Click
                   "show T<span class="textsub">3</span> input" or
-                  "show T<span class="textsub">4</span> input"
+                  "show T<span class="textsub">4</span> input".
                 </li>
                 <li>
                   Click the
@@ -268,10 +271,10 @@ sub insertForm {
                   <img src="../img/syringe1.png" alt="IV Pulse Dose">
                   or
                   <img src="../img/infusion1.png" alt="Infusion">
-                  icons to add as input
+                  icons to add as input.
                 </li>
                 <li>
-                  Fill in the required dosage, start and end times
+                  Fill in the required dosage, start and end times.
                 </li>
               </ol>
             </li>
@@ -279,15 +282,17 @@ sub insertForm {
           Features:<br>
           <ol>
             <li>
-              <img src="../img/x.png" alt="x"> icon: click to delete an input
+              <img src="../img/x.png" alt="x"> icon: click to delete an input.
             </li>
             <li>
               <img src="../img/enabled.png" alt="enabled">
               <img src="../img/disabled.png" alt="disabled">
-              icons: click to enable or disable an input for the next simulation
+              icons: click to enable or disable an input for the next
+              simulation.
             </li>
             <li>
-              <img src="../img/plus.png" alt="plus"> icon: click to modify secretion/absorption via scrollbars
+              <img src="../img/plus.png" alt="plus"> icon: click to modify
+              secretion/absorption via scrollbars.
             </li>
           </ol>
         </p>
@@ -315,7 +320,7 @@ sub insertForm {
       <div id="dp-Disclaimer" class="popup-rollover">
         <p>
           <span class="infoButton-close bank-right" onClick="javascript:clickInfoButton('Disclaimer');">close</span><br>
-          <span style="color:red">THYROSIM</span>
+          <span style="color:red">$self->{thysimD}</span>
 
           is intended as an educational and research tool only.
 
@@ -357,12 +362,12 @@ sub insertForm {
   <!-- Content -->
   <div id="content">
 
-    <!-- Interactive interface -->
+    <!-- Interactive Interface -->
     <div id="interactive-interface">
 
       <!-- Inputs (left-most div) -->
       <div id="content-inputs" class="content-center">
-        <!-- T3 input div -->
+        <!-- T3 Input -->
         <a id="T3display" class="showhide" href="javascript:show_hide('T3');">
           Show T<span class="textsub">3</span> input
         </a><br>
@@ -379,9 +384,9 @@ sub insertForm {
             <img src="../img/infusion1.png" alt="T3 Infusion" />
           </a>
         </div>
-        <!-- T3 input end -->
+        <!-- T3 Input end -->
         <br>
-        <!-- T4 input div -->
+        <!-- T4 Input -->
         <a id="T4display" class="showhide" href="javascript:show_hide('T4');">
           Show T<span class="textsub">4</span> input
         </a><br>
@@ -398,7 +403,7 @@ sub insertForm {
             <img src="../img/infusion2.png" alt="T4 Infusion" />
           </a>
         </div>
-        <!-- T4 input end -->
+        <!-- T4 Input end -->
       </div>
       <!-- Inputs end -->
 
@@ -422,7 +427,7 @@ sub insertForm {
       </div>
       <!-- Diagram end -->
     </div>
-    <!-- Interactive interface end -->
+    <!-- Interactive Interface end -->
 
     <!-- Graphs (right-most div) -->
     <div id="content-right">
@@ -499,6 +504,7 @@ sub insertForm {
 
   <!-- Input Adjustments (footer) -->
   <div id="footer">
+
     <div class="textaligncenter">
       <label title="Total simulation time must be < 100 days.">
         Simulation time:
@@ -508,28 +514,44 @@ sub insertForm {
       <br>
       Adjust pill quantity and frequency:
     </div>
-    <div id="footer-input">
-    </div>
-    <!--
-    The simulate button cannot be a submit. It must be a "button" that onclick
-    activates some javascript that pulls in all form info to form a link.
-    -->
+
+    <!-- Placeholder for Inputs -->
+    <div id="footer-input"></div>
     <br>
+    <!-- Placeholder for Inputs end -->
+
+    <!-- Blue/Green Simulation Manager -->
     <div id="compPanel" class="textaligncenter">
-      <label for="compPanel" title="Simulation results are by default graphed in a Blue line.
-      To superimpose two sets of results, set the next run to a different
-      color. Please note that only 1 line per color is allowed and subsequent
-      runs replace any existing lines of that color.">
+
+      <label for="compPanel" title="Simulation results are by default graphed in
+      a Blue line. To superimpose two sets of results, set the next run to a
+      different color. Please note that only 1 line per color is allowed and
+      subsequent runs replace any existing lines of that color.">
+
         Set next simulation results as Blue or Green:
         <br>
-          <input type="radio" name="runRadio" id="runRadioBlue" value="Blue" checked><label for="runRadioBlue">Blue</label>
-          <input type="radio" name="runRadio" id="runRadioGreen" value="Green"><label for="runRadioGreen">Green</label>
+
+        <input type="radio" name="runRadio" id="runRadioBlue" value="Blue" checked>
+        <label for="runRadioBlue">Blue</label>
+
+        <input type="radio" name="runRadio" id="runRadioGreen" value="Green">
+        <label for="runRadioGreen">Green</label>
+
       </label>
       <br>
-      <button id="resetBlueObj" type="button" onclick="resetObj('Blue');">Delete Blue Run</button>
-      <button id="resetGreenObj" type="button" onclick="resetObj('Green');">Delete Green Run</button>
+
+      <button id="resetBlueObj" type="button" onclick="resetObj('Blue');">
+        Delete Blue Run
+      </button>
+      <button id="resetGreenObj" type="button" onclick="resetObj('Green');">
+        Delete Green Run
+      </button>
+
     </div>
     <br>
+    <!-- Blue/Green Simulation Manager end -->
+
+    <!-- Last Row of Buttons -->
     <div class="textaligncenter">
       <input type="hidden" name="thysim" id="thysim" value="$self->{thysim}">
     </div>
@@ -538,29 +560,127 @@ sub insertForm {
       <button type="button" onclick="location.reload();">RESET ALL</button>
       <button type="button" id="togNormRange">TOGGLE NORMAL RANGE</button>
     </div>
+    <!-- Last Row of Buttons end -->
+
   </div>
   <!-- Input Adjustments end -->
 
-  <!-- References -->
-  <div id="ref">
-    * References
-    <div class="reflist">
-      <ol>
-        <li><a target="_blank" href="https://doi.org/10.3389/fendo.2019.00746">DiStefano & Jonklaas 2019</a></li>
-        <li><a target="_blank" href="https://www.liebertpub.com/doi/10.1089/thy.2015.0373">Han et al., 2016</a></li>
-        <li><a target="_blank" href="https://www.liebertpub.com/doi/10.1089/thy.2011.0355">Ben-Shachar et al., 2012</a></li>
-        <li><a target="_blank" href="https://www.liebertpub.com/doi/10.1089/thy.2009.0349">Eisenberg et al., 2010</a></li>
-        <li><a target="_blank" href="https://www.liebertpub.com/doi/10.1089/thy.2008.0148">Eisenberg et al., 2009</a></li>
-        <li><a target="_blank" href="https://www.liebertpub.com/doi/10.1089/thy.2007.0388">Eisenberg et al., 2008</a></li>
-        <li><a target="_blank" href="https://www.liebertpub.com/doi/10.1089/thy.2006.0144">Eisenberg et al., 2006</a></li>
-      </ol>
+  <!-- Bottom (footer) -->
+  <div id="footer">
+
+    <div class="textaligncenter">
+      <b>THYROSIM 2.1</b> &copy; 2013 by
+      <a href="http://biocyb0.cs.ucla.edu/wp/"
+         target="_blank">UCLA Biocybernetics Laboratory</a><br>
+    </div>
+
+    <!-- References -->
+    <div class="subdiv">
+      <span class="subdivtitle">References*</span>
+      <div class="subdivlist">
+        <ol>
+          <li>
+            <a target="_blank"
+               href="https://doi.org/10.3389/fendo.2019.00746">
+                 DiStefano & Jonklaas 2019
+            </a>
+          </li>
+          <li>
+            <a target="_blank"
+               href="https://www.liebertpub.com/doi/10.1089/thy.2015.0373">
+                 Han et al., 2016
+            </a>
+          </li>
+          <li>
+            <a target="_blank"
+               href="https://www.liebertpub.com/doi/10.1089/thy.2011.0355">
+                 Ben-Shachar et al., 2012
+            </a>
+          </li>
+          <li>
+            <a target="_blank"
+               href="https://www.liebertpub.com/doi/10.1089/thy.2009.0349">
+                 Eisenberg et al., 2010
+            </a>
+          </li>
+          <li>
+            <a target="_blank"
+               href="https://www.liebertpub.com/doi/10.1089/thy.2008.0148">
+                 Eisenberg et al., 2009
+            </a>
+          </li>
+          <li>
+            <a target="_blank"
+               href="https://www.liebertpub.com/doi/10.1089/thy.2007.0388">
+                 Eisenberg et al., 2008
+            </a>
+          </li>
+          <li>
+            <a target="_blank"
+               href="https://www.liebertpub.com/doi/10.1089/thy.2006.0144">
+                 Eisenberg et al., 2006
+            </a>
+          </li>
+        </ol>
+      </div>
+    </div>
+    <!-- References end -->
+
+    <!-- Recent Updates -->
+    <div class="subdiv">
+      <span class="subdivtitle">Recent Updates</span>
+      <div class="subdivlist">
+        <ol>
+          <li>
+            Parameter editor added December 2019 (Toggle Parameters)
+          </li>
+          <li>
+            Free T<span class="textsub">4</span> and
+            Free T<span class="textsub">3</span> alternatives to Total
+            T<span class="textsub">4</span> and
+            T<span class="textsub">3</span> added January 2019
+            (Toggle Free Hormone Values)
+          </li>
+        </ol>
+      </div>
+    </div>
+    <!-- Recent Updates end -->
+
+    <!-- People and Acknowledgement -->
+    <div class="subdiv">
+      <span class="subdivtitle">People & Acknowledgement</span>
+      <div class="subdivlist">
+        <ol>
+          <li>
+            JJ DiStefano III, Director
+          </li>
+          <li>
+            Web App Design and Implementation by Simon X. Han
+          </li>
+          <li>
+            Modeling and Analysis by Marisa Eisenberg, Rotem Ben-Shachar & the
+            DiStefano Lab Team
+          </li>
+          $jr_ack
+        </ol>
+      </div>
+    </div>
+    <!-- People and Acknowledgement end -->
+
+  </div>
+  <!-- Bottom end -->
+
+  <!-- Bottom 2 (footer) -->
+  <div id="footer">
+    <div class="textaligncenter">
+      Please send comments, bugs, criticisms to:
+      <a href="mailto:joed\@ucla.edu">joed\@ucla.edu</a><br>
+      Code repository:
+      <a href="https://bitbucket.org/DistefanoLab/thyrosim/overview"
+         target="_blank">click here</a>
     </div>
   </div>
-  <!-- References end -->
-
-  <!-- Bottom -->
-$bottom
-  <!-- Bottom end -->
+  <!-- Bottom 2 end -->
 
   <!-- Follows the cursor while simulator is running -->
   <div id="follow1" class="follow">
@@ -576,6 +696,8 @@ $bottom
   <!-- Follow end -->
 
 </form>
+
+&nbsp;
 
 END
 }
@@ -660,52 +782,20 @@ EOF
 }
 
 #====================================================================
-# SUBROUTINE:   loadBottom
+# SUBROUTINE:   juniorAcknowledge
 # DESCRIPTION:
 #   The bottom portion includes contacts and acknowledgements. Only include
 #   Junior credit in the Junior page.
 #====================================================================
-sub loadBottom {
+sub juniorAcknowledge {
     my ($self) = @_;
-    my $thysim = $self->{thysim};
-    my $ack_jr = $self->{thysim} eq "ThyrosimJr"
-               ? "Junior Model by Doug Dang, Aaron Hui, Sandy Kim, and Amanda Tsao"
-               : "";
-    my $snp = <<EOF
-<div id="bottom">
-
-  <b>THYROSIM 2.1</b> &copy; 2013 by
-  <a href="http://biocyb0.cs.ucla.edu/wp/"
-     target="_blank">UCLA Biocybernetics Laboratory</a><br>
-
-  Free T<span class="textsub">4</span> and Free T<span class="textsub">3</span>
-  alternatives to Total T<span class="textsub">4</span> and
-  T<span class="textsub">3</span> added January 2019 (Toggle Free Hormone
-  Values)<br>
-
-  Parameter editor added December 2019 (Toggle Parameters)<br>
-
-  JJ DiStefano III, Director<br>
-
-  Web App Design and Implementation by Simon X. Han<br>
-
-  Modeling and Analysis by Marisa Eisenberg,<br>
-
-  Rotem Ben-Shachar &amp; the DiStefano Lab Team<br>
-
-  $ack_jr<br>
-
-  Please send comments, bugs, criticisms to:
-  <a href="mailto:joed\@ucla.edu">joed\@ucla.edu</a><br>
-  Code repository: <a href="https://bitbucket.org/DistefanoLab/thyrosim/overview"
-                      target="_blank">click here</a>
-
-</div>
-
-EOF
-;
-
-    return $snp;
+    if ($self->{thysim} eq "ThyrosimJr") {
+        return "<li>"
+             . "  Junior Model by Doug Dang, Aaron Hui, Sandy Kim,"
+             . "  and Amanda Tsao"
+             . "</li>";
+    }
+    return "";
 }
 
 #====================================================================
