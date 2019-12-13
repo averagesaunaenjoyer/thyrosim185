@@ -632,14 +632,14 @@ sub insertForm {
       <div class="subdivlist">
         <ol>
           <li>
-            Parameter editor added December 2019 (Toggle Parameters)
+            Parameter editor added December 2019 (Toggle: Parameters)
           </li>
           <li>
             Free T<span class="textsub">4</span> and
             Free T<span class="textsub">3</span> alternatives to Total
             T<span class="textsub">4</span> and
             T<span class="textsub">3</span> added January 2019
-            (Toggle Free Hormone Values)
+            (Toggle: Free Hormone Values)
           </li>
         </ol>
       </div>
