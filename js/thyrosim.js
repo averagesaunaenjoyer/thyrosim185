@@ -7,7 +7,7 @@
 //=============================================================================
 
 //========================================================================
-// TASK:        Functions for ajax calls.
+// TASK:    Functions for ajax calls.
 //========================================================================
 
 var ThyrosimGraph = new ThyrosimGraph();
@@ -69,7 +69,7 @@ function ajax_getplot(exp) {
 }
 
 //========================================================================
-// TASK:        Functions for graphing.
+// TASK:    Functions for graphing.
 //========================================================================
 
 //===================================================================
@@ -802,7 +802,7 @@ function runRadioNext() {
 }
 
 //========================================================================
-// TASK:        Functions for UI interactions and animations.
+// TASK:    Functions for UI interactions and animations.
 //========================================================================
 
 var animeObj = new animation();
@@ -810,62 +810,35 @@ var animeObj = new animation();
 //===================================================================
 // DESC:    Create an input and append to footer.
 // ARGS:
-//   type:  The input type
+//   name:  Name of the input, e.g., "T4-Oral".
 //===================================================================
-function addInput(type) {
+function addInput(name) {
 
-    // Get the ID the next input should have
-    var nextID = getNextID();
-
-    // Get the class the new input should have
-    var rowClass = getRowClass(nextID);
+    var nextId = getNextInputId();    // Next input span id
+    var rClass = getRowClass(nextId); // Next input span row class
+    var footer = "#footer-input";     // Input container div id
 
     // Create a new input span object
-    var newInputSpan = $(document.createElement('span')).attr({
-        'id': 'input-' + nextID,
-        'class': rowClass
-    });
-
-    var parsed = parseInput(type);
-    var footer = "#footer-input";
+    var span = $(document.createElement('span')).attr({id:'input-'+nextId});
+    span.addClass(rClass).addClass("inputcontainer");
 
     //---------------------------------------------------------
     // Append the new input span to the end of footer
     //---------------------------------------------------------
+    var input = parseInputName(name);
+    if (input.type == "Oral")     span.append(    OralInput(input,nextId));
+    if (input.type == "IV")       span.append( IVPulseInput(input,nextId));
+    if (input.type == "Infusion") span.append(InfusionInput(input,nextId));
 
-    // Add oral input
-    if (parsed.type == "Oral") {
-        newInputSpan.html(OralInput(parsed,nextID)
-          + addDeleteIcon("input-" + nextID)
-          + "<br />");
-        newInputSpan.appendTo(footer);
+    span.append(addDeleteIcon("input-" + nextId), "<br />");
+    span.appendTo(footer);
 
-    // Add intravenous input
-    } else if (parsed.type == "IV") {
-        newInputSpan.html(IVPulseInput(parsed,nextID)
-          + addDeleteIcon("input-" + nextID)
-          + "<br />");
-        newInputSpan.appendTo(footer);
-
-    // Add infusion input
-    } else if (parsed.type == "Infusion") {
-        newInputSpan.html(InfusionInput(parsed,nextID)
-          + addDeleteIcon("input-" + nextID)
-          + "<br />");
-        newInputSpan.appendTo(footer);
-
-    // Error message
-    } else {
-        // The professor likes an "uh-oh!" sound when there is an error.
-        // This may be a good place for one.
-    }
-
-    // Append/remove animating gifs
-    var aEle = animeObj.getAnimationEle(parsed.TH,parsed.type);
-    var aCat = animeObj.getAnimationCat(parsed.type);
-    var id = animeObj.showAnimation(aCat,aEle);
+    // Show/Hide animating gifs. 3200 ms because each gif has 8 frames and each
+    // frame is 0.4 seconds.
+    var aCat = animeObj.getAnimationCat(input.type);
+    var aEle = animeObj.getAnimationEle(input.type,input.hormone);
+    var id   = animeObj.showAnimation(aCat,aEle);
     setTimeout(function() {animeObj.hideAnimation(aCat,id)},3200);
-    // 3200 ms because each gif has 8 frames of 0.4 sec each
 }
 
 //===================================================================
@@ -874,10 +847,13 @@ function addInput(type) {
 //   parsed:    An input object
 //   id:        The number the input should have
 //===================================================================
+function mytest(id) {
+//$('<input/>').attr({ type: 'text', id: 'test', name: 'test'}).appendTo('#form');
+}
 function OralInput(parsed,id) {
-    return '<span class="inputs" id="label-' + id + '" name="label-' + id + '">Input ' + id + ' (' + parsed.TH + '-' + parsed.type + '):</span><br />'
-         + '<input type="hidden" class="inputs" name="hormone-' + id + '" id="hormone-' + id + '" value="' + parsed.ID + '" />'
-         + '<input type="hidden" class="inputs" name="type-' + id + '" id="type-' + id + '" value="' + parsed.tID + '" />'
+    return '<span class="inputs" id="label-' + id + '" name="label-' + id + '">Input ' + id + ' (' + parsed.hormone + '-' + parsed.type + '):</span><br />'
+         + '<input type="hidden" class="inputs" name="hormone-' + id + '"id="hormone-' + id + '" value="' + parsed.hormoneId + '" />'
+         + '<input type="hidden" class="inputs" name="type-' + id + '"id="type-' + id + '" value="' + parsed.typeId + '" />'
          + addEnable(id)
          + 'Dose: <input size="5" class="inputs" type="text" id="dose-' + id + '" name="dose-' + id + '" /> \u03BCg' + '&nbsp&nbsp&nbsp&nbsp&nbsp'
          + 'Dosing Interval: <input size="5" class="inputs" type="text" id="int-' + id + '" name="int-' + id + '" /> Days' + '&nbsp&nbsp&nbsp&nbsp&nbsp'
@@ -891,9 +867,9 @@ function OralInput(parsed,id) {
 // It is expected to have dose and start day
 //-------------------------------------------------- 
 function IVPulseInput(parsed,id) {
-    return '<span class="inputs" id="label-' + id + '" name="label-' + id + '">Input ' + id + ' (' + parsed.TH + '-' + parsed.type + '):</span><br />'
-         + '<input type="hidden" class="inputs" name="hormone-' + id + '" id="hormone-' + id + '" value="' + parsed.ID + '" />'
-         + '<input type="hidden" class="inputs" name="type-' + id + '" id="type-' + id + '" value="' + parsed.tID + '" />'
+    return '<span class="inputs" id="label-' + id + '" name="label-' + id +'">Input ' + id + ' (' + parsed.hormone + '-' + parsed.type + '):</span><br />'
+         + '<input type="hidden" class="inputs" name="hormone-' + id + '"id="hormone-' + id + '" value="' + parsed.hormoneId + '" />'
+         + '<input type="hidden" class="inputs" name="type-' + id + '"id="type-' + id + '" value="' + parsed.typeId + '" />'
          + addEnable(id)
          + 'Dose: <input size="5" class="inputs" type="text" id="dose-' + id + '" name="dose-' + id + '" /> \u03BCg' + '&nbsp&nbsp&nbsp&nbsp&nbsp'
          + 'Start Day: <input size="5" class="inputs" type="text" id="start-' + id + '" name="start-' + id + '" />' + '&nbsp&nbsp&nbsp&nbsp&nbsp';
@@ -904,9 +880,9 @@ function IVPulseInput(parsed,id) {
 // It is expected to have dose per day, start, and end days
 //-------------------------------------------------- 
 function InfusionInput(parsed,id) {
-    return '<span class="inputs" id="label-' + id + '" name="label-' + id + '">Input ' + id + ' (' + parsed.TH + '-' + parsed.type + '):</span><br />'
-         + '<input type="hidden" class="inputs" name="hormone-' + id + '" id="hormone-' + id + '" value="' + parsed.ID + '" />'
-         + '<input type="hidden" class="inputs" name="type-' + id + '" id="type-' + id + '" value="' + parsed.tID + '" />'
+    return '<span class="inputs" id="label-' + id + '" name="label-' + id +'">Input ' + id + ' (' + parsed.hormone + '-' + parsed.type + '):</span><br />'
+         + '<input type="hidden" class="inputs" name="hormone-' + id + '"id="hormone-' + id + '" value="' + parsed.hormoneId + '" />'
+         + '<input type="hidden" class="inputs" name="type-' + id + '"id="type-' + id + '" value="' + parsed.typeId + '" />'
          + addEnable(id)
          + 'Dose: <input size="5" class="inputs" type="text" id="dose-' + id + '" name="dose-' + id + '" /> \u03BCg/day' + '&nbsp&nbsp&nbsp&nbsp&nbsp'
          + 'Start Day: <input size="5" class="inputs" type="text" id="start-' + id + '"name="start-' + id + '" />' + '&nbsp&nbsp&nbsp&nbsp&nbsp'
@@ -1013,6 +989,33 @@ function deleteInput(id) {
     } // Outer loop end.
 }
 
+//===================================================================
+// DESC:    Given an input name, parse it and build an object
+// ARGS:
+//   name:  Name of the input, e.g., "T4-Oral".
+//===================================================================
+function parseInputName(name) {
+    var split = name.split("-");
+    var o = {
+        hormone:   split[0],                 // T4 or T3
+        hormoneId: split[0].replace("T",""), // 4 or 3
+        type:      split[1],                 // Oral/IV/Infusion
+        typeId:    getInputTypeId(split[1])  // See the function
+    };
+    return o;
+}
+
+//===================================================================
+// DESC:    Given an input type, return corresponding type id.
+// ARGS:
+//   type:  Type of input, Oral/IV/Infusion
+//===================================================================
+function getInputTypeId(type) {
+    if (type == "Oral")     return 1;
+    if (type == "IV")       return 2;
+    if (type == "Infusion") return 3;
+}
+
 //--------------------------------------------------
 // Parses inputtype type and returns an object with the hormone (T3/T4)
 // and type (pill, iv dose, infusion).
@@ -1035,10 +1038,10 @@ function parseInput(type) {
     }
 
     var inputFields = {
-        TH   : inputSplit[0],
-        type : inputSplit[1],
-        ID   : hormoneID,
-        tID  : typeID
+        TH   : inputSplit[0], // hormone
+        type : inputSplit[1], // type
+        ID   : hormoneID,     // hormoneId
+        tID  : typeID         // typeId
     };
 
     // Secondary function: save the split values in an array. This function is
@@ -1049,19 +1052,21 @@ function parseInput(type) {
     return inputFields;
 }
 
-//--------------------------------------------------
-// Count the number of spans in #footer-input and returns the id the next input
-// should have. Currently, each input has 3 spans within.
-//-------------------------------------------------- 
-function getNextID() {
-    return $("#footer-input span").length / 3 + 1;
+//===================================================================
+// DESC:    Count the number of input spans and add 1. That is the id the next
+//          input should have. Input ids start at 1.
+//===================================================================
+function getNextInputId() {
+    return $("#footer-input").children().length + 1;
 }
 
-//--------------------------------------------------
-// Determine row color based on NextID.
-//-------------------------------------------------- 
-function getRowClass(nextID) {
-    return 'row' + nextID % 2;
+//===================================================================
+// DESC:    Determine row color based on position.
+// ARGS:
+//   n:     a number indicating the element is in the nth position.
+//===================================================================
+function getRowClass(n) {
+    return 'row' + n % 2;
 }
 
 //--------------------------------------------------
@@ -1184,27 +1189,8 @@ function useSingleDose(id) {
     }
 }
 
-function showAnimation(hormoneID,inputID) {
-    if (hormoneID == 3) {
-        var ele = "#spill1";
-        if (inputID == 1) $(ele).css("display","block");
-    } else if (hormoneID == 4) {
-        var ele = "#spill2";
-        if (inputID == 1) $(ele).css("display","block");
-    }
-}
-function hideAnimation(hormoneID,inputID) {
-    if (hormoneID == 3) {
-        var ele = "#spill1";
-        if (inputID == 1) $(ele).css("display","none");
-    } else if (hormoneID == 4) {
-        var ele = "#spill2";
-        if (inputID == 1) $(ele).css("display","none");
-    }
-}
-
 //===================================================================
-// DESC:        Animation manager.
+// DESC:    Animation manager.
 //===================================================================
 function animation() {
 
@@ -1254,7 +1240,7 @@ function animation() {
     // For a given hormone and input type, get the file name
     //---------------------------------------------------------
     this.getAnimationEle = getAnimationEle;
-    function getAnimationEle(hormone,type) {
+    function getAnimationEle(type,hormone) {
         return this.element[type][hormone];
     }
 
@@ -1268,14 +1254,14 @@ function animation() {
 }
 
 //===================================================================
-// DESC:        Required for jQuery UI tooltips.
+// DESC:    Required for jQuery UI tooltips.
 //===================================================================
 $(function() {
     $( document ).tooltip();
 });
 
 //===================================================================
-// DESC:        Define sliders and tie slider values to dial input values.
+// DESC:    Define sliders and tie slider values to dial input values.
 //===================================================================
 var sliderObj = {
     // T4 Secretion
@@ -1321,7 +1307,7 @@ $(function() {
 });
 
 //===================================================================
-// DESC:        Function to show/hide list of hormone input icons.
+// DESC:    Function to show/hide list of hormone input icons.
 //===================================================================
 function show_hide(H) {
     if($('#'+H+'input').css("display") == "block") {
@@ -1334,7 +1320,7 @@ function show_hide(H) {
 }
 
 //===================================================================
-// DESC:        Function to show/hide navbar divs.
+// DESC:    Function to show/hide navbar divs.
 //===================================================================
 function clickInfoButton(id) {
     if ($('#button-'+id).hasClass('infoButton-clicked')) {
@@ -1347,7 +1333,7 @@ function clickInfoButton(id) {
 }
 
 //===================================================================
-// DESC:        Function to toggle free hormone graph divs.
+// DESC:    Function to toggle free hormone graph divs.
 //===================================================================
 function togFreeHormoneButton() {
     if ($('#FT4graph').hasClass('displaynone')) {
@@ -1364,7 +1350,7 @@ function togFreeHormoneButton() {
 }
 
 //===================================================================
-// DESC:        Function to toggle parameter list on and off.
+// DESC:    Function to toggle parameter list on and off.
 //===================================================================
 function togParamListButton() {
     if ($('#parameditdiv').hasClass('displaynone')) {
