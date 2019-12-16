@@ -184,7 +184,7 @@ sub getHead {
         -code => $self->ga()
     },
 ],
--onload     => 'graphAll();',
+-onload     => '',
 -ontouchstart => ''
 
 );

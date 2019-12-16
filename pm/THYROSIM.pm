@@ -166,6 +166,7 @@ sub new {
 
     # Define default simulation time (days)
     $self->{simTime} = 5;
+    $self->{simTimeMax} = 100;
 
     # Define default thysim
     $self->{thysim}  = $params{thysim}  // "Thyrosim";
@@ -295,7 +296,9 @@ sub _processForm {
     foreach my $key (keys %$form) {
         # Total simulation time
         if ($key eq "simtime") {
-            $self->setLvl1('simTime',$form->{$key});
+            my $simtime = $form->{$key} > $self->{simTimeMax}
+                        ? $self->{simTimeMax} : $form->{$key};
+            $self->setLvl1('simTime',$simtime);
         # Recalculate IC
         } elsif ($key eq "recalcIC") {
             $self->setLvl1('recalcIC',$form->{$key});

@@ -19,12 +19,6 @@ var ThyrosimGraph = new ThyrosimGraph();
 //===================================================================
 function ajax_getplot(exp) {
 
-    // Needed variables
-    var msgBoxId = getMsgBoxId();
-
-    // Display loading message
-    showLoadingMsg(msgBoxId);
-
     //---------------------------------------------------------
     // Generate form data for processing server side. For specific experiments,
     // return a predefined string. Otherwise serialize form inputs.
@@ -39,7 +33,6 @@ function ajax_getplot(exp) {
         //---------------------------------------------------------
         var hasFormError = validateForm();
         if (hasFormError) {
-            hideLoadingMsg(msgBoxId);
             return false;
         }
         formdata = $("form").serialize();
@@ -48,6 +41,10 @@ function ajax_getplot(exp) {
     //---------------------------------------------------------
     // Submit to server and process response
     //---------------------------------------------------------
+
+    var msgBoxId = getMsgBoxId();
+    showLoadingMsg(msgBoxId);
+
     var msg;
     var time1 = new Date().getTime();
     $.ajaxSetup({timeout:120000}); // No run should take more than 2 mins
@@ -395,17 +392,17 @@ function graph(hormone,addlabel,initgraph) {
 }
 
 //===================================================================
-// DESC:    While the ajax call is running, display a 'wait' message box.
-//          Depending on dial values and whether recalculate IC is checked, the
-//          message is different. The message box follows the cursor. This
+// DESC:    While the ajax call is running, display a 'wait' message box that
+//          follows the cursor. Depending on whether dial values are default or
+//          whether recalculate IC is checked, the message is different. This
 //          function returns the id of the selected message.
 //===================================================================
 function getMsgBoxId() {
-    var s = '#dialinput';
-    if ($(s+'1').prop('defaultValue') == $(s+'1').prop('value') &&
-        $(s+'2').prop('defaultValue') == $(s+'2').prop('value') &&
-        $(s+'3').prop('defaultValue') == $(s+'3').prop('value') &&
-        $(s+'4').prop('defaultValue') == $(s+'4').prop('value')) {
+    var d = '#dialinput';
+    if ($(d+'1').prop('defaultValue') == $(d+'1').prop('value') &&
+        $(d+'2').prop('defaultValue') == $(d+'2').prop('value') &&
+        $(d+'3').prop('defaultValue') == $(d+'3').prop('value') &&
+        $(d+'4').prop('defaultValue') == $(d+'4').prop('value')) {
         return 'follow1';
     }
     return $('#recalcIC').prop('checked') ? 'follow2' : 'follow1';
@@ -1265,13 +1262,6 @@ function animation() {
 }
 
 //===================================================================
-// DESC:    Required for jQuery UI tooltips.
-//===================================================================
-$(function() {
-    $( document ).tooltip();
-});
-
-//===================================================================
 // DESC:    Define sliders and tie slider values to dial input values.
 //===================================================================
 var sliderObj = {
@@ -1296,26 +1286,6 @@ var sliderObj = {
            'min'   : 0,
            'max'   : 100 }
 };
-$(function() {
-    $.each(sliderObj,function(k,o) {
-        var s = '#slider'+k;
-        var d = '#dialinput'+k;
-        $(s).slider({
-            range: o.range,
-            value: o.value,
-            min:   o.min,
-            max:   o.max,
-            // Change dialinput's value to match slider's value
-            slide: function(event,ui) { $(d).val(ui.value); }
-        });
-        // Set defaultValue property
-        $(d).prop('defaultValue',$(s).slider('value'));
-        // Changes slider value when changing dialinput
-        $(d).change(function() {
-            $(s).slider('value',this.value);
-        });
-    });
-});
 
 //===================================================================
 // DESC:    Function to show/hide list of hormone input icons.
@@ -1370,6 +1340,35 @@ function togParamListButton() {
         $('#parameditdiv').addClass('displaynone');
     }
 }
+
+//===================================================================
+// DESC:    jQuery $(document).ready() functions.
+//===================================================================
+$(function() {
+
+    $(document).tooltip(); // Required for jQuery UI tooltips
+    graphAll();            // Initialize graphs
+
+    // Initialize slider objects
+    $.each(sliderObj,function(k,o) {
+        var s = '#slider'+k;
+        var d = '#dialinput'+k;
+        $(s).slider({
+            range: o.range,
+            value: o.value,
+            min:   o.min,
+            max:   o.max,
+            // Change dialinput's value to match slider's value
+            slide: function(event,ui) { $(d).val(ui.value); }
+        });
+        // Set defaultValue property
+        $(d).prop('defaultValue',$(s).slider('value'));
+        // Changes slider value when changing dialinput
+        $(d).change(function() {
+            $(s).slider('value',this.value);
+        });
+    });
+});
 
 //===================================================================
 // Section
