@@ -819,9 +819,9 @@ var animeObj = new animation();
 //===================================================================
 // DESC:    Create an input and append to footer.
 // ARGS:
-//   name:  Name of the input, e.g., "T4-Oral".
+//   title: Title of the input, e.g., "T4-Oral"
 //===================================================================
-function addInput(name) {
+function addInput(title) {
 
     var nextId = getNextInputId();    // Next input span id
     var rClass = getRowClass(nextId); // Next input span row class
@@ -834,7 +834,7 @@ function addInput(name) {
     //---------------------------------------------------------
     // Append the new input span to the end of footer
     //---------------------------------------------------------
-    var input = parseInputName(name);
+    var input = parseInputTitle(title);
     if (input.type == "Oral")     span.append(    OralInput(input,nextId));
     if (input.type == "IV")       span.append( IVPulseInput(input,nextId));
     if (input.type == "Infusion") span.append(InfusionInput(input,nextId));
@@ -929,7 +929,7 @@ function deleteInput(id) {
 
             // Rename by subtracting the number by one, ie:
             // input-3 => input-2
-            var parsed = parseInput(child.attr('name'));
+            var parsed = parseInputName(child.attr('name'));
             child.attr('id'  ,parsed[0]+'-'+j);
             child.attr('name',parsed[0]+'-'+j);
 
@@ -968,12 +968,21 @@ function deleteInput(id) {
 }
 
 //===================================================================
-// DESC:    Given an input name, parse it and build an object
+// DESC:    Given an input id/name, parse it and build an object.
 // ARGS:
-//   name:  Name of the input, e.g., "T4-Oral".
+//   name:  Input id/name, e.g., "label-1"
 //===================================================================
 function parseInputName(name) {
-    var split = name.split("-");
+    return name.split("-");
+}
+
+//===================================================================
+// DESC:    Given an input title, parse it and build an object.
+// ARGS:
+//   title: Input title, e.g., "T4-Oral"
+//===================================================================
+function parseInputTitle(title) {
+    var split = title.split("-");
     var o = {
         hormone:   split[0],                 // T4 or T3
         hormoneId: split[0].replace("T",""), // 4 or 3
@@ -986,48 +995,12 @@ function parseInputName(name) {
 //===================================================================
 // DESC:    Given an input type, return corresponding type id.
 // ARGS:
-//   type:  Type of input, Oral/IV/Infusion
+//   type:  Input type, e.g., Oral/IV/Infusion
 //===================================================================
 function getInputTypeId(type) {
     if (type == "Oral")     return 1;
     if (type == "IV")       return 2;
     if (type == "Infusion") return 3;
-}
-
-//--------------------------------------------------
-// Parses inputtype type and returns an object with the hormone (T3/T4)
-// and type (pill, iv dose, infusion).
-// Hormone name and type are converted to an ID to facilitate passing and
-// processing on server-side.
-// T3 => 3, T4 => 4, Oral => 1, IV => 2, Infusion => 3
-//-------------------------------------------------- 
-function parseInput(type) {
-    var inputSplit = type.split("-");
-    var hormoneID  = inputSplit[0].replace("T","");
-
-    var typeID;
-    if (inputSplit[1] == "Oral") {
-        typeID = 1;
-    } else if (inputSplit[1] == "IV") {
-        typeID = 2;
-    } else if (inputSplit[1] == "Infusion") {
-        typeID = 3;
-    } else {
-    }
-
-    var inputFields = {
-        TH   : inputSplit[0], // hormone
-        type : inputSplit[1], // type
-        ID   : hormoneID,     // hormoneId
-        tID  : typeID         // typeId
-    };
-
-    // Secondary function: save the split values in an array. This function is
-    // called in other places where it is more sensible to use the index.
-    inputFields[0] = inputSplit[0];
-    inputFields[1] = inputSplit[1];
-
-    return inputFields;
 }
 
 //===================================================================
@@ -1041,7 +1014,7 @@ function getNextInputId() {
 //===================================================================
 // DESC:    Determine row color based on position.
 // ARGS:
-//   n:     a number indicating the element is in the nth position.
+//   n:     a number indicating the element is in the nth position
 //===================================================================
 function getRowClass(n) {
     return 'row' + n % 2;
@@ -1114,32 +1087,6 @@ function enDisInput(id) {
     }
 }
 
-//===================================================================
-// DESC:    Show/Hide the scroll bars for secretion/absorption adjustment.
-//===================================================================
-function showhidescrollbars() {
-    if ($(".slidercontainer").css("display") == "none") {
-        $(".slidercontainer").css("display","block");
-        $("#showhidescrollbar").attr("src","../img/minus.png")
-                               .attr("alt","hide scroll bars");
-    } else {
-        $(".slidercontainer").css("display","none");
-        $("#showhidescrollbar").attr("src","../img/plus.png")
-                               .attr("alt","show scroll bars");
-    }
-}
-
-//===================================================================
-// DESC:    Highlight or un-highlight the corresponding black dot in the diagram
-//          when mousing over a T4/3 secretion/absorption edit box.
-//===================================================================
-function hilite(id) {
-    $('#hilite'+id).css("display","block");
-}
-function lolite(id) {
-    $('#hilite'+id).css("display","none");
-}
-
 //--------------------------------------------------
 // Tells the oral input to use only a single dose. In addition,
 // 1. Gray out the "Dosing Interval" and "End Day" boxes
@@ -1164,6 +1111,32 @@ function useSingleDose(id) {
         endDay.prop('disabled',false);
         dosingInterval.prop('disabled',false);
     }
+}
+
+//===================================================================
+// DESC:    Show/Hide the scroll bars for secretion/absorption adjustment.
+//===================================================================
+function showhidescrollbars() {
+    if ($(".slidercontainer").css("display") == "none") {
+        $(".slidercontainer").css("display","block");
+        $("#showhidescrollbar").attr("src","../img/minus.png")
+                               .attr("alt","hide scroll bars");
+    } else {
+        $(".slidercontainer").css("display","none");
+        $("#showhidescrollbar").attr("src","../img/plus.png")
+                               .attr("alt","show scroll bars");
+    }
+}
+
+//===================================================================
+// DESC:    Highlight or un-highlight the corresponding black dot in the diagram
+//          when mousing over a T4/3 secretion/absorption edit box.
+//===================================================================
+function hilite(id) {
+    $('#hilite'+id).css("display","block");
+}
+function lolite(id) {
+    $('#hilite'+id).css("display","none");
 }
 
 //===================================================================
