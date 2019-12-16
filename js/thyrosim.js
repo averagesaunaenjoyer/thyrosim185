@@ -26,15 +26,6 @@ function ajax_getplot(exp) {
     showLoadingMsg(msgBoxId);
 
     //---------------------------------------------------------
-    // Validate form
-    //---------------------------------------------------------
-    var hasFormError = validateForm();
-    if (hasFormError) {
-        hideLoadingMsg(msgBoxId);
-        return false;
-    }
-
-    //---------------------------------------------------------
     // Generate form data for processing server side. For specific experiments,
     // return a predefined string. Otherwise serialize form inputs.
     //---------------------------------------------------------
@@ -43,13 +34,23 @@ function ajax_getplot(exp) {
         formdata = getExperimentStr(exp);
         executeExperiment(exp);
     } else {
+        //---------------------------------------------------------
+        // Validate form
+        //---------------------------------------------------------
+        var hasFormError = validateForm();
+        if (hasFormError) {
+            hideLoadingMsg(msgBoxId);
+            return false;
+        }
         formdata = $("form").serialize();
     }
 
     //---------------------------------------------------------
     // Submit to server and process response
     //---------------------------------------------------------
-    var start = new Date().getTime();
+    var msg;
+    var time1 = new Date().getTime();
+    $.ajaxSetup({timeout:120000}); // No run should take more than 2 mins
     $.post( "ajax_getplot.cgi", { data: formdata })
       .done(function( data ) {
 
@@ -58,13 +59,18 @@ function ajax_getplot(exp) {
         var color = $('input:radio[name=runRadio]:checked').val();
         ThyrosimGraph.setRun(color,rdata);
         graphAll();
-
-        // Finish up
-        hideLoadingMsg(msgBoxId); // Hide loading message
-        var end = new Date().getTime();
-        var time = Math.floor((end - start)/1000);
-        alert('Execution time (sec): '+time);
         runRadioNext();
+
+        msg = "Execution time (sec):";
+      })
+      .fail(function (data ) {
+        msg = "Operation timed out (sec):";
+      })
+      .always(function() {
+        hideLoadingMsg(msgBoxId); // Hide loading message
+        var time2 = new Date().getTime();
+        var timeE = Math.floor((time2 - time1)/1000);
+        alert(msg + ' ' + timeE); // Elapsed
       });
 }
 
@@ -433,6 +439,7 @@ function hideLoadingMsg(mid) {
 //===================================================================
 function validateForm() {
     var fail = 0;
+    var maxDay = parseFloat(100.0);
 
     // Make sure each input is a number. Decimals okay.
     $.each($("form").serializeArray(), function(i, field) {
@@ -455,21 +462,23 @@ function validateForm() {
         }
     });
 
-    // For inputs, look at the "End Day" and update simulation time
-    // with the highest "End Day"
+    // For inputs, check the following:
+    // 1. Check that start, end, and simulation time are <= maxDay.
+    // 2. Update simulation time with the highest end day.
     $.each($("form").serializeArray(), function(i, field) {
-        if (field.name.match(/^end-/)) {
-            if (parseFloat(field.value) > parseFloat($("#simtime").val())) {
+        if (field.name.match(/^start-/) ||
+            field.name.match(/^end-/)   ||
+            field.name.match(/^simtime/)) {
+            if (parseFloat(field.value) > maxDay) {
+                $('#'+field.name).addClass('error');
+                fail = 1;
+            } else if (parseFloat(field.value) >
+                       parseFloat($("#simtime").val())) {
                 $("#simtime").val(field.value);
             }
         }
     });
 
-    // Make sure simulation time is <100 days
-    if ($('#simtime').prop('value') > 100) {
-        $('#simtime').addClass('error');
-        fail = 1;
-    }
     return fail;
 }
 

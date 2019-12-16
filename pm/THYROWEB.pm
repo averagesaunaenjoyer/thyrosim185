@@ -504,7 +504,7 @@ sub insertForm {
   <div id="footer">
 
     <div class="textaligncenter">
-      <label title="Total simulation time must be < 100 days.">
+      <label title="Total simulation time must be <= 100 days.">
         Simulation time:
         <input type="text" id="simtime" name="simtime" size="1" value="5">
         days
