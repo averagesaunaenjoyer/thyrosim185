@@ -839,7 +839,7 @@ function addInput(name) {
     if (input.type == "IV")       span.append( IVPulseInput(input,nextId));
     if (input.type == "Infusion") span.append(InfusionInput(input,nextId));
 
-    span.append(addDeleteIcon("input-" + nextId), "<br />");
+    span.append(addDeleteIcon(nextId), "<br />");
     span.appendTo(footer);
 
     // Show/Hide animating gifs. 3200 ms because each gif has 8 frames and each
@@ -898,103 +898,72 @@ function InfusionInput(parsed,id) {
          + 'End Day: <input size="5" class="inputs" type="text" id="end-' + id + '" name="end-' + id + '" />' + '&nbsp&nbsp&nbsp&nbsp&nbsp';
 }
 
-//--------------------------------------------------
-// This function deletes an input. If the input is in the middle of the list,
-// then rename all the ids to be continuous.
-//-------------------------------------------------- 
+//===================================================================
+// Delete an input and rename remaining input ids to be continuous.
+//===================================================================
 function deleteInput(id) {
 
-    //--------------------------------------------------
-    // Loop through the children of #footer-input to build
-    // a list of existing inputs.
-    //-------------------------------------------------- 
-    var allInputs = new Array;
-    $("#footer-input").children().each(function() {
-        var child = $(this);
+    id = parseInt(id); // Treat as integer
 
-        // attr id is in the form: input-X
-        // [0] is 'input'; [1] is the number
-        var parsedID = child.attr('id').split("-");
-        allInputs.push(parsedID[1]);
-    });
+    // Get the number of inputs before this deletion
+    var end = $('#footer-input').children().length;
 
     // Delete the input element
-    $('#'+id).remove();
+    $('#input-'+id).remove();
 
-    //--------------------------------------------------
+    //---------------------------------------------------------
     // Outer loop.
-    // Loop through all inputs whose numbers > the deleted one
-    //-------------------------------------------------- 
-    var delParsedID = id.split("-");
-    var start       = parseInt(delParsedID[1]);
+    // Loop through all inputs whose ids > the deleted one's
+    //---------------------------------------------------------
+    for (var i = id + 1; i <= end; i++) {
 
-    for (var i=start;i<allInputs.length;i++) {
-        //--------------------------------------------------
+        var j = parseInt(i-1); // New id
+
+        //---------------------------------------------------------
         // Inner loop.
-        // Loop through the children of an input.
-        // Find children with class 'inputs', and rename attributes.
-        // Attributes to rename: id and name
-        //-------------------------------------------------- 
-        $('#'+delParsedID[0]+'-'+allInputs[i]).children('.inputs')
-        .each(function(key, value) {
+        // Loop through the children of an inputcontainer. Find children with
+        // class 'inputs' and rename attributes: id, name.
+        //---------------------------------------------------------
+        $('#input-'+i).children('.inputs').each(function(key, value) {
             var child = $(this);
 
             // Rename by subtracting the number by one, ie:
             // input-3 => input-2
             var parsed = parseInput(child.attr('name'));
-            child.attr('id'  ,parsed[0]+'-'+parseInt(parsed[1]-1));
-            child.attr('name',parsed[0]+'-'+parseInt(parsed[1]-1));
+            child.attr('id'  ,parsed[0]+'-'+j);
+            child.attr('name',parsed[0]+'-'+j);
 
-            //--------------------------------------------------
-            // By this point, all names of elements have been renamed, but a
+            //---------------------------------------------------------
+            // By this point, ids and names of elements have been renamed, but a
             // few special cases remain.
-            //-------------------------------------------------- 
+            //---------------------------------------------------------
 
             // The element with name 'label-X' contains a brief description of
             // what this input is. Change text that says 'Input X (type)'
             if (child.attr('name').match(/label/)) {
-                var text = child.text();
-                text = text.replace(/Input \d+/,
-                                    "Input " + parseInt(parsed[1]-1));
-                child.text(text);
+                child.text(child.text().replace(/Input \d+/,"Input "+j));
             }
 
-            // The element with id/name 'enabled-X' contains a javascript
-            // argument that needs to be changed.
-            if (child.attr('name').match(/enabled/)) {
-                var text = child.attr('onClick');
-                text = text.replace(/\(.*\)/,
-                                    "('" + parseInt(parsed[1]-1)+"')");
-                child.attr('onClick',text);
+            // The element with id/name 'enabled-X' or 'singledose-X' contain a
+            // javascript argument that need to be changed.
+            if (child.attr('name').match(/enabled|singledose/)) {
+                child.attr('onClick',child.attr('onClick').replace(/\d+/,j));
             }
 
             // The delete button has name 'delete-X'. Change the javascript
             // argument in name 'href'.
             if (child.attr('name').match(/delete/)) {
-                var text = child.attr('href');
-                text = text.replace(/\(.*\)/,
-                                    "('input-" + parseInt(parsed[1]-1)+"')");
-                child.attr('href',text);
-            }
-
-            // The checkbox with id/name 'singledose-X' contains a javascript
-            // argument that needs to be changed.
-            if (child.attr('name').match(/singledose/)) {
-                var text = child.attr('onClick');
-                text = text.replace(/\(.*\)/,
-                                    "('" + parseInt(parsed[1]-1)+"')");
-                child.attr('onClick',text);
+                child.attr('href',child.attr('href').replace(/\d+/,j));
             }
         }); // Inner loop end.
 
-        // All child elements of input span fixed? Fix the row colors.
-        var rowColor = $("#"+delParsedID[0]+'-'+allInputs[i]).attr('class');
-        rowColor = (rowColor == "row0" ? "row1" : "row0");
-        $("#"+delParsedID[0]+'-'+allInputs[i]).attr('class',rowColor);
+        // Change the row colors
+        $("#input-"+i).removeClass("row0 row1");
+        $("#input-"+i).addClass(getRowClass(j));
 
-        // Finally, let's fix the input span id.
-        $("#"+delParsedID[0]+'-'+allInputs[i])
-        .attr('id',delParsedID[0]+'-'+parseInt(allInputs[i]-1));
+        // Rename the inputcontainer's span id at the end
+        $("#input-"+i).attr('id','input-'+j);
+
     } // Outer loop end.
 }
 
@@ -1095,8 +1064,7 @@ function addEnable(id) {
 // Adds x.png so that it can be used to delete an input
 //-------------------------------------------------- 
 function addDeleteIcon(id) {
-    var parsed = parseInput(id);
-    var delImg = "<a class=\"img-input bank-right inputs\" name=\"delete-" + parsed[1] + "\" href=\"javascript:deleteInput(\'" + id + "\')\">"
+    var delImg = "<a class=\"img-input bank-right inputs\" name=\"delete-" + id + "\" href=\"javascript:deleteInput(\'" + id + "\')\">"
   + "<img src=\"../img/x.png\" alt=\"Delete this input\" /></a>";
     return delImg;
 }
