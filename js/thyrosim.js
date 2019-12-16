@@ -499,13 +499,15 @@ function getExperimentStr(exp) {
 }
 
 //===================================================================
-// DESC:    Change the UI to match the experiment ran.
+// DESC:    Change the UI to match the experiment ran. When running experiments,
+//          clear results and only graph experiment results in Blue.
 // ARGS:
 //   exp:   The experiment name
 //===================================================================
 function executeExperiment(exp) {
-    // Clear the input space
-    $('#footer-input').empty();
+    $('#footer-input').empty();                  // Clear the input space
+    ThyrosimGraph.setRun("Green",undefined);     // Delete the Green run
+    $('input[name=runRadio]')[0].checked = true; // Set Blue as exp run
 
     if (exp == "experiment-default") {
         $('#simtime').val(5);
