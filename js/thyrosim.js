@@ -41,7 +41,6 @@ function ajax_getplot(exp) {
     //---------------------------------------------------------
     // Submit to server and process response
     //---------------------------------------------------------
-
     var msgBoxId = getMsgBoxId();
     showLoadingMsg(msgBoxId);
 
@@ -388,7 +387,9 @@ function graph(hormone,addlabel,initgraph) {
     d3.select("#togNormRange").on("click",toggleRangeBox);
     d3.select("#togXAxisDisp").on("click",toggleXAxis);
     // Currently, not using this toggle button. While the graph labels change
-    // correctly, the pop-up when hovering over graph values does not update.
+    // correctly, the pop-up when hovering over graph values does not update. To
+    // get this to work properly would require converting all x-axis values to
+    // days and re-graph.
 }
 
 //===================================================================
