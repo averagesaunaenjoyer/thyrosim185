@@ -23,6 +23,7 @@ sub new {
     my $self = {};
 
     $self->{ts} = $params{THYROSIM};
+    $self->{showParams} = $params{showParams} // 0;
 
     bless $self, $class;
 
@@ -202,8 +203,19 @@ sub insertForm {
 
     # Things to put into the form
     my $examples  = $self->insertExamples();
-    my $paramList = $self->printParams();
     my $jr_ack    = $self->juniorAcknowledge();
+
+    # Parameter list only for advanced
+    my $paramEditor = "";
+    if ($self->{showParams}) {
+        my $paramList = $self->printParams();
+        $paramEditor = <<EOF
+Toggle:
+<button type="button" onclick="togParamListButton();">Parameters</button>
+<div id="parameditdiv" class="parameditdiv displaynone">$paramList</div>
+EOF
+;
+    }
 
     # Put form together
     return <<END
@@ -407,9 +419,7 @@ sub insertForm {
 
       <!-- Diagram (center div) -->
       <div id="diagram" class="interface-diagram relative">
-        Toggle:
-        <button type="button" onclick="togParamListButton();">Parameters</button>
-        <div id="parameditdiv" class="parameditdiv displaynone">$paramList</div>
+        $paramEditor
         <div id="hilite1" class="imgcontainer displaynone">
           <img src="../img/hilite.png">
         </div>

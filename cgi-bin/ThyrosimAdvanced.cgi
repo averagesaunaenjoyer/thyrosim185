@@ -1,10 +1,10 @@
 #!/usr/bin/perl
 use v5.10; use strict; use warnings;
 #==============================================================================
-# FILE:         ThyrosimJr.cgi
+# FILE:         ThyrosimAdvanced.cgi
 # AUTHOR:       Simon X. Han
 # DESCRIPTION:
-#   Show UI for ThyrosimJr.
+#   Show UI for Thyrosim, Advanced.
 #==============================================================================
 
 use CGI qw/:standard/;
@@ -40,8 +40,10 @@ use THYROWEB;
 my $ts = THYROSIM->new(setshow => 'default',
                        docRoot => $ENV{DOCUMENT_ROOT},
                        fRoot   => $F_ROOT,
-                       thysim  => 'ThyrosimJr');
-my $tw = THYROWEB->new(THYROSIM => $ts);
+                       thysim  => 'Thyrosim',
+                       loadParams => 1);
+my $tw = THYROWEB->new(THYROSIM => $ts,
+                       showParams => 1);
 
 my $q = new CGI();
 

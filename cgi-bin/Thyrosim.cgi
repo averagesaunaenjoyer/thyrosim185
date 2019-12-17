@@ -4,7 +4,7 @@ use v5.10; use strict; use warnings;
 # FILE:         Thyrosim.cgi
 # AUTHOR:       Simon X. Han
 # DESCRIPTION:
-#   Hello
+#   Show UI for Thyrosim.
 #==============================================================================
 
 use CGI qw/:standard/;
@@ -40,8 +40,7 @@ use THYROWEB;
 my $ts = THYROSIM->new(setshow => 'default',
                        docRoot => $ENV{DOCUMENT_ROOT},
                        fRoot   => $F_ROOT,
-                       thysim  => 'Thyrosim',
-                       loadParams => 1);
+                       thysim  => 'Thyrosim');
 my $tw = THYROWEB->new(THYROSIM => $ts);
 
 my $q = new CGI();

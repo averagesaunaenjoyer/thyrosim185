@@ -191,7 +191,10 @@ sub new {
     $self->initCompartments();
 
     # Load parameter list if forced
-    $self->loadParams() if $params{loadParams};
+    if ($params{loadParams}) {
+        $self->loadParams();
+        $self->{loadParams} = 1;
+    }
 
     return $self;
 }
@@ -320,6 +323,11 @@ sub _processForm {
         # Ignore un-identified inputs
         } else {
         }
+    }
+
+    # Check if parameters were passed from the browser
+    if (!defined $self->getLvl2('params','kdelay')) {
+        $self->loadParams();
     }
 
     # Build $self->{IC}->{0}. Only needed when recalculating IC
