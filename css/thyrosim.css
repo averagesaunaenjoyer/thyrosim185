@@ -59,9 +59,13 @@ a.showhide:link {
   border: 4px solid #eee;
   background-color: #eee;
   width: 40px;
-  height: 25px;
-  margin: 0px -3px -5px -3px;
+  height: 40px;
+  margin: 0px -3px 8px -3px;
   font-weight: bold;
+}
+.hormone-dropdown-text-small {
+  margin-left: -1px;
+  font-size: 14px;
 }
 /* Applies to all divs within the content div */
 /*--------------------------------------------------
@@ -93,16 +97,14 @@ a.showhide:link {
   /* height and width of the graphs are defined in thyrosim.js
    * where D3 is defined */
 }
-/* These are made into classes because id 'drag' is needed for the drag and drop
- * javascript. No longer relevant since drag and drag is no longer used, but
- * will keep this CSS */
 #content div.interface-input-options {
   display: block;
   border: none;
-  margin: -3px 0px 10px -3px;
+  margin: -16px 0px 10px -3px;
   width: 34px;
   border-radius: 5px;
   background-color: #eee;
+  padding: 10px 2px 2px 0px;
 }
 a {
   text-decoration: none;
@@ -121,6 +123,9 @@ a.header-buttons-link {
 }
 a.header-buttons-link:hover {
   color: inherit;
+}
+.infoButton-clicked a.header-buttons-link:hover {
+  color: white;
 }
 a.header-buttons-link:link {
   border-bottom: none;

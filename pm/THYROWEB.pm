@@ -403,6 +403,7 @@ EOF
           <span class="bank-left hormone-dropdown">
             T<span class="textsub">3</span>
             <img class="inputimg" src="../img/down.png" alt="Toggle T3 inputs" />
+            <span class="hormone-dropdown-text-small">Inputs</span>
           </span>
         </a>
         <br>
@@ -426,6 +427,7 @@ EOF
           <span class="bank-left hormone-dropdown">
             T<span class="textsub">4</span>
             <img class="inputimg" src="../img/down.png" alt="Toggle T4 inputs" />
+            <span class="hormone-dropdown-text-small">Inputs</span>
           </span>
         </a>
         <br>

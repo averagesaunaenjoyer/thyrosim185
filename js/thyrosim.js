@@ -1343,8 +1343,10 @@ function clickInfoButton(id) {
     if ($('#button-'+id).hasClass('infoButton-clicked')) {
         $('#button-'+id).removeClass('infoButton-clicked');
         $('#link-'+id).removeClass('color-white');
+        $('#link-'+id).addClass('color-black');
     } else {
         $('#button-'+id).addClass('infoButton-clicked');
+        $('#link-'+id).removeClass('color-black');
         $('#link-'+id).addClass('color-white');
     }
 }
