@@ -225,6 +225,11 @@ EOF
 
   <!-- Header -->
   <div id="header" style="$self->{headerstyle}">
+
+    <span id="ucla" class="bank-left">
+      UCLA
+    </span>
+
     <!-- About -->
     <div id="button-About" class="bank-left infoButton unselectable">
       <a id="link-About"
@@ -342,7 +347,6 @@ EOF
     </div>
     <!-- Disclaimer end -->
 
-    &nbsp;
     Start by clicking
     "Show T<span class="textsub">3</span> input" or
     "Show T<span class="textsub">4</span> input"
@@ -470,7 +474,7 @@ EOF
     <!-- T4 Secretion -->
     <div class="adjuster" onmouseover="hilite('1');" onmouseout="lolite('1');">
       T<span class="textsub">4</span> Secretion (0-200%):
-      <input type="text" size="3" id="dialinput1" name="dialinput1">%
+      <input type="text" size="5" id="dialinput1" name="dialinput1"> %
       <div id="slidercontainer1" class="slidercontainer">
         <div id="slider1"></div>
       </div>
@@ -480,7 +484,7 @@ EOF
     <!-- T4 Absorption -->
     <div class="adjuster" onmouseover="hilite('2');" onmouseout="lolite('2');">
       T<span class="textsub">4</span> Absorption (0-100%):
-      <input type="text" size="3" id="dialinput2" name="dialinput2">%
+      <input type="text" size="5" id="dialinput2" name="dialinput2"> %
       <div id="slidercontainer2" class="slidercontainer">
         <div id="slider2"></div>
       </div>
@@ -490,7 +494,7 @@ EOF
     <!-- T3 Secretion -->
     <div class="adjuster" onmouseover="hilite('3');" onmouseout="lolite('3');">
       T<span class="textsub">3</span> Secretion (0-200%):
-      <input type="text" size="3" id="dialinput3" name="dialinput3">%
+      <input type="text" size="5" id="dialinput3" name="dialinput3"> %
       <div id="slidercontainer3" class="slidercontainer">
         <div id="slider3"></div>
       </div>
@@ -500,7 +504,7 @@ EOF
     <!-- T3 Absorption -->
     <div class="adjuster" onmouseover="hilite('4');" onmouseout="lolite('4');">
       T<span class="textsub">3</span> Absorption (0-100%):
-      <input type="text" size="3" id="dialinput4" name="dialinput4">%
+      <input type="text" size="5" id="dialinput4" name="dialinput4"> %
       <div id="slidercontainer4" class="slidercontainer">
         <div id="slider4"></div>
       </div>

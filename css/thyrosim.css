@@ -32,6 +32,14 @@ html * {
   top: 0.3em;
   font-size: 70%;
 }
+#ucla {
+  background-color: #2c5e91;
+  font-size: 38px;
+  margin: -11px 10px -11px -11px;
+  color: white;
+  font-weight: bold;
+  font-style: italic;
+}
 /* Applies to all divs within the content div */
 /*--------------------------------------------------
 * PROBLEM HERE: #content div declaration interferes with jqueryui
@@ -59,7 +67,7 @@ html * {
 #content-right div {
   border-collapse: collapse;
   border: 0px; /* To counteract 1px border from above */
-  /* height and width of the graphs are defined in thyrosim.js 
+  /* height and width of the graphs are defined in thyrosim.js
    * where D3 is defined */
 }
 /* These are made into classes because id 'drag' is needed for the drag and drop
@@ -274,7 +282,7 @@ a.header-buttons-link:link {
   padding-bottom: 20px;
 }
 /* Alternating input row colors */
-/* row1 is not really needed b/c it's just a white background, but 
+/* row1 is not really needed b/c it's just a white background, but
  * included for consistency */
 .row1 {
   display: block;
@@ -308,7 +316,7 @@ a.header-buttons-link:link {
   border: 2px solid red;
 }
 /* Given to the enable/disable span boxes.
- * 'enable' gives a yellowgreen background, 
+ * 'enable' gives a yellowgreen background,
  * 'disable' gives a pinkish-red background.
  * Both get a dashed border */
 .enDisInput {
@@ -317,6 +325,7 @@ a.header-buttons-link:link {
   border: 1px dashed #bbb;
   cursor: pointer;
   width: 80px;
+  text-align: center;
 }
 .enaInput {
   background-color: #7CFC00;
@@ -349,7 +358,7 @@ a.header-buttons-link:link {
 .infoButton {
   border: 1px solid #5dacdf;
   background-color: #e2ebf1;
-  margin-left: 10px;
+  margin-right: 10px;
   padding: 2px;
 }
 .infoButton div {
@@ -384,9 +393,9 @@ a.header-buttons-link:link {
 }
 .unselectable {
   /* Makes text unselectable */
-  -moz-user-select: none; 
-  -khtml-user-select: none; 
-  -webkit-user-select: none; 
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
   -o-user-select: none;
 }
 .example-text {
