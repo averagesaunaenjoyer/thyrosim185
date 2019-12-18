@@ -581,7 +581,7 @@ EOF
   <div id="footer">
 
     <div class="textaligncenter">
-      <b>THYROSIM 2.1</b> &copy; 2013 by
+      <b>$self->{thysimD} 2.1</b> &copy; 2013 by
       <a href="http://biocyb0.cs.ucla.edu/wp/"
          target="_blank">UCLA Biocybernetics Laboratory</a><br>
     </div>
