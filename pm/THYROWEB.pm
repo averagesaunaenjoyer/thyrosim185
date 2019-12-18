@@ -202,8 +202,8 @@ sub insertForm {
     my ($self) = @_;
 
     # Things to put into the form
-    my $examples  = $self->insertExamples();
-    my $jr_ack    = $self->juniorAcknowledge();
+    my $examples = $self->insertExamples();
+    my $jr_ack   = $self->juniorAcknowledge();
 
     # Parameter list only for advanced
     my $paramEditor = "";
@@ -226,7 +226,7 @@ EOF
   <!-- Header -->
   <div id="header" style="$self->{headerstyle}">
 
-    <span id="ucla" class="bank-left">
+    <span id="ucla" class="bank-left unselectable">
       UCLA
     </span>
 
@@ -238,7 +238,8 @@ EOF
       <div id="dp-About" class="popup-rollover">
         <p>
           <span class="infoButton-close bank-right"
-                onClick="javascript:clickInfoButton('About');">close</span><br>
+                onclick="javascript:clickInfoButton('About');">close</span>
+          <br>
           <span style="color:red">$self->{thysimD}</span>
 
           is a tool for simulating a well-validated human thyroid hormone (TH)
@@ -257,7 +258,8 @@ EOF
           superimposing two sets of simulation results.
           <br>
           <br>
-          Minimum Usage:<br>
+          Minimum Usage:
+          <br>
           <ol>
             <li>
               To see normal thyroid hormone behavior: click "RUN".
@@ -294,7 +296,8 @@ EOF
               </ol>
             </li>
           </ol>
-          Features:<br>
+          Features:
+          <br>
           <ol>
             <li>
               <img src="../img/x.png" alt="x"> icon: click to delete an input.
@@ -317,10 +320,14 @@ EOF
 
     <!-- Example -->
     <div id="button-Example" class="bank-left infoButton unselectable">
-      <a id="link-Example" class="color-black header-buttons-link" href="javascript:clickInfoButton('Example');">EXAMPLE</a>
+      <a id="link-Example"
+         class="color-black header-buttons-link"
+         href="javascript:clickInfoButton('Example');">EXAMPLES</a>
       <div id="dp-Example" class="popup-rollover">
         <p>
-          <span class="infoButton-close bank-right" onClick="javascript:clickInfoButton('Example');">close</span><br>
+          <span class="infoButton-close bank-right"
+                onclick="javascript:clickInfoButton('Example');">close</span>
+          <br>
 
           $examples
 
@@ -331,10 +338,14 @@ EOF
 
     <!-- Disclaimer -->
     <div id="button-Disclaimer" class="bank-left infoButton unselectable">
-      <a id="link-Disclaimer" class="color-black header-buttons-link" href="javascript:clickInfoButton('Disclaimer');">DISCLAIMER</a>
+      <a id="link-Disclaimer"
+         class="color-black header-buttons-link"
+         href="javascript:clickInfoButton('Disclaimer');">DISCLAIMER</a>
       <div id="dp-Disclaimer" class="popup-rollover">
         <p>
-          <span class="infoButton-close bank-right" onClick="javascript:clickInfoButton('Disclaimer');">close</span><br>
+          <span class="infoButton-close bank-right"
+                onclick="javascript:clickInfoButton('Disclaimer');">close</span>
+          <br>
           <span style="color:red">$self->{thysimD}</span>
 
           is intended as an educational and research tool only.
@@ -347,9 +358,15 @@ EOF
     </div>
     <!-- Disclaimer end -->
 
+<!--
     Start by clicking
     "Show T<span class="textsub">3</span> input" or
     "Show T<span class="textsub">4</span> input"
+-->
+
+    <span id="biocyb" class="bank-right unselectable">
+      Biocybernetics Laboratory
+    </span>
 
     <br>
 
@@ -383,8 +400,12 @@ EOF
       <div id="content-inputs" class="content-center">
         <!-- T3 Input -->
         <a id="T3display" class="showhide" href="javascript:show_hide('T3');">
-          Show T<span class="textsub">3</span> input
-        </a><br>
+          <span class="bank-left hormone-dropdown">
+            T<span class="textsub">3</span>
+            <img class="inputimg" src="../img/down.png" alt="Toggle T3 inputs" />
+          </span>
+        </a>
+        <br>
         <div id="T3input" class="interface-input-options">
           <a class="img-input" href="javascript:addInput('T3-Oral');">
             <img src="../img/pill1.png" alt="T3 Pill Input" />
@@ -402,8 +423,12 @@ EOF
         <br>
         <!-- T4 Input -->
         <a id="T4display" class="showhide" href="javascript:show_hide('T4');">
-          Show T<span class="textsub">4</span> input
-        </a><br>
+          <span class="bank-left hormone-dropdown">
+            T<span class="textsub">4</span>
+            <img class="inputimg" src="../img/down.png" alt="Toggle T4 inputs" />
+          </span>
+        </a>
+        <br>
         <div id="T4input" class="interface-input-options">
           <a class="img-input" href="javascript:addInput('T4-Oral');">
             <img src="../img/pill2.png" alt="T4 Pill Input" />

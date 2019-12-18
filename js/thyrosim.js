@@ -1333,13 +1333,7 @@ var sliderObj = {
 // DESC:    Function to show/hide list of hormone input icons.
 //===================================================================
 function show_hide(H) {
-    if($('#'+H+'input').css("display") == "block") {
-        $('#'+H+'input').css("display","none");
-        $('#'+H+'display').text("Show "+H+" input");
-    } else {
-        $('#'+H+'input').css("display","block");
-        $('#'+H+'display').text("Hide "+H+" input");
-    }
+    $('#'+H+'input').toggle("blind");
 }
 
 //===================================================================

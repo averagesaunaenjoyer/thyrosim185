@@ -18,6 +18,7 @@ html * {
   border: 1px solid #bbb;
   padding: 10px;
   font-size: 20px;
+  height: 24px;
 }
 /* Applies to specific divs within header div */
 #header div {
@@ -36,9 +37,31 @@ html * {
   background-color: #2c5e91;
   font-size: 38px;
   margin: -11px 10px -11px -11px;
+  padding: 0px 5px 0px 2px;
   color: white;
   font-weight: bold;
   font-style: italic;
+}
+#biocyb {
+  background-color: #72b626;
+  font-size: 25px;
+  margin: -11px -11px -11px -11px;
+  padding: 8px 9px 8px 9px;
+  color: white;
+  font-weight: bold;
+  font-style: italic;
+}
+a.showhide:link {
+  border-bottom: none;
+}
+.hormone-dropdown {
+  border-radius: 5px;
+  border: 4px solid #eee;
+  background-color: #eee;
+  width: 40px;
+  height: 25px;
+  margin: 0px -3px -5px -3px;
+  font-weight: bold;
 }
 /* Applies to all divs within the content div */
 /*--------------------------------------------------
@@ -74,10 +97,12 @@ html * {
  * javascript. No longer relevant since drag and drag is no longer used, but
  * will keep this CSS */
 #content div.interface-input-options {
-  display: none;
+  display: block;
   border: none;
-  margin-bottom: 10px;
-  width: 42px;
+  margin: -3px 0px 10px -3px;
+  width: 34px;
+  border-radius: 5px;
+  background-color: #eee;
 }
 a {
   text-decoration: none;
