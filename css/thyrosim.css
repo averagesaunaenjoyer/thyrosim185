@@ -269,6 +269,10 @@ a.header-buttons-link:link {
   float: left;
 }
 
+#footer-input {
+  display: inline-block;
+  padding-bottom: 20px;
+}
 /* Alternating input row colors */
 /* row1 is not really needed b/c it's just a white background, but 
  * included for consistency */
@@ -280,9 +284,24 @@ a.header-buttons-link:link {
   display: block;
   background-color: #e5e5e5;
 }
-/* Given to inputs in footer-input div, so JQuery can be used to easily select
+.inputcontainer {
+  float: left;
+  white-space: pre;
+  width: 878px;
+  padding: 1px 10px 1px 10px;
+  margin-left: -10px;
+}
+.inputcontainer input[type=text] {
+  line-height: 18px;
+}
+.inputimg {
+  vertical-align: bottom;
+  width: 18px;
+}
+/* Given to inputs in footer-input div, so jQuery can be used to easily select
  * the elements to rename when deleting inputs */
 .inputs {
+   margin-bottom: 2px;
 }
 /* Added and removed by thyrosim.js for invalid inputs */
 .error {
@@ -292,19 +311,20 @@ a.header-buttons-link:link {
  * 'enable' gives a yellowgreen background, 
  * 'disable' gives a pinkish-red background.
  * Both get a dashed border */
-.enabledInput {
+.enDisInput {
   padding-left: 4px;
   padding-right: 4px;
   border: 1px dashed #bbb;
   cursor: pointer;
+  width: 80px;
+}
+.enaInput {
   background-color: #7CFC00;
 }
-.disabledInput {
-  padding-left: 4px;
-  padding-right: 4px;
-  border: 1px dashed #bbb;
-  cursor: pointer;
+.disInput {
   background-color: #FFA6C9;
+}
+.delete-icon {
 }
 /* A loading.gif that follows the cursor */
 /* loading.gif hidden at first */

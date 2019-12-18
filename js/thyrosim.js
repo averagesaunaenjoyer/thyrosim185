@@ -559,15 +559,14 @@ function tuneDials(a,b,c,d) {
 //===================================================================
 function addInputOral(hormone,dose,interval,singledose,start,end) {
     addInput(hormone+'-Oral');
-    var parsedID = $('#footer-input').children().last().attr('id').split("-");
-    var idNum = parsedID[1];
-    $('#dose-' + idNum).val(dose);
-    $('#int-'  + idNum).val(interval);
-    $('#start-'+ idNum).val(start);
-    $('#end-'  + idNum).val(end);
+    var pin = parseInputName($('#footer-input').children().last().attr('id'));
+    $('#dose-' + pin[1]).val(dose);
+    $('#int-'  + pin[1]).val(interval);
+    $('#start-'+ pin[1]).val(start);
+    $('#end-'  + pin[1]).val(end);
     if (singledose) {
-        $('#singledose-'+idNum).prop('checked', true);
-        useSingleDose(idNum);
+        $('#singledose-'+pin[1]).prop('checked', true);
+        useSingleDose(pin[1]);
     }
 }
 
@@ -593,8 +592,11 @@ function ThyrosimGraph() {
     this.colors = colors;
 
     // Default graph settings
-    // Note that ymin values are rounded up by the largest digit. See
-    // getEndVal().
+    //   comp:  Comparment name. Server-side data use this name for reference
+    //   unit:  Comparment display unit
+    //   ymin:  Y-axis value. ymin values are rounded up by a digit. See
+    //          getEndVal()
+    //   bounds: Normal range
     var settings = {
         FT4: {
             comp: 'ft4',
@@ -616,7 +618,7 @@ function ThyrosimGraph() {
         },
         T4: {
             comp: '1',
-            unit: '\u03BCg/L',
+            unit: '\u03BCg/L', // mcg
             ymin: { Thyrosim: 110, ThyrosimJr: 110 },
             bounds: {
                 Thyrosim:   { lo: 45, hi: 105 },
@@ -625,7 +627,7 @@ function ThyrosimGraph() {
         },
         T3: {
             comp: '4',
-            unit: '\u03BCg/L',
+            unit: '\u03BCg/L', // mcg
             ymin: { Thyrosim: 1, ThyrosimJr: 2 },
             bounds: {
                 Thyrosim:   { lo: 0.6, hi: 1.8 },
@@ -703,19 +705,19 @@ function ThyrosimGraph() {
         return maxY;
     }
 
-    // Get the "End" value by increasing the largest digit by 1
-    // 1.1 => 2
-    // 1.9 => 3
-    // 9.9 => 11
-    // 12.1 => 13
-    // 20 => 30
-    // 90 => 100
-    // 99 => 110
-    // 100 => 110
-    // 500 => 510
-    // 900 => 910
-    // 1000 => 1100
-    // 1100 => 1200
+    // Get the "End" value by increasing a digit by 1. See the following:
+    //   1.1  => 2
+    //   1.9  => 3
+    //   9.9  => 11
+    //   12.1 => 13
+    //   20   => 30
+    //   90   => 100
+    //   99   => 110
+    //   100  => 110
+    //   500  => 510
+    //   900  => 910
+    //   1000 => 1100
+    //   1100 => 1200
     this.getEndVal = getEndVal;
     function getEndVal(n) {
         var roundRule = 8;
@@ -823,29 +825,29 @@ var animeObj = new animation();
 //===================================================================
 function addInput(title) {
 
-    var nextId = getNextInputId();    // Next input span id
-    var rClass = getRowClass(nextId); // Next input span row class
-    var footer = "#footer-input";     // Input container div id
+    var iNum = getNextInputNum(); // Next input number
+    var rowN = getRowClass(iNum); // Next input span row class
+    var footer = "#footer-input"; // Input container div id
 
     // Create a new input span object
-    var span = $(document.createElement('span')).attr({id:'input-'+nextId});
-    span.addClass(rClass).addClass("inputcontainer");
+    var span = $(document.createElement('span')).attr({id:'input-'+iNum});
+    span.addClass(rowN).addClass("inputcontainer");
 
     //---------------------------------------------------------
     // Append the new input span to the end of footer
     //---------------------------------------------------------
-    var input = parseInputTitle(title);
-    if (input.type == "Oral")     span.append(    OralInput(input,nextId));
-    if (input.type == "IV")       span.append( IVPulseInput(input,nextId));
-    if (input.type == "Infusion") span.append(InfusionInput(input,nextId));
+    var pit = parseInputTitle(title);
+    if (pit.type == "Oral")     span.append(    OralInput(pit,iNum));
+    if (pit.type == "IV")       span.append( IVPulseInput(pit,iNum));
+    if (pit.type == "Infusion") span.append(InfusionInput(pit,iNum));
 
-    span.append(addDeleteIcon(nextId), "<br />");
+    span.append(addDeleteIcon(iNum));
     span.appendTo(footer);
 
     // Show/Hide animating gifs. 3200 ms because each gif has 8 frames and each
     // frame is 0.4 seconds.
-    var aCat = animeObj.getAnimationCat(input.type);
-    var aEle = animeObj.getAnimationEle(input.type,input.hormone);
+    var aCat = animeObj.getAnimationCat(pit.type);
+    var aEle = animeObj.getAnimationEle(pit.type,pit.hormone);
     var id   = animeObj.showAnimation(aCat,aEle);
     setTimeout(function() {animeObj.hideAnimation(aCat,id)},3200);
 }
@@ -853,85 +855,159 @@ function addInput(title) {
 //===================================================================
 // DESC:    Generate html for a repeating/single oral dose.
 // ARGS:
-//   parsed:    An input object
-//   id:        The number the input should have
+//   pit:   A parseInputTitle object
+//   n:     The input number
 //===================================================================
-function mytest(id) {
-//$('<input/>').attr({ type: 'text', id: 'test', name: 'test'}).appendTo('#form');
-}
-function OralInput(parsed,id) {
-    return '<span class="inputs" id="label-' + id + '" name="label-' + id + '">Input ' + id + ' (' + parsed.hormone + '-' + parsed.type + '):</span><br />'
-         + '<input type="hidden" class="inputs" name="hormone-' + id + '"id="hormone-' + id + '" value="' + parsed.hormoneId + '" />'
-         + '<input type="hidden" class="inputs" name="type-' + id + '"id="type-' + id + '" value="' + parsed.typeId + '" />'
-         + addEnable(id)
-         + 'Dose: <input size="5" class="inputs" type="text" id="dose-' + id + '" name="dose-' + id + '" /> \u03BCg' + '&nbsp&nbsp&nbsp&nbsp&nbsp'
-         + 'Dosing Interval: <input size="5" class="inputs" type="text" id="int-' + id + '" name="int-' + id + '" /> Days' + '&nbsp&nbsp&nbsp&nbsp&nbsp'
-         + '<input class="inputs" type="checkbox" value="1" id="singledose-' + id + '" name="singledose-' + id + '" onclick="javascript:useSingleDose(\'' + id + '\')" /> Single Dose<br />'
-         + 'Start Day: <input size="5" class="inputs" type="text" id="start-' + id + '" name="start-' + id + '" />' + '&nbsp&nbsp&nbsp&nbsp&nbsp'
-         + 'End Day: <input size="5" class="inputs" type="text" id="end-' + id + '" name="end-' + id + '" />' + '&nbsp&nbsp&nbsp&nbsp&nbsp';
-}
+function OralInput(pit,n) {
+    return '<img src="'+pit.src+'" class="inputimg" />'
 
-//--------------------------------------------------
-// Input for IV pulse dose
-// It is expected to have dose and start day
-//-------------------------------------------------- 
-function IVPulseInput(parsed,id) {
-    return '<span class="inputs" id="label-' + id + '" name="label-' + id +'">Input ' + id + ' (' + parsed.hormone + '-' + parsed.type + '):</span><br />'
-         + '<input type="hidden" class="inputs" name="hormone-' + id + '"id="hormone-' + id + '" value="' + parsed.hormoneId + '" />'
-         + '<input type="hidden" class="inputs" name="type-' + id + '"id="type-' + id + '" value="' + parsed.typeId + '" />'
-         + addEnable(id)
-         + 'Dose: <input size="5" class="inputs" type="text" id="dose-' + id + '" name="dose-' + id + '" /> \u03BCg' + '&nbsp&nbsp&nbsp&nbsp&nbsp'
-         + 'Start Day: <input size="5" class="inputs" type="text" id="start-' + id + '" name="start-' + id + '" />' + '&nbsp&nbsp&nbsp&nbsp&nbsp';
-}
+         + '<span class="inputs" id="label-'+n+'" name="label-'+n+'">'
+         + '  Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
+         + '</span>'
+         + '<br />'
 
-//--------------------------------------------------
-// Input for constant infusion
-// It is expected to have dose per day, start, and end days
-//-------------------------------------------------- 
-function InfusionInput(parsed,id) {
-    return '<span class="inputs" id="label-' + id + '" name="label-' + id +'">Input ' + id + ' (' + parsed.hormone + '-' + parsed.type + '):</span><br />'
-         + '<input type="hidden" class="inputs" name="hormone-' + id + '"id="hormone-' + id + '" value="' + parsed.hormoneId + '" />'
-         + '<input type="hidden" class="inputs" name="type-' + id + '"id="type-' + id + '" value="' + parsed.typeId + '" />'
-         + addEnable(id)
-         + 'Dose: <input size="5" class="inputs" type="text" id="dose-' + id + '" name="dose-' + id + '" /> \u03BCg/day' + '&nbsp&nbsp&nbsp&nbsp&nbsp'
-         + 'Start Day: <input size="5" class="inputs" type="text" id="start-' + id + '"name="start-' + id + '" />' + '&nbsp&nbsp&nbsp&nbsp&nbsp'
-         + 'End Day: <input size="5" class="inputs" type="text" id="end-' + id + '" name="end-' + id + '" />' + '&nbsp&nbsp&nbsp&nbsp&nbsp';
+         + '<input type="hidden" class="inputs" id="hormone-'+n+'"'
+         + '       name="hormone-'+n+'" value="'+pit.hormoneId +'" />'
+         + '<input type="hidden" class="inputs" id="type-'   +n+'"'
+         + '       name="type-'   +n+'" value="'+pit.typeId    +'" />'
+
+         + addEnable(n)
+
+         + 'Dose: '
+         + '<input size="5" class="inputs" type="text"'
+         + '       id="dose-'+n+'" name="dose-'+n+'" /> \u03BCg'
+         + '      '
+
+         + 'Dosing Interval: '
+         + '<input size="5" class="inputs" type="text"'
+         + '       id="int-'+n+'" name="int-'+n+'" /> Days'
+         + '      '
+
+         + '<input class="inputs" type="checkbox" value="1"'
+         + '       id="singledose-'+n+'" name="singledose-'+n+'"'
+         + '       onclick="useSingleDose('+n+');" /> Single Dose'
+         + '<br />'
+
+         + '                        '
+         + 'Start Day: '
+         + '<input size="5" class="inputs" type="text"'
+         + '       id="start-'+n+'" name="start-'+n+'" />'
+         + '      '
+
+         + 'End Day: '
+         + '<input size="5" class="inputs" type="text"'
+         + '       id="end-'+n+'" name="end-'+n+'" />'
+
+         + '';
 }
 
 //===================================================================
-// Delete an input and rename remaining input ids to be continuous.
+// DESC:    Generate html for an IV pulse dose.
+// ARGS:
+//   pit:   A parseInputTitle object
+//   n:     The input number
 //===================================================================
-function deleteInput(id) {
+function IVPulseInput(pit,n) {
+    return '<img src="'+pit.src+'" class="inputimg" />'
 
-    id = parseInt(id); // Treat as integer
+         + '<span class="inputs" id="label-'+n+'" name="label-'+n+'">'
+         + '  Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
+         + '</span>'
+         + '<br />'
+
+         + '<input type="hidden" class="inputs" id="hormone-'+n+'"'
+         + '       name="hormone-'+n+'" value="'+pit.hormoneId +'" />'
+         + '<input type="hidden" class="inputs" id="type-'   +n+'"'
+         + '       name="type-'   +n+'" value="'+pit.typeId    +'" />'
+
+         + addEnable(n)
+
+         + 'Dose: '
+         + '<input size="5" class="inputs" type="text"'
+         + '       id="dose-'+n+'" name="dose-'+n+'" /> \u03BCg'
+         + '      '
+
+         + 'Start Day: '
+         + '<input size="5" class="inputs" type="text"'
+         + '       id="start-'+n+'" name="start-'+n+'" />'
+
+         + '';
+}
+
+//===================================================================
+// DESC:    Generate html for a constant infusion dose.
+// ARGS:
+//   pit:   A parseInputTitle object
+//   n:     The input number
+//===================================================================
+function InfusionInput(pit,n) {
+    return '<img src="'+pit.src+'" class="inputimg" />'
+
+         + '<span class="inputs" id="label-'+n+'" name="label-'+n+'">'
+         + '  Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
+         + '</span>'
+         + '<br />'
+
+         + '<input type="hidden" class="inputs" id="hormone-'+n+'"'
+         + '       name="hormone-'+n+'" value="'+pit.hormoneId +'" />'
+         + '<input type="hidden" class="inputs" id="type-'   +n+'"'
+         + '       name="type-'   +n+'" value="'+pit.typeId    +'" />'
+
+         + addEnable(n)
+
+         + 'Dose: '
+         + '<input size="5" class="inputs" type="text"'
+         + '       id="dose-'+n+'" name="dose-'+n+'" /> \u03BCg/day'
+         + '      '
+
+         + 'Start Day: '
+         + '<input size="5" class="inputs" type="text"'
+         + '       id="start-'+n+'" name="start-'+n+'" />'
+         + '      '
+
+         + 'End Day: '
+         + '<input size="5" class="inputs" type="text"'
+         + '       id="end-'+n+'" name="end-'+n+'" />'
+
+         + '';
+}
+
+//===================================================================
+// DESC:    Delete an input and rename remaining input ids to be continuous.
+// ARGS:
+//   n:     The input number
+//===================================================================
+function deleteInput(n) {
+
+    n = parseInt(n); // Treat as integer
 
     // Get the number of inputs before this deletion
     var end = $('#footer-input').children().length;
 
     // Delete the input element
-    $('#input-'+id).remove();
+    $('#input-'+n).remove();
 
     //---------------------------------------------------------
     // Outer loop.
-    // Loop through all inputs whose ids > the deleted one's
+    // Loop through all inputs whose n > the deleted one's
     //---------------------------------------------------------
-    for (var i = id + 1; i <= end; i++) {
+    for (var i = n + 1; i <= end; i++) {
 
-        var j = parseInt(i-1); // New id
+        var j = parseInt(i-1); // New num
 
         //---------------------------------------------------------
         // Inner loop.
         // Loop through the children of an inputcontainer. Find children with
         // class 'inputs' and rename attributes: id, name.
         //---------------------------------------------------------
-        $('#input-'+i).children('.inputs').each(function(key, value) {
+        $('#input-'+i).children('.inputs').each(function() {
             var child = $(this);
 
             // Rename by subtracting the number by one, ie:
             // input-3 => input-2
-            var parsed = parseInputName(child.attr('name'));
-            child.attr('id'  ,parsed[0]+'-'+j);
-            child.attr('name',parsed[0]+'-'+j);
+            var pin = parseInputName(child.attr('name'));
+            child.attr('id'  ,pin[0]+'-'+j);
+            child.attr('name',pin[0]+'-'+j);
 
             //---------------------------------------------------------
             // By this point, ids and names of elements have been renamed, but a
@@ -947,7 +1023,7 @@ function deleteInput(id) {
             // The element with id/name 'enabled-X' or 'singledose-X' contain a
             // javascript argument that need to be changed.
             if (child.attr('name').match(/enabled|singledose/)) {
-                child.attr('onClick',child.attr('onClick').replace(/\d+/,j));
+                child.attr('onclick',child.attr('onclick').replace(/\d+/,j));
             }
 
             // The delete button has name 'delete-X'. Change the javascript
@@ -971,6 +1047,7 @@ function deleteInput(id) {
 // DESC:    Given an input id/name, parse it and build an object.
 // ARGS:
 //   name:  Input id/name, e.g., "label-1"
+// NOTE:    Return object customarily called 'pin'.
 //===================================================================
 function parseInputName(name) {
     return name.split("-");
@@ -980,6 +1057,7 @@ function parseInputName(name) {
 // DESC:    Given an input title, parse it and build an object.
 // ARGS:
 //   title: Input title, e.g., "T4-Oral"
+// NOTE:    Return object customarily called 'pit'.
 //===================================================================
 function parseInputTitle(title) {
     var split = title.split("-");
@@ -987,7 +1065,8 @@ function parseInputTitle(title) {
         hormone:   split[0],                 // T4 or T3
         hormoneId: split[0].replace("T",""), // 4 or 3
         type:      split[1],                 // Oral/IV/Infusion
-        typeId:    getInputTypeId(split[1])  // See the function
+        typeId:    getInputTypeId(split[1]), // See the function
+        src:       getInputImgSrc(title)     // Image src
     };
     return o;
 }
@@ -1004,81 +1083,106 @@ function getInputTypeId(type) {
 }
 
 //===================================================================
-// DESC:    Count the number of input spans and add 1. That is the id the next
-//          input should have. Input ids start at 1.
+// DESC:    Given an input title, return image source.
+// ARGS:
+//   title: Input title, e.g., "T4-Oral"
 //===================================================================
-function getNextInputId() {
+function getInputImgSrc(title) {
+    if (title == "T3-Oral")     return '../img/pill1.png';
+    if (title == "T3-IV")       return '../img/syringe1.png';
+    if (title == "T3-Infusion") return '../img/infusion1.png';
+    if (title == "T4-Oral")     return '../img/pill2.png';
+    if (title == "T4-IV")       return '../img/syringe2.png';
+    if (title == "T4-Infusion") return '../img/infusion2.png';
+}
+
+//===================================================================
+// DESC:    Count the number of input spans and add 1. This is the number the
+//          next input should have. Input numbers start at 1.
+//===================================================================
+function getNextInputNum() {
     return $("#footer-input").children().length + 1;
 }
 
 //===================================================================
 // DESC:    Determine row color based on position.
 // ARGS:
-//   n:     a number indicating the element is in the nth position
+//   n:     A number indicating the element is in the nth position
 //===================================================================
 function getRowClass(n) {
     return 'row' + n % 2;
 }
 
-//--------------------------------------------------
-// Adds a clickable enable/disable input box
-// Button initializes as enabled. A hidden input named
-// "disabled-X" is used to store whether the input is enabled/disabled.
-// value of 1 means disabled and value of 0 means enabled.
-//-------------------------------------------------- 
-function addEnable(id) {
-    var enable = "<span title=\"Click to disable input\" class=\"enabledInput inputs unselectable\" id=\"enabled-" + id + "\" name=\"enabled-" + id + "\" onClick=\"javascript:enDisInput(\'" + id + "\')\">"
-  + "ENABLED</span>&nbsp&nbsp&nbsp&nbsp&nbsp"
-  + "<input type=\"hidden\" class=\"inputs\" id=\"disabled-" + id + "\" name=\"disabled-" + id + "\" value=\"0\">";
-    return enable;
+//===================================================================
+// DESC:    Add a clickable enable/disable input box. The button initializes as
+//          enabled. A hidden input named "disabled-X" is used to store whether
+//          the input is enabled/disabled. Value of 1 means disabled and value
+//          of 0 means enabled.
+// ARGS:
+//   n:     The input number
+//===================================================================
+function addEnable(n) {
+    return '<span title="Click to disable input"'
+         + '      class="bank-left enaInput enDisInput inputs unselectable"'
+         + '      id="enabled-'+n+'" name="enabled-'+n+'"'
+         + '      onclick="enDisInput('+n+');">'
+         + 'ENABLED'
+         + '</span>'
+         + '    '
+         + '<input type="hidden" class="inputs" id="disabled-'+n+'"'
+         + '       name="disabled-'+n+'" value="0">'
+         + '';
 }
 
-//--------------------------------------------------
-// Adds x.png so that it can be used to delete an input
-//-------------------------------------------------- 
-function addDeleteIcon(id) {
-    var delImg = "<a class=\"img-input bank-right inputs\" name=\"delete-" + id + "\" href=\"javascript:deleteInput(\'" + id + "\')\">"
-  + "<img src=\"../img/x.png\" alt=\"Delete this input\" /></a>";
-    return delImg;
+//===================================================================
+// DESC:    Add x.png so that it can be used to delete an input.
+// ARGS:
+//   n:     The input number
+//===================================================================
+function addDeleteIcon(n) {
+    return '<a class="img-input inputs"'
+         + '   name="delete-'+n+'" href="javascript:deleteInput('+n+');">'
+         + '  <img class="bank-right delete-icon"'
+         + '       src="../img/x.png" alt="Delete this input">'
+         + '</a>'
+         + '';
 }
 
-//--------------------------------------------------
-// Detects the current value in element named "enabled-X" and
-// "disabled-X" and change them. If function is called while an
-// input is enabled, then "enabled-X"'s text changes to "disabled"
-// and "disabled-X"'s value changes to 1. Opposite occurs if the
-// function is called while an input is disabled.
-//-------------------------------------------------- 
-function enDisInput(id) {
-    var enabled  = $('#enabled-'  + id);
-    var disabled = $('#disabled-' + id);
+//===================================================================
+// DESC:    Detect value in element enabled-X/disabled-X and change them:
+//          1. When input is enabled
+//            a. "enabled-X"'s text changes to "disabled"
+//            b. "disabled-X"'s value changes to 1
+//          2. When input is disabled: opposite of the above
+// ARGS:
+//   n:     The input number
+//===================================================================
+function enDisInput(n) {
+    var ena = $('#enabled-' +n);
+    var dis = $('#disabled-'+n);
     // Disable an input
-    if (enabled.attr('class') == "enabledInput inputs unselectable") {
-        enabled.attr('class','disabledInput inputs unselectable');
-        enabled.attr('title','Click to enable input');
-        enabled.text('DISABLED');
-        disabled.attr('value','1');
+    if (ena.hasClass('enaInput')) {
+        ena.removeClass('enaInput').addClass('disInput');
+        ena.attr('title','Click to enable input');
+        ena.text('DISABLED');
+        dis.attr('value','1');
         // Gray out this input's other input boxes
-        $('#input-'+id).children('.inputs')
-        .each(function(key, value) {
-            var child = $(this);
-            // Add the 'disabled' attribute
-            child.attr('disabled',true);
+        $('#input-'+n).children('.inputs').each(function() {
+            $(this).attr('disabled',true);
         });
     // Enable an input
     } else {
-        enabled.attr('class','enabledInput inputs unselectable');
-        enabled.text('ENABLED');
-        enabled.attr('title','Click to disable input');
-        disabled.attr('value','0');
+        ena.removeClass('disInput').addClass('enaInput');
+        ena.text('ENABLED');
+        ena.attr('title','Click to disable input');
+        dis.attr('value','0');
         // Un-gray out this input's other input boxes
-        $('#input-'+id).children('.inputs')
-        .each(function(key, value) {
+        $('#input-'+n).children('.inputs').each(function() {
             var child = $(this);
             // Remove the 'disabled' attribute unless "Single Dose" is checked
-            var atLeastOneIsChecked = $('input[name="singledose-' + id + '"]:checked').length > 0;
-            if ((atLeastOneIsChecked && (child.attr('id') == 'int-'+id)) ||
-                (atLeastOneIsChecked && (child.attr('id') == 'end-'+id)) ) {
+            var sd = $('input[name="singledose-'+n+'"]:checked').length > 0;
+            if ((sd && (child.attr('id') == 'int-'+n)) ||
+                (sd && (child.attr('id') == 'end-'+n)) ) {
                 // Do nothing here
             } else {
                 child.attr('disabled',false);
@@ -1087,29 +1191,25 @@ function enDisInput(id) {
     }
 }
 
-//--------------------------------------------------
-// Tells the oral input to use only a single dose. In addition,
-// 1. Gray out the "Dosing Interval" and "End Day" boxes
-// 2. Fills "Dosing Interval" and "End Day" with a "0" if blank
-//--------------------------------------------------
-function useSingleDose(id) {
-    var atLeastOneIsChecked = $('input[name="singledose-' + id + '"]:checked').length > 0;
-    var endDay         = $('#end-' + id);
-    var dosingInterval = $('#int-' + id);
-    if (atLeastOneIsChecked) { // If true
-        // Gray out "Dosing Interval" and "End Day" boxes
-        endDay.prop('disabled',true);
-        dosingInterval.prop('disabled',true);
-        // Fill value as 0 if blank
-        if (!endDay.attr('value')) {
-            endDay.attr('value','0');
-        }
-        if (!dosingInterval.attr('value')) {
-            dosingInterval.attr('value','0');
-        }
+//===================================================================
+// DESC:    Tell the oral input to use only a single dose. In addition:
+//          1. Gray out the "Dosing Interval" and "End Day" inputs.
+//          2. Fill "Dosing Interval" and "End Day" with a "0" if blank.
+// ARGS:
+//   n:     The input number
+//===================================================================
+function useSingleDose(n) {
+    var isChecked = $('input[name="singledose-'+n+'"]:checked').length > 0;
+    var endE = $('#end-'+n); // E for element
+    var intE = $('#int-'+n);
+    if (isChecked) {
+        endE.prop('disabled',true); // Gray out input boxes
+        intE.prop('disabled',true);
+        if (!endE.attr('value')) endE.attr('value','0'); // Fill with 0
+        if (!intE.attr('value')) intE.attr('value','0');
     } else {
-        endDay.prop('disabled',false);
-        dosingInterval.prop('disabled',false);
+        endE.prop('disabled',false);
+        intE.prop('disabled',false);
     }
 }
 

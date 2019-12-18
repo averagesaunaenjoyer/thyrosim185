@@ -382,15 +382,15 @@ EOF
           Show T<span class="textsub">3</span> input
         </a><br>
         <div id="T3input" class="interface-input-options">
-          <a class="../img-input" href="javascript:addInput('T3-Oral');">
+          <a class="img-input" href="javascript:addInput('T3-Oral');">
             <img src="../img/pill1.png" alt="T3 Pill Input" />
           </a>
           <br>
-          <a class="../img-input" href="javascript:addInput('T3-IV');">
+          <a class="img-input" href="javascript:addInput('T3-IV');">
             <img src="../img/syringe1.png" alt="T3 IV Pulse Dose" />
           </a>
           <br>
-          <a class="../img-input" href="javascript:addInput('T3-Infusion');">
+          <a class="img-input" href="javascript:addInput('T3-Infusion');">
             <img src="../img/infusion1.png" alt="T3 Infusion" />
           </a>
         </div>
@@ -401,15 +401,15 @@ EOF
           Show T<span class="textsub">4</span> input
         </a><br>
         <div id="T4input" class="interface-input-options">
-          <a class="../img-input" href="javascript:addInput('T4-Oral');">
+          <a class="img-input" href="javascript:addInput('T4-Oral');">
             <img src="../img/pill2.png" alt="T4 Pill Input" />
           </a>
           <br>
-          <a class="../img-input" href="javascript:addInput('T4-IV');">
+          <a class="img-input" href="javascript:addInput('T4-IV');">
             <img src="../img/syringe2.png" alt="T4 IV Pulse Dose" />
           </a>
           <br>
-          <a class="../img-input" href="javascript:addInput('T4-Infusion');">
+          <a class="img-input" href="javascript:addInput('T4-Infusion');">
             <img src="../img/infusion2.png" alt="T4 Infusion" />
           </a>
         </div>
