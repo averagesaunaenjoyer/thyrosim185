@@ -402,7 +402,7 @@ EOF
         <a id="T3display" class="showhide" href="javascript:show_hide('T3');">
           <span class="bank-left hormone-dropdown">
             T<span class="textsub">3</span>
-            <img class="inputimg" src="../img/down.png" alt="Toggle T3 inputs" />
+            <img class="downimg" src="../img/down.png" alt="Toggle T3 inputs" />
             <span class="hormone-dropdown-text-small">Inputs</span>
           </span>
         </a>
@@ -426,7 +426,7 @@ EOF
         <a id="T4display" class="showhide" href="javascript:show_hide('T4');">
           <span class="bank-left hormone-dropdown">
             T<span class="textsub">4</span>
-            <img class="inputimg" src="../img/down.png" alt="Toggle T4 inputs" />
+            <img class="downimg" src="../img/down.png" alt="Toggle T4 inputs" />
             <span class="hormone-dropdown-text-small">Inputs</span>
           </span>
         </a>

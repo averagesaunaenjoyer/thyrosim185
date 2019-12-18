@@ -35,7 +35,7 @@ html * {
 }
 #ucla {
   background-color: #2c5e91;
-  font-size: 38px;
+  font-size: 37px;
   margin: -11px 10px -11px -11px;
   padding: 0px 5px 0px 2px;
   color: white;
@@ -46,7 +46,7 @@ html * {
   background-color: #72b626;
   font-size: 25px;
   margin: -11px -11px -11px -11px;
-  padding: 8px 9px 8px 9px;
+  padding: 8px 9px 7px 9px;
   color: white;
   font-weight: bold;
   font-style: italic;
@@ -66,6 +66,10 @@ a.showhide:link {
 .hormone-dropdown-text-small {
   margin-left: -1px;
   font-size: 14px;
+}
+.downimg {
+  vertical-align: bottom;
+  width: 15px;
 }
 /* Applies to all divs within the content div */
 /*--------------------------------------------------
