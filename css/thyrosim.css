@@ -110,6 +110,17 @@ a.showhide:link {
   background-color: #eee;
   padding: 10px 2px 2px 0px;
 }
+.interface-input {
+  box-shadow: none;
+}
+.interface-input-t3:hover, .interface-input-t3:active {
+  box-shadow: 2px 2px 5px #12249c;
+  border-radius: 5px;
+}
+.interface-input-t4:hover, .interface-input-t4:active {
+  box-shadow: 2px 2px 5px #1c9c30;
+  border-radius: 5px;
+}
 a {
   text-decoration: none;
   color: gray;
@@ -252,7 +263,7 @@ a.header-buttons-link:link {
   top: -4px;
 }
 /* This section deals with footer and what's in it */
-#footer {
+.footer {
   float: left;
   margin-top: 10px;
   padding: 10px;
@@ -368,6 +379,9 @@ a.header-buttons-link:link {
   background-color: #FFA6C9;
 }
 .delete-icon {
+}
+.cursor-pointer {
+  cursor: pointer;
 }
 /* A loading.gif that follows the cursor */
 /* loading.gif hidden at first */

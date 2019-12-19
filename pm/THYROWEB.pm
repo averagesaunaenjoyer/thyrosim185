@@ -224,14 +224,14 @@ EOF
 <div id="wrapper">
 
   <!-- Header -->
-  <div id="header" style="$self->{headerstyle}">
+  <div id="header" style="$self->{headerstyle}" class="unselectable">
 
-    <span id="ucla" class="bank-left unselectable">
+    <span id="ucla" class="bank-left">
       UCLA
     </span>
 
     <!-- About -->
-    <div id="button-About" class="bank-left infoButton unselectable">
+    <div id="button-About" class="bank-left infoButton">
       <a id="link-About"
          class="color-black header-buttons-link"
          href="javascript:clickInfoButton('About');">DIRECTIONS</a>
@@ -319,7 +319,7 @@ EOF
     <!-- About end -->
 
     <!-- Example -->
-    <div id="button-Example" class="bank-left infoButton unselectable">
+    <div id="button-Example" class="bank-left infoButton">
       <a id="link-Example"
          class="color-black header-buttons-link"
          href="javascript:clickInfoButton('Example');">EXAMPLES</a>
@@ -337,7 +337,7 @@ EOF
     <!-- Example end -->
 
     <!-- Disclaimer -->
-    <div id="button-Disclaimer" class="bank-left infoButton unselectable">
+    <div id="button-Disclaimer" class="bank-left infoButton">
       <a id="link-Disclaimer"
          class="color-black header-buttons-link"
          href="javascript:clickInfoButton('Disclaimer');">DISCLAIMER</a>
@@ -364,7 +364,7 @@ EOF
     "Show T<span class="textsub">4</span> input"
 -->
 
-    <span id="biocyb" class="bank-right unselectable">
+    <span id="biocyb" class="bank-right">
       Biocybernetics Laboratory
     </span>
 
@@ -397,10 +397,10 @@ EOF
     <div id="interactive-interface">
 
       <!-- Inputs (left-most div) -->
-      <div id="content-inputs" class="content-center">
+      <div id="content-inputs" class="content-center unselectable">
         <!-- T3 Input -->
         <a id="T3display" class="showhide" href="javascript:show_hide('T3');">
-          <span class="bank-left hormone-dropdown unselectable">
+          <span class="bank-left hormone-dropdown">
             T<span class="textsub">3</span>
             <img class="downimg" src="../img/down.png" alt="Toggle T3 inputs" />
             <span class="hormone-dropdown-text-small">Inputs</span>
@@ -409,22 +409,25 @@ EOF
         <br>
         <div id="T3input" class="interface-input-options">
           <a class="img-input" href="javascript:addInput('T3-Oral');">
-            <img src="../img/pill1.png" alt="T3 Pill Input" />
+            <img src="../img/pill1.png" alt="T3 Pill Input"
+                 class="interface-input interface-input-t3" />
           </a>
           <br>
           <a class="img-input" href="javascript:addInput('T3-IV');">
-            <img src="../img/syringe1.png" alt="T3 IV Pulse Dose" />
+            <img src="../img/syringe1.png" alt="T3 IV Pulse Dose"
+                 class="interface-input interface-input-t3" />
           </a>
           <br>
           <a class="img-input" href="javascript:addInput('T3-Infusion');">
-            <img src="../img/infusion1.png" alt="T3 Infusion" />
+            <img src="../img/infusion1.png" alt="T3 Infusion"
+                 class="interface-input interface-input-t3" />
           </a>
         </div>
         <!-- T3 Input end -->
         <br>
         <!-- T4 Input -->
         <a id="T4display" class="showhide" href="javascript:show_hide('T4');">
-          <span class="bank-left hormone-dropdown unselectable">
+          <span class="bank-left hormone-dropdown">
             T<span class="textsub">4</span>
             <img class="downimg" src="../img/down.png" alt="Toggle T4 inputs" />
             <span class="hormone-dropdown-text-small">Inputs</span>
@@ -433,15 +436,18 @@ EOF
         <br>
         <div id="T4input" class="interface-input-options">
           <a class="img-input" href="javascript:addInput('T4-Oral');">
-            <img src="../img/pill2.png" alt="T4 Pill Input" />
+            <img src="../img/pill2.png" alt="T4 Pill Input"
+                 class="interface-input interface-input-t4" />
           </a>
           <br>
           <a class="img-input" href="javascript:addInput('T4-IV');">
-            <img src="../img/syringe2.png" alt="T4 IV Pulse Dose" />
+            <img src="../img/syringe2.png" alt="T4 IV Pulse Dose"
+                 class="interface-input interface-input-t4" />
           </a>
           <br>
           <a class="img-input" href="javascript:addInput('T4-Infusion');">
-            <img src="../img/infusion2.png" alt="T4 Infusion" />
+            <img src="../img/infusion2.png" alt="T4 Infusion"
+                 class="interface-input interface-input-t4" />
           </a>
         </div>
         <!-- T4 Input end -->
@@ -471,7 +477,9 @@ EOF
     <!-- Graphs (right-most div) -->
     <div id="content-right">
       Toggle:
-      <button type="button" onclick="togFreeHormoneButton();">Free Hormone Values</button>
+      <button type="button" onclick="togFreeHormoneButton();">
+        Free Hormone Values
+      </button>
       <!--<button type="button" id="togXAxisDisp">X-Axis Days/Hours</button>-->
       <div id="FT4graph" class="displaynone"></div>
       <div id="FT3graph" class="displaynone"></div>
@@ -484,15 +492,16 @@ EOF
   <!-- Content end -->
 
   <!-- Secretion/Absorption (lower div) -->
-  <div id="content-lower">
+  <div id="content-lower" class="unselectable">
     <div class="textaligncenter">
       <a class="img-input" href="javascript:showhidescrollbars();">
-        <img class="textaligntop relative scrollbars" id="showhidescrollbar" src="../img/plus.png" alt="show scroll bars" />
+        <img class="textaligntop relative scrollbars" id="showhidescrollbar"
+             src="../img/plus.png" alt="show scroll bars" />
       </a>
       Adjust secretion/absorption rates:<br>
       <label title="Initial conditions are automatically recalculated when
       secretion/absorption values are changed. Uncheck this box to use
-      euthyroid initial conditions.">
+      euthyroid initial conditions." class="cursor-pointer">
         <input type="checkbox" value="1" id="recalcIC" name="recalcIC" checked>
         Recalculate Initial Conditions
       </label>
@@ -542,7 +551,7 @@ EOF
   <!-- Secretion/Absorption end -->
 
   <!-- Input Adjustments (footer) -->
-  <div id="footer">
+  <div class="footer unselectable">
 
     <div class="textaligncenter">
       <label title="Total simulation time must be <= 100 days.">
@@ -605,7 +614,7 @@ EOF
   <!-- Input Adjustments end -->
 
   <!-- Bottom (footer) -->
-  <div id="footer">
+  <div class="footer">
 
     <div class="textaligncenter">
       <b>$self->{thysimD} 2.1</b> &copy; 2013 by
@@ -711,7 +720,7 @@ EOF
   <!-- Bottom end -->
 
   <!-- Bottom 2 (footer) -->
-  <div id="footer">
+  <div class="footer">
     <div class="textaligncenter">
       Please send comments, bugs, criticisms to:
       <a href="mailto:joed\@ucla.edu">joed\@ucla.edu</a>
