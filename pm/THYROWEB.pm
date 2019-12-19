@@ -212,7 +212,7 @@ sub insertForm {
         $paramEditor = <<EOF
 Toggle:
 <button type="button" onclick="togParamListButton();">Parameters</button>
-<div id="parameditdiv" class="parameditdiv displaynone">$paramList</div>
+<div id="parameditdiv" class="parameditdiv">$paramList</div>
 EOF
 ;
     }

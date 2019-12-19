@@ -1372,11 +1372,7 @@ function togFreeHormoneButton() {
 // DESC:    Function to toggle parameter list on and off.
 //===================================================================
 function togParamListButton() {
-    if ($('#parameditdiv').hasClass('displaynone')) {
-        $('#parameditdiv').removeClass('displaynone');
-    } else {
-        $('#parameditdiv').addClass('displaynone');
-    }
+    $('#parameditdiv').toggle("blind");
 }
 
 //===================================================================

@@ -165,6 +165,7 @@ a.header-buttons-link:link {
   height: 90%;
   border-collapse: collapse;
   border: 0px; /* To counteract 1px border from #content */
+  display: none;
 }
 #content .paraminput {
 }
