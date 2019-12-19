@@ -238,7 +238,7 @@ EOF
       <div id="dp-About" class="popup-rollover">
         <p>
           <span class="infoButton-close bank-right"
-                onclick="javascript:clickInfoButton('About');">close</span>
+                onclick="javascript:clickInfoButton('About');">[x]</span>
           <br>
           <span style="color:red">$self->{thysimD}</span>
 
@@ -278,16 +278,14 @@ EOF
               Simulate treatment options:
               <ol type="a">
                 <li>
-                  Click
-                  "show T<span class="textsub">3</span> input" or
-                  "show T<span class="textsub">4</span> input".
-                </li>
-                <li>
                   Click the
-                  <img src="../img/pill1.png" alt="Pill Input">
-                  <img src="../img/syringe1.png" alt="IV Pulse Dose">
+                  <img class="info-icon" src="../img/pill1.png"
+                       alt="Oral Input">
+                  <img class="info-icon" src="../img/syringe1.png"
+                       alt="IV Input">
                   or
-                  <img src="../img/infusion1.png" alt="Infusion">
+                  <img class="info-icon" src="../img/infusion1.png"
+                       alt="Infusion Input">
                   icons to add as input.
                 </li>
                 <li>
@@ -300,17 +298,18 @@ EOF
           <br>
           <ol>
             <li>
-              <img src="../img/x.png" alt="x"> icon: click to delete an input.
+              <img class="info-icon" src="../img/x.png" alt="x">
+              icon: click to delete an input.
             </li>
             <li>
-              <img src="../img/enabled.png" alt="enabled">
-              <img src="../img/disabled.png" alt="disabled">
+              <span class="enaInput enDisInput">ENABLED</span>
+              <span class="disInput enDisInput">DISABLED</span>
               icons: click to enable or disable an input for the next
               simulation.
             </li>
             <li>
-              <img src="../img/plus.png" alt="plus"> icon: click to modify
-              secretion/absorption via scrollbars.
+              <img class="info-icon" src="../img/plus.png" alt="plus">
+              icon: click to modify secretion/absorption via scrollbars.
             </li>
           </ol>
         </p>
@@ -326,7 +325,7 @@ EOF
       <div id="dp-Example" class="popup-rollover">
         <p>
           <span class="infoButton-close bank-right"
-                onclick="javascript:clickInfoButton('Example');">close</span>
+                onclick="javascript:clickInfoButton('Example');">[x]</span>
           <br>
 
           $examples
@@ -344,7 +343,7 @@ EOF
       <div id="dp-Disclaimer" class="popup-rollover">
         <p>
           <span class="infoButton-close bank-right"
-                onclick="javascript:clickInfoButton('Disclaimer');">close</span>
+                onclick="javascript:clickInfoButton('Disclaimer');">[x]</span>
           <br>
           <span style="color:red">$self->{thysimD}</span>
 
@@ -499,11 +498,14 @@ EOF
              src="../img/plus.png" alt="show scroll bars" />
       </a>
       Adjust secretion/absorption rates:<br>
-      <label title="Initial conditions are automatically recalculated when
-      secretion/absorption values are changed. Uncheck this box to use
-      euthyroid initial conditions." class="cursor-pointer">
+      <label for="recalcIC" class="cursor-pointer">
         <input type="checkbox" value="1" id="recalcIC" name="recalcIC" checked>
         Recalculate Initial Conditions
+      </label>
+      <label title="When this box is checked, initial conditions (IC) are
+      recalculated when secretion/absorption values are changed from default
+      (100, 88, 100, 88). Uncheck this box to always use euthyroid IC.">
+        <img class="info-icon" src="../img/info.svg" />
       </label>
     </div>
 
@@ -554,10 +556,11 @@ EOF
   <div class="footer unselectable">
 
     <div class="textaligncenter">
-      <label title="Total simulation time must be <= 100 days.">
-        Simulation time:
-        <input type="text" id="simtime" name="simtime" size="1" value="5">
-        days
+      Simulation time:
+      <input type="text" id="simtime" name="simtime" size="1" value="5">
+      Days
+      <label title="Simulation time must be <= 100 days.">
+        <img class="info-icon" src="../img/info.svg" />
       </label>
       <br>
       Adjust pill quantity and frequency:
@@ -571,21 +574,25 @@ EOF
     <!-- Blue/Green Simulation Manager -->
     <div id="compPanel" class="textaligncenter">
 
-      <label for="compPanel" title="Simulation results are by default graphed in
-      a Blue line. To superimpose two sets of results, set the next run to a
-      different color. Please note that only 1 line per color is allowed and
-      subsequent runs replace any existing lines of that color.">
+      Set next simulation results as Blue or Green
 
-        Set next simulation results as Blue or Green:
-        <br>
-
-        <input type="radio" name="runRadio" id="runRadioBlue" value="Blue" checked>
-        <label for="runRadioBlue">Blue</label>
-
-        <input type="radio" name="runRadio" id="runRadioGreen" value="Green">
-        <label for="runRadioGreen">Green</label>
-
+      <label for="compPanel" title="Simulation results are by default
+      alternately graphed between Blue and Green lines. However, you may
+      override this functionality by manually setting the color of the next run.
+      Please note that only 1 line per color is allowed and subsequent runs
+      replace any existing lines of that color. Please also note that example
+      runs are always graphed as Blue.">
+        <img class="info-icon" src="../img/info.svg" />
       </label>
+
+      <br>
+
+      <input type="radio" name="runRadio" id="runRadioBlue" value="Blue" checked>
+      <label for="runRadioBlue">Blue</label>
+
+      <input type="radio" name="runRadio" id="runRadioGreen" value="Green">
+      <label for="runRadioGreen">Green</label>
+
       <br>
 
       <button id="resetBlueRun" type="button" onclick="resetRun('Blue');">

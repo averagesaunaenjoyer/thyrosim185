@@ -380,6 +380,11 @@ a.header-buttons-link:link {
 }
 .delete-icon {
 }
+.info-icon {
+  height: 20px;
+  vertical-align: middle;
+  margin-top: -0.2em;
+}
 .cursor-pointer {
   cursor: pointer;
 }
