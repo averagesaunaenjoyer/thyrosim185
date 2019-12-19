@@ -281,10 +281,16 @@ EOF
                   Click the
                   <img class="info-icon" src="../img/pill1.png"
                        alt="Oral Input">
+                  <img class="info-icon" src="../img/pill2.png"
+                       alt="Oral Input">
                   <img class="info-icon" src="../img/syringe1.png"
+                       alt="IV Input">
+                  <img class="info-icon" src="../img/syringe2.png"
                        alt="IV Input">
                   or
                   <img class="info-icon" src="../img/infusion1.png"
+                       alt="Infusion Input">
+                  <img class="info-icon" src="../img/infusion2.png"
                        alt="Infusion Input">
                   icons to add as input.
                 </li>

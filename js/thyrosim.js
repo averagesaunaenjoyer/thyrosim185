@@ -1217,15 +1217,15 @@ function useSingleDose(n) {
 // DESC:    Show/Hide the scroll bars for secretion/absorption adjustment.
 //===================================================================
 function showhidescrollbars() {
-    if ($(".slidercontainer").css("display") == "none") {
-        $(".slidercontainer").css("display","block");
-        $("#showhidescrollbar").attr("src","../img/minus.png")
-                               .attr("alt","hide scroll bars");
-    } else {
-        $(".slidercontainer").css("display","none");
-        $("#showhidescrollbar").attr("src","../img/plus.png")
-                               .attr("alt","show scroll bars");
-    }
+    $('.slidercontainer').toggle("blind",function() {
+        if ($(".slidercontainer").css("display") == "none") {
+            $("#showhidescrollbar").attr("src","../img/plus.png")
+                                   .attr("alt","show scroll bars");
+        } else {
+            $("#showhidescrollbar").attr("src","../img/minus.png")
+                                   .attr("alt","hide scroll bars");
+        }
+    });
 }
 
 //===================================================================
