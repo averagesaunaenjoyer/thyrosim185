@@ -859,7 +859,7 @@ function addInput(title) {
 //   n:     The input number
 //===================================================================
 function OralInput(pit,n) {
-    return '<img src="'+pit.src+'" class="inputimg" />'
+    return '<img src="'+pit.src+'" class="info-icon" />'
 
          + '<span class="inputs" id="label-'+n+'" name="label-'+n+'">'
          + '  Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
@@ -908,7 +908,7 @@ function OralInput(pit,n) {
 //   n:     The input number
 //===================================================================
 function IVPulseInput(pit,n) {
-    return '<img src="'+pit.src+'" class="inputimg" />'
+    return '<img src="'+pit.src+'" class="info-icon" />'
 
          + '<span class="inputs" id="label-'+n+'" name="label-'+n+'">'
          + '  Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
@@ -941,7 +941,7 @@ function IVPulseInput(pit,n) {
 //   n:     The input number
 //===================================================================
 function InfusionInput(pit,n) {
-    return '<img src="'+pit.src+'" class="inputimg" />'
+    return '<img src="'+pit.src+'" class="info-icon" />'
 
          + '<span class="inputs" id="label-'+n+'" name="label-'+n+'">'
          + '  Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
@@ -1122,11 +1122,11 @@ function getRowClass(n) {
 //   n:     The input number
 //===================================================================
 function addEnable(n) {
-    return '<span title="Click to disable input"'
-         + '      class="bank-left enaInput enDisInput inputs unselectable"'
+    return '<span title="Turn input off"'
+         + '      class="floatL tog-in tog-in-1 inputs unselectable"'
          + '      id="enabled-'+n+'" name="enabled-'+n+'"'
-         + '      onclick="enDisInput('+n+');">'
-         + 'ENABLED'
+         + '      onclick="togInput('+n+');">'
+         + 'ON'
          + '</span>'
          + '    '
          + '<input type="hidden" class="inputs" id="disabled-'+n+'"'
@@ -1142,7 +1142,7 @@ function addEnable(n) {
 function addDeleteIcon(n) {
     return '<a class="img-input inputs"'
          + '   name="delete-'+n+'" href="javascript:deleteInput('+n+');">'
-         + '  <img class="bank-right delete-icon"'
+         + '  <img class="floatR delete-icon"'
          + '       src="../img/x.png" alt="Delete this input">'
          + '</a>'
          + '';
@@ -1157,24 +1157,24 @@ function addDeleteIcon(n) {
 // ARGS:
 //   n:     The input number
 //===================================================================
-function enDisInput(n) {
+function togInput(n) {
     var ena = $('#enabled-' +n);
     var dis = $('#disabled-'+n);
-    // Disable an input
-    if (ena.hasClass('enaInput')) {
-        ena.removeClass('enaInput').addClass('disInput');
-        ena.attr('title','Click to enable input');
-        ena.text('DISABLED');
+    // Turn input off
+    if (ena.hasClass('tog-in-1')) {
+        ena.removeClass('tog-in-1').addClass('tog-in-2');
+        ena.attr('title','Turn input on');
+        ena.text('OFF');
         dis.attr('value','1');
         // Gray out this input's other input boxes
         $('#input-'+n).children('.inputs').each(function() {
             $(this).attr('disabled',true);
         });
-    // Enable an input
+    // Turn input on
     } else {
-        ena.removeClass('disInput').addClass('enaInput');
-        ena.text('ENABLED');
-        ena.attr('title','Click to disable input');
+        ena.removeClass('tog-in-2').addClass('tog-in-1');
+        ena.text('ON');
+        ena.attr('title','Turn input off');
         dis.attr('value','0');
         // Un-gray out this input's other input boxes
         $('#input-'+n).children('.inputs').each(function() {
@@ -1333,21 +1333,21 @@ var sliderObj = {
 // DESC:    Function to show/hide list of hormone input icons.
 //===================================================================
 function show_hide(H) {
-    $('#'+H+'input').toggle("blind");
+    $('#'+H+'input').toggle('blind');
 }
 
 //===================================================================
-// DESC:    Function to show/hide navbar divs.
+// DESC:    Function to show/hide header info boxes.
 //===================================================================
-function clickInfoButton(id) {
-    if ($('#button-'+id).hasClass('infoButton-clicked')) {
-        $('#button-'+id).removeClass('infoButton-clicked');
-        $('#link-'+id).removeClass('color-white');
-        $('#link-'+id).addClass('color-black');
+function clickInfoBox(id) {
+    if ($('#info-box-cont-'+id).css('display') == 'none') {
+        $('#info-box-'+id).toggleClass('info-box-a',0,function() {
+            $('#info-box-cont-'+id).toggle('blind',200);
+        });
     } else {
-        $('#button-'+id).addClass('infoButton-clicked');
-        $('#link-'+id).removeClass('color-black');
-        $('#link-'+id).addClass('color-white');
+        $('#info-box-cont-'+id).toggle('blind',200,function() {
+            $('#info-box-'+id).toggleClass('info-box-a',0);
+        });
     }
 }
 
@@ -1355,16 +1355,16 @@ function clickInfoButton(id) {
 // DESC:    Function to toggle free hormone graph divs.
 //===================================================================
 function togFreeHormoneButton() {
-    if ($('#FT4graph').hasClass('displaynone')) {
-        $('#FT4graph').removeClass('displaynone');
-        $('#FT3graph').removeClass('displaynone');
-        $('#T4graph').addClass('displaynone');
-        $('#T3graph').addClass('displaynone');
+    if ($('#FT4graph').hasClass('hide')) {
+        $('#FT4graph').removeClass('hide');
+        $('#FT3graph').removeClass('hide');
+        $('#T4graph').addClass('hide');
+        $('#T3graph').addClass('hide');
     } else {
-        $('#FT4graph').addClass('displaynone');
-        $('#FT3graph').addClass('displaynone');
-        $('#T4graph').removeClass('displaynone');
-        $('#T3graph').removeClass('displaynone');
+        $('#FT4graph').addClass('hide');
+        $('#FT3graph').addClass('hide');
+        $('#T4graph').removeClass('hide');
+        $('#T3graph').removeClass('hide');
     }
 }
 

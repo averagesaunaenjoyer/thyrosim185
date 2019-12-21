@@ -9,24 +9,21 @@ html * {
   font-size: 16px;
 }
 #wrapper {
-  width: 901px;
+  width: 900px;
   margin: 0px auto;
-  border: 1px solid #bbb;
-  padding: 10px;
 }
 #header {
   border: 1px solid #bbb;
-  padding: 10px;
-  font-size: 20px;
-  height: 24px;
+  padding: 0.625em;
+  font-size: 1.2em;
+  height: 1.5em;
 }
 /* Applies to specific divs within header div */
 #header div {
-  font-size: 16px;
 }
 #content {
-  margin-top: 10px;
-  padding-bottom: 10px;
+  margin-top: 0.625em;
+  padding-bottom: 0.625em;
 }
 .textsub {
   position: relative;
@@ -35,7 +32,7 @@ html * {
 }
 #ucla {
   background-color: #2c5e91;
-  font-size: 37px;
+  font-size: 2.4em;
   margin: -11px 10px -11px -11px;
   padding: 0px 5px 0px 2px;
   color: white;

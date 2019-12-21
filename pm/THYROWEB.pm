@@ -33,6 +33,7 @@ sub new {
 
     $self->initDisplay();
     $self->initExamples();
+    $self->initInfoBoxes();
 
     return $self;
 }
@@ -107,6 +108,117 @@ sub initExamples {
 }
 
 #====================================================================
+# SUBROUTINE:   initInfoBoxes
+# DESCRIPTION:
+#   Initialize info boxes. See getInfoBox() and _getInfoBox().
+#====================================================================
+sub initInfoBoxes {
+    my ($self) = @_;
+
+    $self->{infoBoxes}->{About} = {
+        key     => 'About',
+        val     => 'DIRECTIONS',
+        content => <<EOF
+
+<span style="color:red">$self->{thysimD}</span> is a tool for simulating a
+well-validated human thyroid hormone (TH) feedback regulation system model*.
+
+Users can simulate common thyroid system maladies by adjusting TH
+secretion/absorption rates on the interface.
+
+Oral input regimens, also selectable on the interface, simulate common hormone
+treatment options.
+
+Bolus and intravenous infusion inputs also can be added, for exploratory
+research and teaching demonstrations.
+
+For easy comparisons, the interface includes facility for superimposing two sets
+of simulation results.
+<br>
+<br>
+Minimum Usage:
+<ol>
+  <li>
+    To see normal thyroid hormone behavior: click "RUN".
+  </li>
+  <li>
+    To simulate hypo/hyperthyroidism: change
+    T<span class="textsub">3</span>/T<span class="textsub">4</span>
+    secretion.
+  </li>
+  <li>
+    To modify oral input absorption: change
+    T<span class="textsub">3</span>/T<span class="textsub">4</span>
+    absorption.
+  </li>
+  <li>
+    Simulate treatment options:
+    <ol>
+      <li>
+        Click the
+        <img class="info-icon" src="../img/pill1.png"
+             alt="Oral Input">
+        <img class="info-icon" src="../img/pill2.png"
+             alt="Oral Input">
+        <img class="info-icon" src="../img/syringe1.png"
+             alt="IV Input">
+        <img class="info-icon" src="../img/syringe2.png"
+             alt="IV Input">
+        or
+        <img class="info-icon" src="../img/infusion1.png"
+             alt="Infusion Input">
+        <img class="info-icon" src="../img/infusion2.png"
+             alt="Infusion Input">
+        icons to add as input.
+      </li>
+      <li>
+        Fill in the required dosage, start and end times.
+      </li>
+    </ol>
+  </li>
+</ol>
+Features:
+<ol>
+  <li>
+    <img class="info-icon" src="../img/x.png" alt="x">
+    icon: click to delete an input.
+  </li>
+  <li>
+    <span class="tog-in tog-in-1">ON</span>
+    <span class="tog-in tog-in-2">OFF</span>
+    icons: click to turn input on or off for the next run.
+  </li>
+  <li>
+    <img class="info-icon" src="../img/plus.png" alt="plus">
+    icon: click to modify secretion/absorption via scrollbars.
+  </li>
+</ol>
+
+EOF
+    };
+
+    $self->{infoBoxes}->{Example} = {
+        key     => 'Example',
+        val     => 'EXAMPLES',
+        content => $self->insertExamples()
+    };
+
+    $self->{infoBoxes}->{Disclaimer} = {
+        key     => 'Disclaimer',
+        val     => 'DISCLAIMER',
+        content => <<EOF
+<span style="color:red">$self->{thysimD}</span> is intended as an educational
+and research tool only.
+
+Information provided is not a substitute for medical advice and you should
+contact your doctor regarding any medical conditions or medical questions that
+you have.
+
+EOF
+    };
+}
+
+#====================================================================
 # SUBROUTINE:   ga
 # DESCRIPTION:
 #   Google Analytics code.
@@ -146,9 +258,10 @@ sub getHead {
 }),
 -style      => {
     'src'           => [
-        '../css/thyrosim.css',
-        '../css/fonts-min.css',
-        '../css/ui-lightness/jquery-ui.min.css',
+        #'../css/thyrosim.css',
+        '../css/thyrosim2.css',
+        #'../css/fonts-min.css',
+        #'../css/ui-lightness/jquery-ui.min.css',
         #'../css/bootstrap.min.css'
     ]
 },
@@ -202,8 +315,12 @@ sub insertForm {
     my ($self) = @_;
 
     # Things to put into the form
-    my $examples = $self->insertExamples();
     my $jr_ack   = $self->juniorAcknowledge();
+
+    # Generate info boxes
+    my $infoBox_About = $self->getInfoBox('About');
+    my $infoBox_Examp = $self->getInfoBox('Example');
+    my $infoBox_Discl = $self->getInfoBox('Disclaimer');
 
     # Parameter list only for advanced
     my $paramEditor = "";
@@ -220,147 +337,27 @@ EOF
     # Put form together
     return <<END
 
-<form name="form">
+<!-- Wrapper -->
 <div id="wrapper">
+<form name="form">
 
   <!-- Header -->
   <div id="header" style="$self->{headerstyle}" class="unselectable">
 
-    <span id="ucla" class="bank-left">
-      UCLA
-    </span>
+    <div id="ucla" class="floatL">
+      <span>UCLA</span>
+    </div>
 
     <!-- About -->
-    <div id="button-About" class="bank-left infoButton">
-      <a id="link-About"
-         class="color-black header-buttons-link"
-         href="javascript:clickInfoButton('About');">DIRECTIONS</a>
-      <div id="dp-About" class="popup-rollover">
-        <p>
-          <span class="infoButton-close bank-right"
-                onclick="javascript:clickInfoButton('About');">[x]</span>
-          <br>
-          <span style="color:red">$self->{thysimD}</span>
-
-          is a tool for simulating a well-validated human thyroid hormone (TH)
-          feedback regulation system model*.
-
-          Users can simulate common thyroid system maladies by adjusting TH
-          secretion/absorption rates on the interface.
-
-          Oral input regimens, also selectable on the interface, simulate
-          common hormone treatment options.
-
-          Bolus and intravenous infusion inputs also can be added, for
-          exploratory research and teaching demonstrations.
-
-          For easy comparisons, the interface includes facility for
-          superimposing two sets of simulation results.
-          <br>
-          <br>
-          Minimum Usage:
-          <br>
-          <ol>
-            <li>
-              To see normal thyroid hormone behavior: click "RUN".
-            </li>
-            <li>
-              To simulate hypo/hyperthyroidism: change
-              T<span class="textsub">3</span>/T<span class="textsub">4</span>
-              secretion.
-            </li>
-            <li>
-              To modify oral input absorption: change
-              T<span class="textsub">3</span>/T<span class="textsub">4</span>
-              absorption.
-            </li>
-            <li>
-              Simulate treatment options:
-              <ol type="a">
-                <li>
-                  Click the
-                  <img class="info-icon" src="../img/pill1.png"
-                       alt="Oral Input">
-                  <img class="info-icon" src="../img/pill2.png"
-                       alt="Oral Input">
-                  <img class="info-icon" src="../img/syringe1.png"
-                       alt="IV Input">
-                  <img class="info-icon" src="../img/syringe2.png"
-                       alt="IV Input">
-                  or
-                  <img class="info-icon" src="../img/infusion1.png"
-                       alt="Infusion Input">
-                  <img class="info-icon" src="../img/infusion2.png"
-                       alt="Infusion Input">
-                  icons to add as input.
-                </li>
-                <li>
-                  Fill in the required dosage, start and end times.
-                </li>
-              </ol>
-            </li>
-          </ol>
-          Features:
-          <br>
-          <ol>
-            <li>
-              <img class="info-icon" src="../img/x.png" alt="x">
-              icon: click to delete an input.
-            </li>
-            <li>
-              <span class="enaInput enDisInput">ENABLED</span>
-              <span class="disInput enDisInput">DISABLED</span>
-              icons: click to enable or disable an input for the next
-              simulation.
-            </li>
-            <li>
-              <img class="info-icon" src="../img/plus.png" alt="plus">
-              icon: click to modify secretion/absorption via scrollbars.
-            </li>
-          </ol>
-        </p>
-      </div>
-    </div>
+$infoBox_About
     <!-- About end -->
 
     <!-- Example -->
-    <div id="button-Example" class="bank-left infoButton">
-      <a id="link-Example"
-         class="color-black header-buttons-link"
-         href="javascript:clickInfoButton('Example');">EXAMPLES</a>
-      <div id="dp-Example" class="popup-rollover">
-        <p>
-          <span class="infoButton-close bank-right"
-                onclick="javascript:clickInfoButton('Example');">[x]</span>
-          <br>
-
-          $examples
-
-        </p>
-      </div>
-    </div>
+$infoBox_Examp
     <!-- Example end -->
 
     <!-- Disclaimer -->
-    <div id="button-Disclaimer" class="bank-left infoButton">
-      <a id="link-Disclaimer"
-         class="color-black header-buttons-link"
-         href="javascript:clickInfoButton('Disclaimer');">DISCLAIMER</a>
-      <div id="dp-Disclaimer" class="popup-rollover">
-        <p>
-          <span class="infoButton-close bank-right"
-                onclick="javascript:clickInfoButton('Disclaimer');">[x]</span>
-          <br>
-          <span style="color:red">$self->{thysimD}</span>
-
-          is intended as an educational and research tool only.
-
-          Information provided is not a substitute for medical advice and you
-          should contact your doctor regarding any medical conditions or
-          medical questions that you have.
-        </p>
-      </div>
-    </div>
+$infoBox_Discl
     <!-- Disclaimer end -->
 
 <!--
@@ -369,14 +366,14 @@ EOF
     "Show T<span class="textsub">4</span> input"
 -->
 
-    <span id="biocyb" class="bank-right">
-      Biocybernetics Laboratory
-    </span>
+    <div id="biocyb" class="floatR">
+      <span>Biocybernetics Laboratory</span>
+    </div>
 
     <br>
 
     <!-- Not-for-IE Message -->
-    <div id="nonIEMsgDiv" class="displaynone">
+    <div id="nonIEMsgDiv" class="hide">
       <br>
       <div class="nonIEMsg">
         It appears that you are using Internet Explorer (IE). If you are
@@ -405,7 +402,7 @@ EOF
       <div id="content-inputs" class="content-center unselectable">
         <!-- T3 Input -->
         <a id="T3display" class="showhide" href="javascript:show_hide('T3');">
-          <span class="bank-left hormone-dropdown">
+          <span class="floatL hormone-dropdown">
             T<span class="textsub">3</span>
             <img class="downimg" src="../img/down.png" alt="Toggle T3 inputs" />
             <span class="hormone-dropdown-text-small">Inputs</span>
@@ -432,7 +429,7 @@ EOF
         <br>
         <!-- T4 Input -->
         <a id="T4display" class="showhide" href="javascript:show_hide('T4');">
-          <span class="bank-left hormone-dropdown">
+          <span class="floatL hormone-dropdown">
             T<span class="textsub">4</span>
             <img class="downimg" src="../img/down.png" alt="Toggle T4 inputs" />
             <span class="hormone-dropdown-text-small">Inputs</span>
@@ -462,16 +459,16 @@ EOF
       <!-- Diagram (center div) -->
       <div id="diagram" class="interface-diagram relative">
         $paramEditor
-        <div id="hilite1" class="imgcontainer displaynone">
+        <div id="hilite1" class="imgcontainer hide">
           <img src="../img/hilite.png">
         </div>
-        <div id="hilite2" class="imgcontainer displaynone">
+        <div id="hilite2" class="imgcontainer hide">
           <img src="../img/hilite.png">
         </div>
-        <div id="hilite3" class="imgcontainer displaynone">
+        <div id="hilite3" class="imgcontainer hide">
           <img src="../img/hilite.png">
         </div>
-        <div id="hilite4" class="imgcontainer displaynone">
+        <div id="hilite4" class="imgcontainer hide">
           <img src="../img/hilite.png">
         </div>
       </div>
@@ -486,8 +483,8 @@ EOF
         Free Hormone Values
       </button>
       <!--<button type="button" id="togXAxisDisp">X-Axis Days/Hours</button>-->
-      <div id="FT4graph" class="displaynone"></div>
-      <div id="FT3graph" class="displaynone"></div>
+      <div id="FT4graph" class="hide"></div>
+      <div id="FT3graph" class="hide"></div>
       <div id="T4graph"></div>
       <div id="T3graph"></div>
       <div id="TSHgraph"></div>
@@ -762,8 +759,8 @@ EOF
   <!-- Follow end -->
 
 </form>
-
-&nbsp;
+</div>
+<!-- Wrapper end -->
 
 END
 }
@@ -792,16 +789,15 @@ sub insertExample {
     my $snp = <<EOF
 
 <!-- Example $exp->{name} -->
-<span class="bank-left margin-bot-10">
-  <span class="bank-left example-text">
-    <b>$exp->{bold}</b> $exp->{text}
-    <br>
-    <button type="button" onclick="ajax_getplot('$exp->{name}');
-                                   clickInfoButton('Example');">
+<span class="floatL example">
+  <span class="floatL example-wrp">
+    <span class="example-txt"><b>$exp->{bold}</b> $exp->{text}</span>
+    <button class="btn btn-submit" type="button"
+            onclick="ajax_getplot('$exp->{name}');">
       Simulate
     </button>
   </span>
-  <img src="$exp->{img}" alt="$exp->{alt}" class="example-image" />
+  <img src="$exp->{img}" alt="$exp->{alt}" class="example-tbn" />
 </span>
 <!-- Example $exp->{name} end -->
 
@@ -863,6 +859,44 @@ sub juniorAcknowledge {
              . "</li>";
     }
     return "";
+}
+
+#====================================================================
+# SUBROUTINE:   getInfoBox
+# DESCRIPTION:
+#   Wrapper for generating info box with content.
+#====================================================================
+sub getInfoBox {
+    my ($self,$key) = @_;
+    my $infoBox = $self->_getInfoBox(
+        $key,
+        $self->{infoBoxes}->{$key}->{val},
+        $self->{infoBoxes}->{$key}->{content}
+    );
+    return $infoBox;
+}
+
+#====================================================================
+# SUBROUTINE:   _getInfoBox
+# DESCRIPTION:
+#   Generate info box snp.
+#
+#   key:        Unique infoBoxes key
+#   val:        Button's display value
+#   content:    Content to be shown when button is clicked
+#====================================================================
+sub _getInfoBox {
+    my ($self,$key,$val,$content) = @_;
+    return <<EOF
+<a id="info-box-$key" class="info-box floatL"
+   href="javascript:clickInfoBox('$key');">$val
+  <div id="info-box-cont-$key" class="info-box-cont">
+    <p>
+$content
+    </p>
+  </div>
+</a>
+EOF
 }
 
 #====================================================================
