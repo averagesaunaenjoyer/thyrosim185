@@ -1330,10 +1330,18 @@ var sliderObj = {
 };
 
 //===================================================================
-// DESC:    Function to show/hide list of hormone input icons.
+// DESC:    Function to show/hide an id. Takes an optional time argument.
 //===================================================================
-function show_hide(H) {
-    $('#'+H+'input').toggle('blind');
+function toggle(id,ms) {
+    $('#'+id).toggle('blind',ms);
+}
+
+//===================================================================
+// DESC:    Function to show/hide a hormone menu.
+//===================================================================
+function togHormoneMenu(id) {
+    $('#'+id).toggle('blind');
+    $('#'+id+'-head > button > i').toggleClass('arrow-d arrow-u');
 }
 
 //===================================================================
@@ -1366,13 +1374,6 @@ function togFreeHormoneButton() {
         $('#T4graph').removeClass('hide');
         $('#T3graph').removeClass('hide');
     }
-}
-
-//===================================================================
-// DESC:    Function to toggle parameter list on and off.
-//===================================================================
-function togParamListButton() {
-    $('#parameditdiv').toggle("blind",200);
 }
 
 //===================================================================

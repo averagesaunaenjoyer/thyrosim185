@@ -311,25 +311,12 @@ return \%head;
 sub insertForm {
     my ($self) = @_;
 
+    my $header = $self->getHeader();
+    my $main   = $self->getMain();
+    my $footer = "";
+
     # Things to put into the form
     my $jr_ack   = $self->juniorAcknowledge();
-
-    # Generate info boxes
-    my $infoBtn_About = $self->getInfoBtn('About');
-    my $infoBtn_Examp = $self->getInfoBtn('Example');
-    my $infoBtn_Discl = $self->getInfoBtn('Disclaimer');
-
-    # Parameter list only for advanced
-    my $paramEditor = "";
-    if ($self->{showParams}) {
-        my $paramList = $self->printParams();
-        $paramEditor = <<EOF
-Toggle:
-<button type="button" onclick="togParamListButton();">Parameters</button>
-<div id="parameditdiv" class="parameditdiv">$paramList</div>
-EOF
-;
-    }
 
     # Put form together
     return <<END
@@ -339,39 +326,12 @@ EOF
 <form name="form">
 
   <!-- Header -->
-  <div id="header" style="$self->{headerstyle}" class="select-none">
-
-    <div id="ucla" class="floatL">
-      <span>UCLA</span>
-    </div>
-$infoBtn_About
-$infoBtn_Examp
-$infoBtn_Discl
-    <div id="biocyb" class="floatR">
-      <span>Biocybernetics Laboratory</span>
-    </div>
-
-    <div class="bar-h-gold floatL"></div>
-
-    <!-- Not-for-IE Warning -->
-    <div id="non-ie-warn" class="hide floatL non-ie-warn">
-      It appears that you are using Internet Explorer (IE). If you are using IE,
-      please use version 9 or above. Otherwise, to see the web-app as intended,
-      please use a free and supported browser, such as
-      <a target="_blank" href="https://www.google.com/chrome/">
-        Google Chrome</a> or
-      <a target="_blank" href="https://www.mozilla.org/en-US/firefox/new/">
-        Mozilla Firefox</a>.
-    </div>
-    <script>
-        // D3 only supports IE9+
-        checkMSIE();
-    </script>
-    <!-- Not-for-IE Warning end -->
-
-  </div>
+$header
   <!-- Header end -->
 
+  <!-- Main -->
+$main
+  <!-- Main end -->
 
   <!-- Content -->
   <div id="content" class="select-none">
@@ -379,67 +339,8 @@ $infoBtn_Discl
     <!-- Interactive Interface -->
     <div id="interactive-interface">
 
-      <!-- Inputs (left-most div) -->
-      <div id="content-inputs" class="content-center">
-        <!-- T3 Input -->
-        <a id="T3display" class="showhide" href="javascript:show_hide('T3');">
-          <span class="floatL hormone-dropdown">
-            T<span class="textsub">3</span>
-            <img class="downimg" src="../img/down.png" alt="Toggle T3 inputs" />
-            <span class="hormone-dropdown-text-small">Inputs</span>
-          </span>
-        </a>
-        <br>
-        <div id="T3input" class="interface-input-options">
-          <a class="img-input" href="javascript:addInput('T3-Oral');">
-            <img src="../img/pill1.png" alt="T3 Pill Input"
-                 class="interface-input interface-input-t3" />
-          </a>
-          <br>
-          <a class="img-input" href="javascript:addInput('T3-IV');">
-            <img src="../img/syringe1.png" alt="T3 IV Pulse Dose"
-                 class="interface-input interface-input-t3" />
-          </a>
-          <br>
-          <a class="img-input" href="javascript:addInput('T3-Infusion');">
-            <img src="../img/infusion1.png" alt="T3 Infusion"
-                 class="interface-input interface-input-t3" />
-          </a>
-        </div>
-        <!-- T3 Input end -->
-        <br>
-        <!-- T4 Input -->
-        <a id="T4display" class="showhide" href="javascript:show_hide('T4');">
-          <span class="floatL hormone-dropdown">
-            T<span class="textsub">4</span>
-            <img class="downimg" src="../img/down.png" alt="Toggle T4 inputs" />
-            <span class="hormone-dropdown-text-small">Inputs</span>
-          </span>
-        </a>
-        <br>
-        <div id="T4input" class="interface-input-options">
-          <a class="img-input" href="javascript:addInput('T4-Oral');">
-            <img src="../img/pill2.png" alt="T4 Pill Input"
-                 class="interface-input interface-input-t4" />
-          </a>
-          <br>
-          <a class="img-input" href="javascript:addInput('T4-IV');">
-            <img src="../img/syringe2.png" alt="T4 IV Pulse Dose"
-                 class="interface-input interface-input-t4" />
-          </a>
-          <br>
-          <a class="img-input" href="javascript:addInput('T4-Infusion');">
-            <img src="../img/infusion2.png" alt="T4 Infusion"
-                 class="interface-input interface-input-t4" />
-          </a>
-        </div>
-        <!-- T4 Input end -->
-      </div>
-      <!-- Inputs end -->
-
       <!-- Diagram (center div) -->
       <div id="diagram" class="interface-diagram relative">
-        $paramEditor
         <div id="hilite1" class="imgcontainer hide">
           <img src="../img/hilite.png">
         </div>
@@ -747,6 +648,159 @@ END
 }
 
 #====================================================================
+# SUBROUTINE:   getHeader
+# DESCRIPTION:
+#   Semantic element: Header.
+#====================================================================
+sub getHeader {
+    my ($self) = @_;
+
+    # Generate info buttons
+    my $infoBtn_About = $self->getInfoBtn('About');
+    my $infoBtn_Examp = $self->getInfoBtn('Example');
+    my $infoBtn_Discl = $self->getInfoBtn('Disclaimer');
+
+    return <<EOF
+<header style="$self->{headerstyle}" class="select-none">
+
+  <!-- Logos and Info -->
+  <div id="ucla" class="floatL">
+    <span>UCLA</span>
+  </div>
+$infoBtn_About
+$infoBtn_Examp
+$infoBtn_Discl
+  <div id="biocyb" class="floatR">
+    <span>Biocybernetics Laboratory</span>
+  </div>
+  <!-- Logos and Info end -->
+
+  <div class="bar-h-gold floatL"></div>
+
+  <!-- Not-for-IE Warning -->
+  <div id="non-ie-warn" class="hide floatL non-ie-warn">
+    It appears that you are using Internet Explorer (IE). If you are using IE,
+    please use version 9 or above. Otherwise, to see the web-app as intended,
+    please use a free and supported browser, such as
+    <a target="_blank" href="https://www.google.com/chrome/">
+      Google Chrome</a> or
+    <a target="_blank" href="https://www.mozilla.org/en-US/firefox/new/">
+      Mozilla Firefox</a>.
+  </div>
+  <script>
+  checkMSIE(); // D3 only supports IE9+
+  </script>
+  <!-- Not-for-IE Warning end -->
+
+</header>
+EOF
+}
+
+#====================================================================
+# SUBROUTINE:   getMain
+# DESCRIPTION:
+#   Semantic element: Header.
+#====================================================================
+sub getMain {
+    my ($self) = @_;
+
+    # Parameter list only for advanced
+    my $paramEditor = "";
+    if ($self->{showParams}) {
+        my $paramList = $self->printParams();
+        $paramEditor = <<EOF
+Toggle:
+<button class="btn btn-toggle" type="button" 
+        onclick="toggle('parameters',200);">
+  Parameters
+</button>
+<div id="parameters">$paramList</div>
+EOF
+;
+
+    }
+    return <<EOF
+<main class="select-none">
+
+  <div class="container">
+
+    <!-- Panel Left -->
+    <section class="panel panelL floatL">
+
+      <!-- Sidebar -->
+      <div id="sidebar" class="floatL">
+
+        <!-- T3 Inputs Menu -->
+        <div id="T3-menu-head" class="T-menu-head">
+          <button type="button" onclick="togHormoneMenu('T3-menu');">
+            T<span class="textsub">3</span><i class="arrow arrow-u"></i>Inputs
+          </button>
+        </div>
+
+        <div id="T3-menu" class="T-menu show">
+          <button type="button" class="btn-icon btn-icon-t3"
+                  onclick="addInput('T3-Oral');">
+            <img src="../img/pill1.png">
+          </button>
+          <button type="button" class="btn-icon btn-icon-t3"
+                  onclick="addInput('T3-IV');">
+            <img src="../img/syringe1.png">
+          </button>
+          <button type="button" class="btn-icon btn-icon-t3"
+                  onclick="addInput('T3-Infusion');">
+            <img src="../img/infusion1.png">
+          </button>
+        </div>
+        <!-- T3 Inputs Menu end -->
+
+        <!-- T4 Inputs Menu -->
+        <div id="T4-menu-head" class="T-menu-head">
+          <button type="button" onclick="togHormoneMenu('T4-menu');">
+            T<span class="textsub">4</span><i class="arrow arrow-u"></i>Inputs
+          </button>
+        </div>
+
+        <div id="T4-menu" class="T-menu show">
+          <button type="button" class="btn-icon btn-icon-t4"
+                  onclick="addInput('T4-Oral');">
+            <img src="../img/pill2.png">
+          </button>
+          <button type="button" class="btn-icon btn-icon-t4"
+                  onclick="addInput('T4-IV');">
+            <img src="../img/syringe2.png">
+          </button>
+          <button type="button" class="btn-icon btn-icon-t4"
+                  onclick="addInput('T4-Infusion');">
+            <img src="../img/infusion2.png">
+          </button>
+        </div>
+        <!-- T4 Inputs Menu end -->
+
+      </div>
+      <!-- Sidebar end -->
+
+      <!-- Image and Parameters -->
+      <div id="img-param" class="floatL height-32">
+$paramEditor
+        <img src="../img/hilite.png" class="hide">
+      </div>
+      <!-- Image and Parameters end -->
+
+    </section>
+    <!-- Panel Left end -->
+
+    <!-- Panel Right -->
+    <section class="panel panelR floatL">
+hello world
+    </section
+
+  </div>
+
+</main>
+EOF
+}
+
+#====================================================================
 # SUBROUTINE:   insertExamples
 # DESCRIPTION:
 #   Insert examples associated with $thysim.
@@ -821,7 +875,7 @@ sub getParamInput {
     my ($self,$p,$v) = @_;
     return <<EOF
 <label>$p:</label>
-<input size="8" type="text" id="$p" name="$p" value="$v" class="paraminput">
+<input type="text" id="$p" name="$p" value="$v">
 EOF
 }
 
@@ -874,6 +928,10 @@ sub _getInfoBtn {
   <button id="info-btn-$key" type="button" class="info-btn floatL"
           onclick="togInfoBtn('$key');">$val</button>
   <div id="info-btn-c-$key" class="info-btn-c">
+    <button type="button" class="btn-anchor floatR"
+            onclick="togInfoBtn('$key');">
+      Close
+    </button>
     <p>
 $content
     </p>
