@@ -113,7 +113,7 @@ function graph(hormone,addlabel,initgraph) {
     var eRHi = ThyrosimGraph.settings[hormone].bounds[thysim].hi;
 
     // Graph size
-    var w = 350; // width in pixels of the graph
+    var w = 370; // width in pixels of the graph
     var h = 130; // height in pixels of the graph
 
     // Scales
@@ -250,7 +250,7 @@ function graph(hormone,addlabel,initgraph) {
         });
 
         // Turn range values on by default
-        toggleRangeBox();
+        togNormRange();
 
     // Update the graph
     } else {
@@ -347,7 +347,7 @@ function graph(hormone,addlabel,initgraph) {
     }
 
     // Toggle range box on and off
-    function toggleRangeBox() {
+    function togNormRange() {
         var rangeBox = d3.selectAll("rect.rangeBox");
         var fill = rangeBox.attr("fill");
         rangeBox.attr("fill",function(d) {
@@ -355,41 +355,7 @@ function graph(hormone,addlabel,initgraph) {
         });
     }
 
-    // Toggle x-axis day or hour
-    function toggleXAxis() {
-        var curXAxis = d3.selectAll("text.x-axis-label");
-        var curLabel = curXAxis.text();
-        var thisXAxis;
-        var thisXLabel;
-        if (curLabel == "Days") {
-            thisXAxis = xAxis2;
-            thisXLabel = "Hours";
-        } else {
-            thisXAxis = xAxis;
-            thisXLabel = "Days";
-        }
-
-        // Update x-axis
-        d3.selectAll("g.x-axis")
-            .call(thisXAxis)
-                .selectAll("text")
-                .style("display","none");
-
-        // Only show axis values for bottom graph
-        d3.selectAll("#TSHgraph text")
-            .style("display","block");
-
-        // Update x-axis label
-        d3.selectAll("text.x-axis-label")
-            .text(thisXLabel);
-    }
-
-    d3.select("#togNormRange").on("click",toggleRangeBox);
-    d3.select("#togXAxisDisp").on("click",toggleXAxis);
-    // Currently, not using this toggle button. While the graph labels change
-    // correctly, the pop-up when hovering over graph values does not update. To
-    // get this to work properly would require converting all x-axis values to
-    // days and re-graph.
+    d3.select("#togNormRange").on("click",togNormRange);
 }
 
 //===================================================================
@@ -1216,14 +1182,14 @@ function useSingleDose(n) {
 //===================================================================
 // DESC:    Show/Hide the scroll bars for secretion/absorption adjustment.
 //===================================================================
-function showhidescrollbars() {
-    $('.slidercontainer').toggle("blind",function() {
-        if ($(".slidercontainer").css("display") == "none") {
-            $("#showhidescrollbar").attr("src","../img/plus.png")
-                                   .attr("alt","show scroll bars");
+function togScrollBars() {
+    $('.sliders').toggle("blind",function() {
+        if ($('.sliders').css('display') == 'none') {
+            $('#scrollbar').attr('src','../img/plus.png')
+                           .attr('alt','Show scroll bars');
         } else {
-            $("#showhidescrollbar").attr("src","../img/minus.png")
-                                   .attr("alt","hide scroll bars");
+            $('#scrollbar').attr('src','../img/minus.png')
+                           .attr('alt','Hide scroll bars');
         }
     });
 }
@@ -1362,18 +1328,11 @@ function togInfoBtn(id) {
 //===================================================================
 // DESC:    Function to toggle free hormone graph divs.
 //===================================================================
-function togFreeHormoneButton() {
-    if ($('#FT4graph').hasClass('hide')) {
-        $('#FT4graph').removeClass('hide');
-        $('#FT3graph').removeClass('hide');
-        $('#T4graph').addClass('hide');
-        $('#T3graph').addClass('hide');
-    } else {
-        $('#FT4graph').addClass('hide');
-        $('#FT3graph').addClass('hide');
-        $('#T4graph').removeClass('hide');
-        $('#T3graph').removeClass('hide');
-    }
+function togFreeHormone() {
+    $('#FT4graph').toggleClass('show hide');
+    $('#FT3graph').toggleClass('show hide');
+    $('#T4graph').toggleClass('show hide');
+    $('#T3graph').toggleClass('show hide');
 }
 
 //===================================================================

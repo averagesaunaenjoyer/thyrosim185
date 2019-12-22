@@ -88,6 +88,7 @@ html, body {
 .color-blue  { color: blue;  }
 .color-white { color: white; }
 .height-32 { height: 32em; }
+.width-100 { width: 100%; }
 
 .info-icon {
   height: 1.25em;
@@ -105,6 +106,7 @@ html, body {
   border: 1px solid transparent;
   border-radius: 0.25em;
   line-height: 1;
+  margin: 0 0.3em;
   padding: 0.4em;
 }
 .btn-submit {
@@ -390,7 +392,7 @@ footer {
   width: 3em;
 }
 
-/* Panel Left - Hormone menu sidebar */
+/* Container (top) - Panel Left - Hormone menu sidebar */
 .T-menu-head {
   margin-bottom: 0.625em;
 }
@@ -399,8 +401,11 @@ footer {
   margin: -0.625em 0 0.625em 0;
   text-align: center;
 }
+.T-menu button {
+  margin: 0.2em;
+}
 
-/* Panel Left - Diagram and parameters */
+/* Container (top) - Panel Left - Diagram and parameters */
 #img-param {
   background-image: url("../img/sim.png");
   background-repeat: no-repeat;
@@ -446,8 +451,34 @@ footer {
   border: 1px solid #555;
   box-shadow: 0 0 0.4em rgba(102, 175, 233, .6);
 }
+.hilite {
+  position: absolute;
+}
+#hilite1 {}
+#hilite2 {}
+#hilite3 {}
+#hilite4 {}
 
-/* Panel right - Hello */
+/* Container (top) - Panel Right - these would probably be D3 customizations */
+.d3chart {
+}
+.d3chart .tick text {
+  font: 0.688em sans-serif;
+  stroke: black;
+  stroke-width: 0;
+}
+.d3chart .tooltip {
+  background: lightsteelblue;
+  border: 0;
+  border-radius: 0.5em;
+  font: 0.875em sans-serif;
+  padding: 0.125em 0.4em;
+  pointer-events: none;
+  position: absolute;
+  text-align: center;
+}
+
+/* Container (mid) */
 
 
 /*--------------------------------------------------

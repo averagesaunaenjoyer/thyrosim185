@@ -258,6 +258,7 @@ sub getHead {
 }),
 -style => {
     'src'           => [
+        '../css/ui-lightness/jquery-ui.min.css',
         '../css/thyrosim2.css',
         #'../css/bootstrap.min.css'
     ]
@@ -332,48 +333,6 @@ $header
   <!-- Main -->
 $main
   <!-- Main end -->
-
-  <!-- Content -->
-  <div id="content" class="select-none">
-
-    <!-- Interactive Interface -->
-    <div id="interactive-interface">
-
-      <!-- Diagram (center div) -->
-      <div id="diagram" class="interface-diagram relative">
-        <div id="hilite1" class="imgcontainer hide">
-          <img src="../img/hilite.png">
-        </div>
-        <div id="hilite2" class="imgcontainer hide">
-          <img src="../img/hilite.png">
-        </div>
-        <div id="hilite3" class="imgcontainer hide">
-          <img src="../img/hilite.png">
-        </div>
-        <div id="hilite4" class="imgcontainer hide">
-          <img src="../img/hilite.png">
-        </div>
-      </div>
-      <!-- Diagram end -->
-    </div>
-    <!-- Interactive Interface end -->
-
-    <!-- Graphs (right-most div) -->
-    <div id="content-right">
-      Toggle:
-      <button type="button" onclick="togFreeHormoneButton();">
-        Free Hormone Values
-      </button>
-      <!--<button type="button" id="togXAxisDisp">X-Axis Days/Hours</button>-->
-      <div id="FT4graph" class="hide"></div>
-      <div id="FT3graph" class="hide"></div>
-      <div id="T4graph"></div>
-      <div id="T3graph"></div>
-      <div id="TSHgraph"></div>
-    </div>
-    <!-- Graphs end -->
-  </div>
-  <!-- Content end -->
 
   <!-- Secretion/Absorption (lower div) -->
   <div id="content-lower" class="select-none">
@@ -498,7 +457,6 @@ $main
     <div class="textaligncenter">
       <button type="button" onclick="ajax_getplot();">SIMULATE</button>
       <button type="button" onclick="location.reload();">RESET ALL</button>
-      <button type="button" id="togNormRange">TOGGLE NORMAL RANGE</button>
     </div>
     <!-- Last Row of Buttons end -->
 
@@ -722,7 +680,8 @@ EOF
     return <<EOF
 <main class="select-none">
 
-  <div class="container">
+  <!-- Container (top) -->
+  <div class="container floatL width-100">
 
     <!-- Panel Left -->
     <section class="panel panelL floatL">
@@ -779,22 +738,56 @@ EOF
       </div>
       <!-- Sidebar end -->
 
-      <!-- Image and Parameters -->
+      <!-- Diagram and Parameters -->
       <div id="img-param" class="floatL height-32">
 $paramEditor
-        <img src="../img/hilite.png" class="hide">
+        <img id="hilite1" src="../img/hilite.png" class="hilite hide">
+        <img id="hilite2" src="../img/hilite.png" class="hilite hide">
+        <img id="hilite3" src="../img/hilite.png" class="hilite hide">
+        <img id="hilite4" src="../img/hilite.png" class="hilite hide">
       </div>
-      <!-- Image and Parameters end -->
+      <!-- Diagram and Parameters end -->
 
     </section>
     <!-- Panel Left end -->
 
     <!-- Panel Right -->
     <section class="panel panelR floatL">
-hello world
-    </section
+
+      <!-- Graphs -->
+      Toggle:
+      <button class="btn btn-toggle" type="button" onclick="togFreeHormone();">
+        Free Hormone Values
+      </button>
+      <button class="btn btn-toggle" type="button" id="togNormRange">
+        Normal Range
+      </button>
+      <div id="FT4graph" class="hide d3chart"></div>
+      <div id="FT3graph" class="hide d3chart"></div>
+      <div id="T4graph"  class="show d3chart"></div>
+      <div id="T3graph"  class="show d3chart"></div>
+      <div id="TSHgraph" class="show d3chart"></div>
+      <!-- Graphs end -->
+
+    </section>
+    <!-- Panel Right end -->
 
   </div>
+  <!-- Container (top) end -->
+
+  <!-- Container (mid - secretion/absorption) -->
+  <div class="container floatL width-100">
+
+    <div class="">
+      <button type="button" class="btn-icon" onclick="togScrollBars();">
+        <img id="scrollbar" class="info-icon" 
+             src="../img/plus.png" alt="Show scroll bars">
+        Adjust secretion/absorption rates:
+      </button>
+    </div>
+
+  </div>
+  <!-- Container (mid - secretion/absorption) end -->
 
 </main>
 EOF
