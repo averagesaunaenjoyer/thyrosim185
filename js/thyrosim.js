@@ -1123,7 +1123,7 @@ function getRowClass(n) {
 //===================================================================
 function addEnable(n) {
     return '<span title="Turn input off"'
-         + '      class="floatL tog-in tog-in-1 inputs unselectable"'
+         + '      class="floatL tog-in tog-in-1 inputs"'
          + '      id="enabled-'+n+'" name="enabled-'+n+'"'
          + '      onclick="togInput('+n+');">'
          + 'ON'
@@ -1337,16 +1337,16 @@ function show_hide(H) {
 }
 
 //===================================================================
-// DESC:    Function to show/hide header info boxes.
+// DESC:    Function to show/hide header info.
 //===================================================================
-function clickInfoBox(id) {
-    if ($('#info-box-cont-'+id).css('display') == 'none') {
-        $('#info-box-'+id).toggleClass('info-box-a',0,function() {
-            $('#info-box-cont-'+id).toggle('blind',200);
+function togInfoBtn(id) {
+    if ($('#info-btn-c-'+id).css('display') == 'none') {
+        $('#info-btn-'+id).toggleClass('info-btn-a',0,function() {
+            $('#info-btn-c-'+id).toggle('blind',200);
         });
     } else {
-        $('#info-box-cont-'+id).toggle('blind',200,function() {
-            $('#info-box-'+id).toggleClass('info-box-a',0);
+        $('#info-btn-c-'+id).toggle('blind',200,function() {
+            $('#info-btn-'+id).toggleClass('info-btn-a',0);
         });
     }
 }

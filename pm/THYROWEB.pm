@@ -33,7 +33,7 @@ sub new {
 
     $self->initDisplay();
     $self->initExamples();
-    $self->initInfoBoxes();
+    $self->initInfoBtns();
 
     return $self;
 }
@@ -108,14 +108,14 @@ sub initExamples {
 }
 
 #====================================================================
-# SUBROUTINE:   initInfoBoxes
+# SUBROUTINE:   initInfoBtns
 # DESCRIPTION:
-#   Initialize info boxes. See getInfoBox() and _getInfoBox().
+#   Initialize info boxes. See getInfoBtn() and _getInfoBtn().
 #====================================================================
-sub initInfoBoxes {
+sub initInfoBtns {
     my ($self) = @_;
 
-    $self->{infoBoxes}->{About} = {
+    $self->{infoBtns}->{About} = {
         key     => 'About',
         val     => 'DIRECTIONS',
         content => <<EOF
@@ -197,13 +197,13 @@ Features:
 EOF
     };
 
-    $self->{infoBoxes}->{Example} = {
+    $self->{infoBtns}->{Example} = {
         key     => 'Example',
         val     => 'EXAMPLES',
         content => $self->insertExamples()
     };
 
-    $self->{infoBoxes}->{Disclaimer} = {
+    $self->{infoBtns}->{Disclaimer} = {
         key     => 'Disclaimer',
         val     => 'DISCLAIMER',
         content => <<EOF
@@ -245,23 +245,20 @@ sub getHead {
 
     my %head = (
 
--title      => "$self->{thysimD} by UCLA Biocybernetics Lab",
--meta       => {
-    'charset'       => 'utf-8',
-    'content'       => 'width=device-width, initial-scale=1, shrink-to-fit=no',
-    'keywords'      => 'thyrosim thyroid simulator',
-    'copyright'     => 'Copyright 2013 by UCLA Biocybernetics Laboratory'
+-title => "$self->{thysimD} by UCLA Biocybernetics Lab",
+-meta  => {
+    'charset'   => 'utf-8',
+    'content'   => 'width=device-width, initial-scale=1, shrink-to-fit=no',
+    'keywords'  => 'thyrosim thyroid simulator',
+    'copyright' => 'Copyright 2013 by UCLA Biocybernetics Laboratory'
 },
 -head => Link({
     -rel  => 'shortcut icon',
     -href => '../favicon.ico'
 }),
--style      => {
+-style => {
     'src'           => [
-        #'../css/thyrosim.css',
         '../css/thyrosim2.css',
-        #'../css/fonts-min.css',
-        #'../css/ui-lightness/jquery-ui.min.css',
         #'../css/bootstrap.min.css'
     ]
 },
@@ -298,7 +295,7 @@ sub getHead {
         -code => $self->ga()
     },
 ],
--onload     => '',
+-onload => '',
 -ontouchstart => ''
 
 );
@@ -318,9 +315,9 @@ sub insertForm {
     my $jr_ack   = $self->juniorAcknowledge();
 
     # Generate info boxes
-    my $infoBox_About = $self->getInfoBox('About');
-    my $infoBox_Examp = $self->getInfoBox('Example');
-    my $infoBox_Discl = $self->getInfoBox('Disclaimer');
+    my $infoBtn_About = $self->getInfoBtn('About');
+    my $infoBtn_Examp = $self->getInfoBtn('Example');
+    my $infoBtn_Discl = $self->getInfoBtn('Disclaimer');
 
     # Parameter list only for advanced
     my $paramEditor = "";
@@ -342,64 +339,48 @@ EOF
 <form name="form">
 
   <!-- Header -->
-  <div id="header" style="$self->{headerstyle}" class="unselectable">
+  <div id="header" style="$self->{headerstyle}" class="select-none">
 
     <div id="ucla" class="floatL">
       <span>UCLA</span>
     </div>
-
-    <!-- About -->
-$infoBox_About
-    <!-- About end -->
-
-    <!-- Example -->
-$infoBox_Examp
-    <!-- Example end -->
-
-    <!-- Disclaimer -->
-$infoBox_Discl
-    <!-- Disclaimer end -->
-
-<!--
-    Start by clicking
-    "Show T<span class="textsub">3</span> input" or
-    "Show T<span class="textsub">4</span> input"
--->
-
+$infoBtn_About
+$infoBtn_Examp
+$infoBtn_Discl
     <div id="biocyb" class="floatR">
       <span>Biocybernetics Laboratory</span>
     </div>
 
-    <br>
+    <div class="bar-h-gold floatL"></div>
 
-    <!-- Not-for-IE Message -->
-    <div id="nonIEMsgDiv" class="hide">
-      <br>
-      <div class="nonIEMsg">
-        It appears that you are using Internet Explorer (IE). If you are
-        using IE, please use version 9 or above. Otherwise, to see the
-        web-app as intended, please use a free and supported browser, such as
-        <a href="http://www.google.com/chrome">Google Chrome</a> or
-        <a href="http://www.mozilla.org/en-US/firefox/new/">Mozilla Firefox</a>.
-      </div>
+    <!-- Not-for-IE Warning -->
+    <div id="non-ie-warn" class="hide floatL non-ie-warn">
+      It appears that you are using Internet Explorer (IE). If you are using IE,
+      please use version 9 or above. Otherwise, to see the web-app as intended,
+      please use a free and supported browser, such as
+      <a target="_blank" href="https://www.google.com/chrome/">
+        Google Chrome</a> or
+      <a target="_blank" href="https://www.mozilla.org/en-US/firefox/new/">
+        Mozilla Firefox</a>.
     </div>
     <script>
         // D3 only supports IE9+
         checkMSIE();
     </script>
-    <!-- Not-for-IE Message end -->
+    <!-- Not-for-IE Warning end -->
 
   </div>
   <!-- Header end -->
 
+
   <!-- Content -->
-  <div id="content">
+  <div id="content" class="select-none">
 
     <!-- Interactive Interface -->
     <div id="interactive-interface">
 
       <!-- Inputs (left-most div) -->
-      <div id="content-inputs" class="content-center unselectable">
+      <div id="content-inputs" class="content-center">
         <!-- T3 Input -->
         <a id="T3display" class="showhide" href="javascript:show_hide('T3');">
           <span class="floatL hormone-dropdown">
@@ -494,7 +475,7 @@ $infoBox_Discl
   <!-- Content end -->
 
   <!-- Secretion/Absorption (lower div) -->
-  <div id="content-lower" class="unselectable">
+  <div id="content-lower" class="select-none">
     <div class="textaligncenter">
       <a class="img-input" href="javascript:showhidescrollbars();">
         <img class="textaligntop relative scrollbars" id="showhidescrollbar"
@@ -556,7 +537,7 @@ $infoBox_Discl
   <!-- Secretion/Absorption end -->
 
   <!-- Input Adjustments (footer) -->
-  <div class="footer unselectable">
+  <div class="footer select-none">
 
     <div class="textaligncenter">
       Simulation time:
@@ -793,7 +774,7 @@ sub insertExample {
   <span class="floatL example-wrp">
     <span class="example-txt"><b>$exp->{bold}</b> $exp->{text}</span>
     <button class="btn btn-submit" type="button"
-            onclick="ajax_getplot('$exp->{name}');">
+            onclick="ajax_getplot('$exp->{name}');togInfoBtn('Example')">
       Simulate
     </button>
   </span>
@@ -862,40 +843,42 @@ sub juniorAcknowledge {
 }
 
 #====================================================================
-# SUBROUTINE:   getInfoBox
+# SUBROUTINE:   getInfoBtn
 # DESCRIPTION:
-#   Wrapper for generating info box with content.
+#   Wrapper for generating info button with content.
 #====================================================================
-sub getInfoBox {
+sub getInfoBtn {
     my ($self,$key) = @_;
-    my $infoBox = $self->_getInfoBox(
+    my $infoBtn = $self->_getInfoBtn(
         $key,
-        $self->{infoBoxes}->{$key}->{val},
-        $self->{infoBoxes}->{$key}->{content}
+        $self->{infoBtns}->{$key}->{val},
+        $self->{infoBtns}->{$key}->{content}
     );
-    return $infoBox;
+    return $infoBtn;
 }
 
 #====================================================================
-# SUBROUTINE:   _getInfoBox
+# SUBROUTINE:   _getInfoBtn
 # DESCRIPTION:
-#   Generate info box snp.
+#   Generate info button snp.
 #
-#   key:        Unique infoBoxes key
+#   key:        Unique infoBtns key
 #   val:        Button's display value
 #   content:    Content to be shown when button is clicked
 #====================================================================
-sub _getInfoBox {
+sub _getInfoBtn {
     my ($self,$key,$val,$content) = @_;
+
     return <<EOF
-<a id="info-box-$key" class="info-box floatL"
-   href="javascript:clickInfoBox('$key');">$val
-  <div id="info-box-cont-$key" class="info-box-cont">
+<div class="floatL">
+  <button id="info-btn-$key" type="button" class="info-btn floatL"
+          onclick="togInfoBtn('$key');">$val</button>
+  <div id="info-btn-c-$key" class="info-btn-c">
     <p>
 $content
     </p>
   </div>
-</a>
+</div>
 EOF
 }
 
