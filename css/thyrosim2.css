@@ -55,7 +55,7 @@ ol, ul {
 }
 p {
   display: block;
-  margin: 1em 0 1em 0;
+  margin: 1.5em 0;
 }
 table {
   border-collapse: collapse;
@@ -66,18 +66,14 @@ table {
 html, body {
   height: 100%;
   font-family: arial,helvetica,sans-serif;
-  font-size: 16px;
+  font-size: 100%;
 }
-
-/* Link customization */
 
 /*--------------------------------------------------
 * Project-wide styles
 *--------------------------------------------------*/
-.container {
-  margin: 0.625em;
-}
 
+/* One-liners */
 .cursor-pointer { cursor: pointer; }
 .floatL { float: left; }
 .floatR { float: right; }
@@ -87,18 +83,26 @@ html, body {
 .color-black { color: black; }
 .color-blue  { color: blue;  }
 .color-white { color: white; }
-.height-32 { height: 32em; }
-.width-100 { width: 100%; }
+.textcenter { text-align: center; }
 
-.info-icon {
-  height: 1.25em;
-  margin-top: -0.2em;
-  vertical-align: middle;
+/* Layouts and grids */
+.container {
+  box-sizing: border-box;
+  float: left;
+  width: 100%;
 }
-.textsub {
-  font-size: 0.7em;
-  position: relative;
-  top: 0.2em;
+.grid-1-2 {
+  width: calc(100% / 2);
+}
+.grid-1-3 {
+  width: calc(100% / 3);
+}
+.grid-2-3 {
+  width: calc(100% * 2 / 3);
+}
+.grid-1-2, .grid-1-3, .grid-2-3 {
+  box-sizing: border-box;
+  float: left;
 }
 
 /* Button - Default */
@@ -106,26 +110,53 @@ html, body {
   border: 1px solid transparent;
   border-radius: 0.25em;
   line-height: 1;
-  margin: 0 0.3em;
+  margin: 0.1em 0.3em;
   padding: 0.4em;
 }
-.btn-submit {
+.btn-blue {
   background-color: #007bff;
   border: 1px solid #007bff;
   color: white;
 }
-.btn-submit:hover {
+.btn-blue:hover {
   background-color: #0069d9;
   border: 1px solid #0062cc;
 }
-.btn-toggle {
+.btn-gray {
+  background-color: #6c757d;
+  border: 1px solid #6c757d;
+  color: white;
+}
+.btn-gray:hover {
+  background-color: #5a6268;
+  border: 1px solid #545b62;
+}
+.btn-red {
+  background-color: #dc3545;
+  border: 1px solid #dc3545;
+  color: white;
+}
+.btn-red:hover {
+  background-color: #c82333;
+  border: 1px solid #bd2130;
+}
+.btn-yellow {
   background-color: #ffc107;
   border: 1px solid #ffc107;
   color: #212529;
 }
-.btn-toggle:hover {
+.btn-yellow:hover {
   background-color: #e0a800;
   border: 1px solid #d39e00;
+}
+.btn-teal {
+  background-color: #17a2b8;
+  border: 1px solid #17a2b8;
+  color: white;
+}
+.btn-teal:hover {
+  background-color: #138496;
+  border: 1px solid #117a8b;
 }
 
 /* Button - Icon */
@@ -214,8 +245,18 @@ html, body {
   -webkit-transform: rotate(45deg);
 }
 
-/* Unselectable text */
-.select-none {
+/* Miscellaneous */
+.info-icon {
+  height: 1em;
+  margin-top: -0.2em;
+  vertical-align: middle;
+}
+.textsub { /* Subscript */
+  font-size: 0.7em;
+  position: relative;
+  top: 0.2em;
+}
+.select-none { /* Unselectable text */
   -webkit-touch-callout: none !important;
   -webkit-user-select: none !important;
   -khtml-user-select: none !important;
@@ -268,7 +309,7 @@ html, body {
 
 #wrapper {
   margin: 0 auto;
-  width: 900px;
+  width: 1050px;
 }
 header {
   background-color: #fafafa;
@@ -381,18 +422,22 @@ footer {
 *--------------------------------------------------*/
 
 /* Main layout */
-.panel {
-  width: 50%;
+#container-top {
+  height: 32.5em;
+  padding: 0.625em 0.625em 0;
 }
-.panelL {
+#container-top > div {
+  height: 100%;
 }
-.panelR {
+#container-bot {
 }
-#sidebar {
-  width: 3em;
+#container-bot > div {
 }
 
 /* Container (top) - Panel Left - Hormone menu sidebar */
+#sidebar {
+  width: 3em;
+}
 .T-menu-head {
   margin-bottom: 0.625em;
 }
@@ -402,14 +447,15 @@ footer {
   text-align: center;
 }
 .T-menu button {
-  margin: 0.2em;
+  margin: 0.4em;
 }
 
 /* Container (top) - Panel Left - Diagram and parameters */
 #img-param {
   background-image: url("../img/sim.png");
   background-repeat: no-repeat;
-  background-position: 0 1%;
+  background-position: center;
+  height: 100%;
   margin: 0 0 0 0.625em;
   width: 85%;
 }
@@ -418,7 +464,7 @@ footer {
   display: none;
   height: 90%;
   line-height: 1.6;
-  padding: 1em 0 0 1em;
+  padding: 0.625em 0 0 0.625em;
 }
 .paramrow {
   width: 100%;
@@ -459,7 +505,7 @@ footer {
 #hilite3 {}
 #hilite4 {}
 
-/* Container (top) - Panel Right - these would probably be D3 customizations */
+/* Container (top) - Panel Right - D3 customizations */
 .d3chart {
 }
 .d3chart .tick text {
@@ -478,8 +524,13 @@ footer {
   text-align: center;
 }
 
-/* Container (mid) */
+/* Container (bot) - Panel Left - Control panel */
+#control-panel {
+}
 
+/* Container (bot) - Panel Right - Input manager */
+#input-manager {
+}
 
 /*--------------------------------------------------
 * Footer

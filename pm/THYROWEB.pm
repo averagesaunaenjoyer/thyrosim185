@@ -34,6 +34,7 @@ sub new {
     $self->initDisplay();
     $self->initExamples();
     $self->initInfoBtns();
+    $self->initHormoneMenu();
 
     return $self;
 }
@@ -219,6 +220,39 @@ EOF
 }
 
 #====================================================================
+# SUBROUTINE:   initHormoneMenu
+# DESCRIPTION:
+#   Initialize hormone menu. See getHormoneMenu().
+#====================================================================
+sub initHormoneMenu {
+    my ($self) = @_;
+
+    $self->{hormoneMenu}->{T3} = {
+        head_id => 'T3-menu-head',
+        menu_id => 'T3-menu',
+        button  => 'btn-icon-t3',
+        in_or_name => 'T3-Oral',
+        in_iv_name => 'T3-IV',
+        in_in_name => 'T3-Infusion',
+        in_or_src => '../img/pill1.png',
+        in_iv_src => '../img/syringe1.png',
+        in_in_src => '../img/infusion1.png'
+    };
+
+    $self->{hormoneMenu}->{T4} = {
+        head_id => 'T4-menu-head',
+        menu_id => 'T4-menu',
+        button  => 'btn-icon-t4',
+        in_or_name => 'T4-Oral',
+        in_iv_name => 'T4-IV',
+        in_in_name => 'T4-Infusion',
+        in_or_src => '../img/pill2.png',
+        in_iv_src => '../img/syringe2.png',
+        in_in_src => '../img/infusion2.png'
+    };
+}
+
+#====================================================================
 # SUBROUTINE:   ga
 # DESCRIPTION:
 #   Google Analytics code.
@@ -337,10 +371,6 @@ $main
   <!-- Secretion/Absorption (lower div) -->
   <div id="content-lower" class="select-none">
     <div class="textaligncenter">
-      <a class="img-input" href="javascript:showhidescrollbars();">
-        <img class="textaligntop relative scrollbars" id="showhidescrollbar"
-             src="../img/plus.png" alt="show scroll bars" />
-      </a>
       Adjust secretion/absorption rates:<br>
       <label for="recalcIC" class="cursor-pointer">
         <input type="checkbox" value="1" id="recalcIC" name="recalcIC" checked>
@@ -357,7 +387,7 @@ $main
     <div class="adjuster" onmouseover="hilite('1');" onmouseout="lolite('1');">
       T<span class="textsub">4</span> Secretion (0-200%):
       <input type="text" size="5" id="dialinput1" name="dialinput1"> %
-      <div id="slidercontainer1" class="slidercontainer">
+      <div id="slidercontainer1" class="sliders">
         <div id="slider1"></div>
       </div>
     </div>
@@ -367,7 +397,7 @@ $main
     <div class="adjuster" onmouseover="hilite('2');" onmouseout="lolite('2');">
       T<span class="textsub">4</span> Absorption (0-100%):
       <input type="text" size="5" id="dialinput2" name="dialinput2"> %
-      <div id="slidercontainer2" class="slidercontainer">
+      <div id="slidercontainer2" class="sliders">
         <div id="slider2"></div>
       </div>
     </div>
@@ -377,7 +407,7 @@ $main
     <div class="adjuster" onmouseover="hilite('3');" onmouseout="lolite('3');">
       T<span class="textsub">3</span> Secretion (0-200%):
       <input type="text" size="5" id="dialinput3" name="dialinput3"> %
-      <div id="slidercontainer3" class="slidercontainer">
+      <div id="slidercontainer3" class="sliders">
         <div id="slider3"></div>
       </div>
     </div>
@@ -387,7 +417,7 @@ $main
     <div class="adjuster" onmouseover="hilite('4');" onmouseout="lolite('4');">
       T<span class="textsub">3</span> Absorption (0-100%):
       <input type="text" size="5" id="dialinput4" name="dialinput4"> %
-      <div id="slidercontainer4" class="slidercontainer">
+      <div id="slidercontainer4" class="sliders">
         <div id="slider4"></div>
       </div>
     </div>
@@ -662,13 +692,16 @@ EOF
 sub getMain {
     my ($self) = @_;
 
+    my $menuT3 = $self->getHormoneMenu('T3');
+    my $menuT4 = $self->getHormoneMenu('T4');
+
     # Parameter list only for advanced
     my $paramEditor = "";
     if ($self->{showParams}) {
         my $paramList = $self->printParams();
         $paramEditor = <<EOF
 Toggle:
-<button class="btn btn-toggle" type="button" 
+<button class="btn btn-teal" type="button"
         onclick="toggle('parameters',200);">
   Parameters
 </button>
@@ -677,69 +710,32 @@ EOF
 ;
 
     }
+
     return <<EOF
 <main class="select-none">
 
   <!-- Container (top) -->
-  <div class="container floatL width-100">
+  <div id="container-top" class="container">
 
     <!-- Panel Left -->
-    <section class="panel panelL floatL">
+    <div class="grid-1-2">
 
       <!-- Sidebar -->
       <div id="sidebar" class="floatL">
 
         <!-- T3 Inputs Menu -->
-        <div id="T3-menu-head" class="T-menu-head">
-          <button type="button" onclick="togHormoneMenu('T3-menu');">
-            T<span class="textsub">3</span><i class="arrow arrow-u"></i>Inputs
-          </button>
-        </div>
-
-        <div id="T3-menu" class="T-menu show">
-          <button type="button" class="btn-icon btn-icon-t3"
-                  onclick="addInput('T3-Oral');">
-            <img src="../img/pill1.png">
-          </button>
-          <button type="button" class="btn-icon btn-icon-t3"
-                  onclick="addInput('T3-IV');">
-            <img src="../img/syringe1.png">
-          </button>
-          <button type="button" class="btn-icon btn-icon-t3"
-                  onclick="addInput('T3-Infusion');">
-            <img src="../img/infusion1.png">
-          </button>
-        </div>
+$menuT3
         <!-- T3 Inputs Menu end -->
 
         <!-- T4 Inputs Menu -->
-        <div id="T4-menu-head" class="T-menu-head">
-          <button type="button" onclick="togHormoneMenu('T4-menu');">
-            T<span class="textsub">4</span><i class="arrow arrow-u"></i>Inputs
-          </button>
-        </div>
-
-        <div id="T4-menu" class="T-menu show">
-          <button type="button" class="btn-icon btn-icon-t4"
-                  onclick="addInput('T4-Oral');">
-            <img src="../img/pill2.png">
-          </button>
-          <button type="button" class="btn-icon btn-icon-t4"
-                  onclick="addInput('T4-IV');">
-            <img src="../img/syringe2.png">
-          </button>
-          <button type="button" class="btn-icon btn-icon-t4"
-                  onclick="addInput('T4-Infusion');">
-            <img src="../img/infusion2.png">
-          </button>
-        </div>
+$menuT4
         <!-- T4 Inputs Menu end -->
 
       </div>
       <!-- Sidebar end -->
 
       <!-- Diagram and Parameters -->
-      <div id="img-param" class="floatL height-32">
+      <div id="img-param" class="floatL">
 $paramEditor
         <img id="hilite1" src="../img/hilite.png" class="hilite hide">
         <img id="hilite2" src="../img/hilite.png" class="hilite hide">
@@ -748,46 +744,79 @@ $paramEditor
       </div>
       <!-- Diagram and Parameters end -->
 
-    </section>
+    </div>
     <!-- Panel Left end -->
 
     <!-- Panel Right -->
-    <section class="panel panelR floatL">
+    <div class="grid-1-2">
 
       <!-- Graphs -->
       Toggle:
-      <button class="btn btn-toggle" type="button" onclick="togFreeHormone();">
+      <button class="btn btn-teal" type="button" onclick="togFreeHormone();">
         Free Hormone Values
       </button>
-      <button class="btn btn-toggle" type="button" id="togNormRange">
+      <button class="btn btn-teal" type="button" id="togNormRange">
         Normal Range
       </button>
-      <div id="FT4graph" class="hide d3chart"></div>
-      <div id="FT3graph" class="hide d3chart"></div>
-      <div id="T4graph"  class="show d3chart"></div>
-      <div id="T3graph"  class="show d3chart"></div>
-      <div id="TSHgraph" class="show d3chart"></div>
+      <div class="textcenter">
+        <div id="FT4graph" class="hide d3chart"></div>
+        <div id="FT3graph" class="hide d3chart"></div>
+        <div id="T4graph"  class="show d3chart"></div>
+        <div id="T3graph"  class="show d3chart"></div>
+        <div id="TSHgraph" class="show d3chart"></div>
+      </div>
       <!-- Graphs end -->
 
-    </section>
+    </div>
     <!-- Panel Right end -->
 
   </div>
   <!-- Container (top) end -->
 
-  <!-- Container (mid - secretion/absorption) -->
-  <div class="container floatL width-100">
+  <!-- Container (bot) -->
+  <div id="container-bot" class="container">
 
-    <div class="">
+    <div id="control-panel" class="grid-1-2"
+         style="border:1px solid black;padding:2em 0">
       <button type="button" class="btn-icon" onclick="togScrollBars();">
-        <img id="scrollbar" class="info-icon" 
+        <img id="scrollbar" class="info-icon"
              src="../img/plus.png" alt="Show scroll bars">
         Adjust secretion/absorption rates:
       </button>
+      <br>
+      Secretion/Absorption Rates:<br>
+      Simulation Time: 100000 Days<br>
+      Recalculate Initial Conditions<br>
+      Set Next Run as Color<br>
+
+
+<div class="textcenter">
+  <button class="btn btn-blue" type="button" onclick="ajax_getplot();">
+    Simulate
+  </button>
+  <button class="btn btn-red" type="button" onclick="location.reload();">
+    Reset All
+  </button>
+  <button class="btn btn-yellow" type="button" onclick="resetRun('Blue');">
+    <img class="info-icon" src="../img/x.png" alt="x">
+    Blue Run
+  </button>
+  <button class="btn btn-yellow" type="button" onclick="resetRun('Green');">
+    <img class="info-icon" src="../img/x.png" alt="x">
+    Green Run
+  </button>
+</div>
+
     </div>
 
+    <!-- Input Manager -->
+    <div id="input-manager" class="grid-1-2" style="border:1px solid black;">
+      Input Manager
+    </div>
+    <!-- Input Manager end -->
+
   </div>
-  <!-- Container (mid - secretion/absorption) end -->
+  <!-- Container (bot) end -->
 
 </main>
 EOF
@@ -814,25 +843,20 @@ sub insertExamples {
 #====================================================================
 sub insertExample {
     my ($self,$exp) = @_;
-    my $snp = <<EOF
-
+    return <<EOF
 <!-- Example $exp->{name} -->
 <span class="floatL example">
   <span class="floatL example-wrp">
     <span class="example-txt"><b>$exp->{bold}</b> $exp->{text}</span>
-    <button class="btn btn-submit" type="button"
-            onclick="ajax_getplot('$exp->{name}');togInfoBtn('Example')">
+    <button class="btn btn-blue" type="button"
+            onclick="ajax_getplot('$exp->{name}');togInfoBtn('Example');">
       Simulate
     </button>
   </span>
   <img src="$exp->{img}" alt="$exp->{alt}" class="example-tbn" />
 </span>
 <!-- Example $exp->{name} end -->
-
 EOF
-;
-
-    return $snp;
 }
 
 #====================================================================
@@ -919,7 +943,9 @@ sub _getInfoBtn {
     return <<EOF
 <div class="floatL">
   <button id="info-btn-$key" type="button" class="info-btn floatL"
-          onclick="togInfoBtn('$key');">$val</button>
+          onclick="togInfoBtn('$key');">
+    $val
+  </button>
   <div id="info-btn-c-$key" class="info-btn-c">
     <button type="button" class="btn-anchor floatR"
             onclick="togInfoBtn('$key');">
@@ -929,6 +955,41 @@ sub _getInfoBtn {
 $content
     </p>
   </div>
+</div>
+EOF
+}
+
+#====================================================================
+# SUBROUTINE:   getHormoneMenu
+# DESCRIPTION:
+#   Generate hormone menu snp.
+#
+#   h:  Hormone, T3 or T4
+#====================================================================
+sub getHormoneMenu {
+    my ($self,$h) = @_;
+
+    my $s = $self->{hormoneMenu}->{$h}; # Shorthand
+
+    return <<EOF
+<div id="$s->{head_id}" class="T-menu-head">
+  <button type="button" onclick="togHormoneMenu('$s->{menu_id}');">
+    T<span class="textsub">3</span><i class="arrow arrow-u"></i>Inputs
+  </button>
+</div>
+<div id="$s->{menu_id}" class="T-menu show">
+  <button type="button" class="btn-icon $s->{button}"
+          onclick="addInput('$s->{in_or_name}');">
+    <img src="$s->{in_or_src}">
+  </button>
+  <button type="button" class="btn-icon $s->{button}"
+          onclick="addInput('$s->{in_iv_name}');">
+    <img src="$s->{in_iv_src}">
+  </button>
+  <button type="button" class="btn-icon $s->{button}"
+          onclick="addInput('$s->{in_in_name}');">
+    <img src="$s->{in_in_src}">
+  </button>
 </div>
 EOF
 }

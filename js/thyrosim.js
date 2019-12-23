@@ -113,7 +113,7 @@ function graph(hormone,addlabel,initgraph) {
     var eRHi = ThyrosimGraph.settings[hormone].bounds[thysim].hi;
 
     // Graph size
-    var w = 370; // width in pixels of the graph
+    var w = 420; // width in pixels of the graph
     var h = 130; // height in pixels of the graph
 
     // Scales
@@ -478,7 +478,7 @@ function getExperimentStr(exp) {
 //   exp:   The experiment name
 //===================================================================
 function executeExperiment(exp) {
-    $('#footer-input').empty();                  // Clear the input space
+    $('#input-manager').empty();                 // Clear the input space
     ThyrosimGraph.setRun("Green",undefined);     // Delete the Green run
     $('input[name=runRadio]')[0].checked = true; // Set Blue as exp run
 
@@ -525,7 +525,7 @@ function tuneDials(a,b,c,d) {
 //===================================================================
 function addInputOral(hormone,dose,interval,singledose,start,end) {
     addInput(hormone+'-Oral');
-    var pin = parseInputName($('#footer-input').children().last().attr('id'));
+    var pin = parseInputName($('#input-manager').children().last().attr('id'));
     $('#dose-' + pin[1]).val(dose);
     $('#int-'  + pin[1]).val(interval);
     $('#start-'+ pin[1]).val(start);
@@ -791,9 +791,9 @@ var animeObj = new animation();
 //===================================================================
 function addInput(title) {
 
-    var iNum = getNextInputNum(); // Next input number
-    var rowN = getRowClass(iNum); // Next input span row class
-    var footer = "#footer-input"; // Input container div id
+    var iNum = getNextInputNum();  // Next input number
+    var rowN = getRowClass(iNum);  // Next input span row class
+    var footer = "#input-manager"; // Input container div id
 
     // Create a new input span object
     var span = $(document.createElement('span')).attr({id:'input-'+iNum});
@@ -948,7 +948,7 @@ function deleteInput(n) {
     n = parseInt(n); // Treat as integer
 
     // Get the number of inputs before this deletion
-    var end = $('#footer-input').children().length;
+    var end = $('#input-manager').children().length;
 
     // Delete the input element
     $('#input-'+n).remove();
@@ -1067,7 +1067,7 @@ function getInputImgSrc(title) {
 //          next input should have. Input numbers start at 1.
 //===================================================================
 function getNextInputNum() {
-    return $("#footer-input").children().length + 1;
+    return $("#input-manager").children().length + 1;
 }
 
 //===================================================================
