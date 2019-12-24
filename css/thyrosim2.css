@@ -84,6 +84,7 @@ html, body {
 .color-blue  { color: blue;  }
 .color-white { color: white; }
 .textcenter { text-align: center; }
+.width-100 { width: 100%; }
 
 /* Layouts and grids */
 .container {
@@ -105,7 +106,7 @@ html, body {
   float: left;
 }
 
-/* Button - Default */
+/* Buttons - Bootstrap buttons colorscheme */
 .btn {
   border: 1px solid transparent;
   border-radius: 0.25em;
@@ -118,7 +119,7 @@ html, body {
   border: 1px solid #007bff;
   color: white;
 }
-.btn-blue:hover {
+.btn-blue:hover, .btn-blue.active {
   background-color: #0069d9;
   border: 1px solid #0062cc;
 }
@@ -127,16 +128,25 @@ html, body {
   border: 1px solid #6c757d;
   color: white;
 }
-.btn-gray:hover {
+.btn-gray:hover, .btn-gray.active {
   background-color: #5a6268;
   border: 1px solid #545b62;
+}
+.btn-green {
+  background-color: #28a745;
+  border: 1px solid #28a745;
+  color: white;
+}
+.btn-green:hover, .btn-green.active {
+  background-color: #218838;
+  border: 1px solid #1e7e34;
 }
 .btn-red {
   background-color: #dc3545;
   border: 1px solid #dc3545;
   color: white;
 }
-.btn-red:hover {
+.btn-red:hover, .btn-red.active {
   background-color: #c82333;
   border: 1px solid #bd2130;
 }
@@ -145,7 +155,7 @@ html, body {
   border: 1px solid #ffc107;
   color: #212529;
 }
-.btn-yellow:hover {
+.btn-yellow:hover, .btn-yellow.active {
   background-color: #e0a800;
   border: 1px solid #d39e00;
 }
@@ -154,10 +164,65 @@ html, body {
   border: 1px solid #17a2b8;
   color: white;
 }
-.btn-teal:hover {
+.btn-teal:hover, .btn-teal.active {
   background-color: #138496;
   border: 1px solid #117a8b;
 }
+.btn-white {
+  background-color: #f8f9fa;
+  border: 1px solid #f8f9fa;
+  color: #212529;
+}
+.btn-white:hover, .btn-white.active {
+  background-color: #e2e6ea;
+  border: 1px solid #dae0e5;
+}
+.btn-black {
+  background-color: #343a40;
+  border: 1px solid #343a40;
+  color: white;
+}
+.btn-black:hover, .btn-black.active {
+  background-color: #23272b;
+  border: 1px solid #1d2124;
+}
+
+/* Button - Group Radio */
+.btn-group {
+  display: inline-block;
+}
+.btn-group>.btn {
+  position: relative;
+}
+.btn-group>label {
+  cursor: pointer;
+  margin: 0 0 0 0; /* reset .btn margins */
+  padding-left: 0.6em;
+}
+.btn-group>label:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.btn-group>label:last-child {
+  padding-right: 0.6em;
+}
+.btn-group>label:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.btn-group>label>input[type="radio"] { /* hide radio button */
+  opacity: 0;
+  position: absolute;
+}
+.btn-group>.active { z-index: 1 } /* set active button higher to show borders */
+.btn-group>.btn-blue.active  {box-shadow: 0 0 0 0.2rem rgba(  0,123,255,.5);}
+.btn-group>.btn-gray.active  {box-shadow: 0 0 0 0.2rem rgba(108,117,125,.5);}
+.btn-group>.btn-green.active {box-shadow: 0 0 0 0.2rem rgba( 40,167, 69,.5);}
+.btn-group>.btn-red.active   {box-shadow: 0 0 0 0.2rem rgba(220, 53, 69,.5);}
+.btn-group>.btn-yellow.active{box-shadow: 0 0 0 0.2rem rgba(255,193,  7,.5);}
+.btn-group>.btn-teal.active  {box-shadow: 0 0 0 0.2rem rgba( 23,162,184,.5);}
+.btn-group>.btn-white.active {box-shadow: 0 0 0 0.2rem rgba(248,249,250,.5);}
+.btn-group>.btn-black.active {box-shadow: 0 0 0 0.2rem rgba( 52, 58, 64,.5);}
 
 /* Button - Icon */
 .btn-icon {
@@ -426,12 +491,12 @@ footer {
   height: 32.5em;
   padding: 0.625em 0.625em 0;
 }
-#container-top > div {
+#container-top>div {
   height: 100%;
 }
 #container-bot {
 }
-#container-bot > div {
+#container-bot>div {
 }
 
 /* Container (top) - Panel Left - Hormone menu sidebar */
@@ -526,6 +591,9 @@ footer {
 
 /* Container (bot) - Panel Left - Control panel */
 #control-panel {
+}
+#control-panel .control-div {
+  padding-top: 1em;
 }
 
 /* Container (bot) - Panel Right - Input manager */

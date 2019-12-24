@@ -1362,6 +1362,26 @@ $(function() {
             $(s).slider('value',this.value);
         });
     });
+
+    // Bind action to button groups. Require the following construction:
+    // <span/div class="btn-group">
+    //   <label class="btn btn-$color">
+    //     <input type="radio" name="myradio" id="value1" value="One">One
+    //   </label>
+    //   <label class="btn btn-$color">
+    //     <input type="radio" name="myradio" id="value2" value="Two">Two
+    //   </label>
+    //   <label class="btn btn-$color">
+    //     <input type="radio" name="myradio" id="value3" value="Three">Three
+    //   </label>
+    $.each($('.btn-group > label'),function() {
+        var label = $(this);
+        label.click(function() {
+            label.addClass('active');
+            label.children('input').prop('checked',true);
+            label.siblings().removeClass('active');
+        });
+    });
 });
 
 //===================================================================
