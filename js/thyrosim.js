@@ -1340,8 +1340,13 @@ function togFreeHormone() {
 //===================================================================
 $(function() {
 
-    $(document).tooltip(); // Required for jQuery UI tooltips
-    graphAll();            // Initialize graphs
+    // Initialize D3 charts
+    graphAll();
+
+    // Initialize jQuery UI tooltip
+    $(document).tooltip({
+        tooltipClass: "thysim-tooltip"
+    });
 
     // Initialize slider objects
     $.each(sliderObj,function(k,o) {
@@ -1363,16 +1368,17 @@ $(function() {
         });
     });
 
-    // Bind action to button groups. Require the following construction:
+    // Initialize button groups. Apply an "active" class on the checked input.
+    // Require the following construction:
     // <span/div class="btn-group">
     //   <label class="btn btn-$color">
-    //     <input type="radio" name="myradio" id="value1" value="One">One
+    //     <input type="radio" name="myradio" id="r1" value="1">1
     //   </label>
     //   <label class="btn btn-$color">
-    //     <input type="radio" name="myradio" id="value2" value="Two">Two
+    //     <input type="radio" name="myradio" id="r2" value="2">2
     //   </label>
     //   <label class="btn btn-$color">
-    //     <input type="radio" name="myradio" id="value3" value="Three">Three
+    //     <input type="radio" name="myradio" id="r3" value="3">3
     //   </label>
     $.each($('.btn-group > label'),function() {
         var label = $(this);
@@ -1382,6 +1388,10 @@ $(function() {
             label.siblings().removeClass('active');
         });
     });
+
+    // Initialize "Next Run" as Blue
+    $('#runRadioBlue').parent().addClass('active');
+
 });
 
 //===================================================================

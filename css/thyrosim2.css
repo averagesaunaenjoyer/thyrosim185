@@ -92,16 +92,12 @@ html, body {
   float: left;
   width: 100%;
 }
-.grid-1-2 {
-  width: calc(100% / 2);
-}
-.grid-1-3 {
-  width: calc(100% / 3);
-}
-.grid-2-3 {
-  width: calc(100% * 2 / 3);
-}
-.grid-1-2, .grid-1-3, .grid-2-3 {
+.grid-1-2 { width: calc(100% / 2); }
+.grid-1-3 { width: calc(100% / 3); }
+.grid-2-3 { width: calc(100% * 2 / 3); }
+.grid-2-5 { width: calc(100% * 2 / 5); }
+.grid-3-5 { width: calc(100% * 3 / 5); }
+.grid-1-2, .grid-1-3, .grid-2-3, .grid-2-5, .grid-3-5 {
   box-sizing: border-box;
   float: left;
 }
@@ -190,6 +186,8 @@ html, body {
 /* Button - Group Radio */
 .btn-group {
   display: inline-block;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
 }
 .btn-group>.btn {
   position: relative;
@@ -311,15 +309,32 @@ html, body {
 }
 
 /* Miscellaneous */
-.info-icon {
-  height: 1em;
+.info-icon-s, .info-icon-m, .info-icon-l {
   margin-top: -0.2em;
   vertical-align: middle;
+}
+.info-icon-s {
+  height: 1em;
+}
+.info-icon-m {
+  height: 1.2em;
+}
+.info-icon-l {
+  height: 1.6em;
 }
 .textsub { /* Subscript */
   font-size: 0.7em;
   position: relative;
   top: 0.2em;
+}
+.thysim-tooltip { /* jQuery UI tooltip customization */
+  background: #d1ecf1;
+  border: 0.125em solid #bee5eb;
+  box-shadow: none;
+  color: #0c5460;
+  font-size: 0.875em;
+  padding: 0.8em;
+  z-index: 99;
 }
 .select-none { /* Unselectable text */
   -webkit-touch-callout: none !important;
@@ -441,6 +456,10 @@ footer {
   position: absolute;
   width: 500px;
   z-index: 1; /* content does not block button */
+}
+.info-btn-c div {
+  display: block;
+  margin: 1.8em 0 1.5em 0;
 }
 .info-btn-c ol {
   list-style-type: decimal;
@@ -591,9 +610,13 @@ footer {
 
 /* Container (bot) - Panel Left - Control panel */
 #control-panel {
+  padding: 2em 1em;
 }
-#control-panel .control-div {
+#control-panel .control-div-1 {
   padding-top: 1em;
+}
+#control-panel .control-div-2 {
+  padding-top: 2em;
 }
 
 /* Container (bot) - Panel Right - Input manager */
@@ -609,5 +632,3 @@ footer {
 *--------------------------------------------------*/
 /* Copied over for now without change because I want those buttons hidden */
 /* Want renamed */
-
-

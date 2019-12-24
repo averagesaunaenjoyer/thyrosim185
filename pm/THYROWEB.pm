@@ -99,8 +99,8 @@ sub initExamples {
         bold    => 'The DiStefano-Jonklaas 2019 Example-1',
         text    => 'reproduces Figure 1 of the DiStefano-Jonklaas 2019 paper.
                     Specifically, the simulated hypothyroidic individual (25%
-                    thyroid function) is given 123 &microg
-                    T<span class="textsub">4</span> and 6.5 &microg
+                    thyroid function) is given 123 &micro;g
+                    T<span class="textsub">4</span> and 6.5 &micro;g
                     T<span class="textsub">3</span> daily for 30 days.',
         img     => '../img/experiment-DiJo19-1.png',
         alt     => 'DiStefano-Jonklass Example 1',
@@ -157,18 +157,18 @@ Minimum Usage:
     <ol>
       <li>
         Click the
-        <img class="info-icon" src="../img/pill1.png"
+        <img class="info-icon-m" src="../img/pill1.png"
              alt="Oral Input">
-        <img class="info-icon" src="../img/pill2.png"
+        <img class="info-icon-m" src="../img/pill2.png"
              alt="Oral Input">
-        <img class="info-icon" src="../img/syringe1.png"
+        <img class="info-icon-m" src="../img/syringe1.png"
              alt="IV Input">
-        <img class="info-icon" src="../img/syringe2.png"
+        <img class="info-icon-m" src="../img/syringe2.png"
              alt="IV Input">
         or
-        <img class="info-icon" src="../img/infusion1.png"
+        <img class="info-icon-m" src="../img/infusion1.png"
              alt="Infusion Input">
-        <img class="info-icon" src="../img/infusion2.png"
+        <img class="info-icon-m" src="../img/infusion2.png"
              alt="Infusion Input">
         icons to add as input.
       </li>
@@ -181,7 +181,7 @@ Minimum Usage:
 Features:
 <ol>
   <li>
-    <img class="info-icon" src="../img/x.png" alt="x">
+    <img class="info-icon-m" src="../img/x.png" alt="x">
     icon: click to delete an input.
   </li>
   <li>
@@ -190,7 +190,7 @@ Features:
     icons: click to turn input on or off for the next run.
   </li>
   <li>
-    <img class="info-icon" src="../img/plus.png" alt="plus">
+    <img class="info-icon-m" src="../img/plus.png" alt="plus">
     icon: click to modify secretion/absorption via scrollbars.
   </li>
 </ol>
@@ -368,131 +368,6 @@ $header
 $main
   <!-- Main end -->
 
-  <!-- Secretion/Absorption (lower div) -->
-  <div id="content-lower" class="select-none">
-    <div class="textaligncenter">
-      Adjust secretion/absorption rates:<br>
-      <label for="recalcIC" class="cursor-pointer">
-        <input type="checkbox" value="1" id="recalcIC" name="recalcIC" checked>
-        Recalculate Initial Conditions
-      </label>
-      <label title="When this box is checked, initial conditions (IC) are
-      recalculated when secretion/absorption values are changed from default
-      (100, 88, 100, 88). Uncheck this box to always use euthyroid IC.">
-        <img class="info-icon" src="../img/info.svg" />
-      </label>
-    </div>
-
-    <!-- T4 Secretion -->
-    <div class="adjuster" onmouseover="hilite('1');" onmouseout="lolite('1');">
-      T<span class="textsub">4</span> Secretion (0-200%):
-      <input type="text" size="5" id="dialinput1" name="dialinput1"> %
-      <div id="slidercontainer1" class="sliders">
-        <div id="slider1"></div>
-      </div>
-    </div>
-    <!-- T4 Secretion end -->
-
-    <!-- T4 Absorption -->
-    <div class="adjuster" onmouseover="hilite('2');" onmouseout="lolite('2');">
-      T<span class="textsub">4</span> Absorption (0-100%):
-      <input type="text" size="5" id="dialinput2" name="dialinput2"> %
-      <div id="slidercontainer2" class="sliders">
-        <div id="slider2"></div>
-      </div>
-    </div>
-    <!-- T4 Absorption end -->
-
-    <!-- T3 Secretion -->
-    <div class="adjuster" onmouseover="hilite('3');" onmouseout="lolite('3');">
-      T<span class="textsub">3</span> Secretion (0-200%):
-      <input type="text" size="5" id="dialinput3" name="dialinput3"> %
-      <div id="slidercontainer3" class="sliders">
-        <div id="slider3"></div>
-      </div>
-    </div>
-    <!-- T3 Secretion end -->
-
-    <!-- T3 Absorption -->
-    <div class="adjuster" onmouseover="hilite('4');" onmouseout="lolite('4');">
-      T<span class="textsub">3</span> Absorption (0-100%):
-      <input type="text" size="5" id="dialinput4" name="dialinput4"> %
-      <div id="slidercontainer4" class="sliders">
-        <div id="slider4"></div>
-      </div>
-    </div>
-    <!-- T3 Absorption end -->
-
-  </div>
-  <!-- Secretion/Absorption end -->
-
-  <!-- Input Adjustments (footer) -->
-  <div class="footer select-none">
-
-    <div class="textaligncenter">
-      Simulation time:
-      <input type="text" id="simtime" name="simtime" size="1" value="5">
-      Days
-      <label title="Simulation time must be <= 100 days.">
-        <img class="info-icon" src="../img/info.svg" />
-      </label>
-      <br>
-      Adjust pill quantity and frequency:
-    </div>
-
-    <!-- Placeholder for Inputs -->
-    <div id="footer-input"></div>
-    <br>
-    <!-- Placeholder for Inputs end -->
-
-    <!-- Blue/Green Simulation Manager -->
-    <div id="compPanel" class="textaligncenter">
-
-      Set next simulation results as Blue or Green
-
-      <label for="compPanel" title="Simulation results are by default
-      alternately graphed between Blue and Green lines. However, you may
-      override this functionality by manually setting the color of the next run.
-      Please note that only 1 line per color is allowed and subsequent runs
-      replace any existing lines of that color. Please also note that example
-      runs are always graphed as Blue.">
-        <img class="info-icon" src="../img/info.svg" />
-      </label>
-
-      <br>
-
-      <input type="radio" name="runRadio" id="runRadioBlue" value="Blue" checked>
-      <label for="runRadioBlue">Blue</label>
-
-      <input type="radio" name="runRadio" id="runRadioGreen" value="Green">
-      <label for="runRadioGreen">Green</label>
-
-      <br>
-
-      <button id="resetBlueRun" type="button" onclick="resetRun('Blue');">
-        Delete Blue Run
-      </button>
-      <button id="resetGreenRun" type="button" onclick="resetRun('Green');">
-        Delete Green Run
-      </button>
-
-    </div>
-    <br>
-    <!-- Blue/Green Simulation Manager end -->
-
-    <!-- Last Row of Buttons -->
-    <div class="textaligncenter">
-      <input type="hidden" name="thysim" id="thysim" value="$self->{thysim}">
-    </div>
-    <div class="textaligncenter">
-      <button type="button" onclick="ajax_getplot();">SIMULATE</button>
-      <button type="button" onclick="location.reload();">RESET ALL</button>
-    </div>
-    <!-- Last Row of Buttons end -->
-
-  </div>
-  <!-- Input Adjustments end -->
-
   <!-- Bottom (footer) -->
   <div class="footer">
 
@@ -629,9 +504,10 @@ $main
   <!-- Follow end -->
 
 </form>
-<div class="textcenter width-100 control-div">
+
+<div class="textcenter width-100 control-div-1">
   <span>
-    Set Next Run as Color:
+    All Buttons:
   </span>
   <span class="btn-group">
     <label class="btn btn-blue">
@@ -660,6 +536,7 @@ $main
     </label>
   </span>
 </div>
+
 </div>
 <!-- Wrapper end -->
 
@@ -807,19 +684,106 @@ $paramEditor
   <!-- Container (bot) -->
   <div id="container-bot" class="container">
 
-    <div id="control-panel" class="grid-1-2"
-         style="border:1px solid black;padding:2em 0">
-      <button type="button" class="btn-icon" onclick="togScrollBars();">
-        <img id="scrollbar" class="info-icon"
-             src="../img/plus.png" alt="Show scroll bars">
-        Adjust secretion/absorption rates:
-      </button>
-      <br>
-      Secretion/Absorption Rates:<br>
-      Simulation Time: 100000 Days<br>
-      Recalculate Initial Conditions<br>
+    <!-- Input Manager -->
+    <div id="input-manager" class="grid-1-2" style="border:1px solid black;">
+      Input Manager
+      Adjust pill quantity and frequency:
+    </div>
+    <!-- Input Manager end -->
 
-<div class="textcenter width-100 control-div">
+    <!-- Control Panel -->
+    <div id="control-panel" class="grid-1-2" style="border:1px solid black">
+
+<div class="textcenter width-100 floatL">
+  <b>Control Panel</b>
+</div>
+
+<div class="textcenter width-100 control-div-1 floatL">
+  <button type="button" class="btn-icon" onclick="togScrollBars();">
+    <img id="scrollbar" class="info-icon-m"
+         src="../img/minus.png" alt="Show scroll bars">
+    Secretion/Absorption Rates:
+  </button>
+</div>
+
+<div class="container control-div-1">
+  <div class="grid-3-5" onmouseover="hilite('1');" onmouseout="lolite('1');">
+    T<span class="textsub">4</span> Secretion (0-200%):
+    <input type="text" size="5" id="dialinput1" name="dialinput1"> %
+  </div>
+  <div class="grid-2-5">
+    <div id="slidercontainer1" class="sliders"><div id="slider1"></div></div>
+  </div>
+  <div class="grid-3-5" onmouseover="hilite('2');" onmouseout="lolite('2');">
+    T<span class="textsub">4</span> Absorption (0-100%):
+    <input type="text" size="5" id="dialinput2" name="dialinput2"> %
+  </div>
+  <div class="grid-2-5">
+    <div id="slidercontainer2" class="sliders"><div id="slider2"></div></div>
+  </div>
+  <div class="grid-3-5" onmouseover="hilite('3');" onmouseout="lolite('3');">
+    T<span class="textsub">3</span> Secretion (0-200%):
+    <input type="text" size="5" id="dialinput3" name="dialinput3"> %
+  </div>
+  <div class="grid-2-5">
+    <div id="slidercontainer3" class="sliders"><div id="slider3"></div></div>
+  </div>
+  <div class="grid-3-5" onmouseover="hilite('4');" onmouseout="lolite('4');">
+    T<span class="textsub">3</span> Absorption (0-100%):
+    <input type="text" size="5" id="dialinput4" name="dialinput4"> %
+  </div>
+  <div class="grid-2-5">
+    <div id="slidercontainer4" class="sliders"><div id="slider4"></div></div>
+  </div>
+</div>
+
+<div class="textcenter width-100 control-div-1 floatL">
+  Simulation Time:
+  <input type="text" id="simtime" name="simtime" size="1" value="5">
+  Days
+  <label title="Simulation time must be &le; 100 days.">
+    <img class="info-icon-l" src="../img/info.svg">
+  </label>
+</div>
+
+<div class="textcenter width-100 control-div-1 floatL">
+  <span>
+    Recalculate Initial Conditions:
+  </span>
+  <span class="btn-group">
+    <input type="checkbox" value="1" id="recalcIC" name="recalcIC" checked>
+  </span>
+  <label title="When this box is checked, initial conditions (IC) are
+  recalculated when secretion/absorption values are changed from default
+  (100, 88, 100, 88). Uncheck this box to always use euthyroid IC.">
+    <img class="info-icon-l" src="../img/info.svg">
+  </label>
+</div>
+
+<div class="textcenter width-100 control-div-1 floatL">
+  <span>
+    Set Next Run Color:
+  </span>
+  <span class="btn-group">
+    <label class="btn btn-blue">
+      <input type="radio" name="runRadio" id="runRadioBlue" value="Blue" checked>
+      Blue
+    </label>
+    <label class="btn btn-green">
+      <input type="radio" name="runRadio" id="runRadioGreen" value="Green">
+      Green
+    </label>
+  </span>
+  <label title="Simulation results are by default alternately graphed between
+  Blue and Green lines. However, you may override this functionality by manually
+  setting the color of the next run. Please note that only 1 line per color is
+  allowed and subsequent runs replace any existing lines of that color. Please
+  also note that example runs are always graphed as Blue.">
+    <img class="info-icon-l" src="../img/info.svg">
+  </label>
+</div>
+
+<div class="textcenter width-100 control-div-1 floatL">
   <button class="btn btn-blue" type="button" onclick="ajax_getplot();">
     Simulate
   </button>
@@ -827,22 +791,18 @@ $paramEditor
     Reset All
   </button>
   <button class="btn btn-yellow" type="button" onclick="resetRun('Blue');">
-    <img class="info-icon" src="../img/x.png" alt="Delete">
+    <img class="info-icon-s" src="../img/x.png" alt="Delete">
     Blue Run
   </button>
   <button class="btn btn-yellow" type="button" onclick="resetRun('Green');">
-    <img class="info-icon" src="../img/x.png" alt="Delete">
+    <img class="info-icon-s" src="../img/x.png" alt="Delete">
     Green Run
   </button>
 </div>
 
+<input type="hidden" name="thysim" id="thysim" value="$self->{thysim}">
     </div>
-
-    <!-- Input Manager -->
-    <div id="input-manager" class="grid-1-2" style="border:1px solid black;">
-      Input Manager
-    </div>
-    <!-- Input Manager end -->
+    <!-- Control Panel end -->
 
   </div>
   <!-- Container (bot) end -->
@@ -980,9 +940,9 @@ sub _getInfoBtn {
             onclick="togInfoBtn('$key');">
       Close
     </button>
-    <p>
+    <div>
 $content
-    </p>
+    </div>
   </div>
 </div>
 EOF
