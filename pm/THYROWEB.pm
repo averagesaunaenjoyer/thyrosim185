@@ -282,7 +282,7 @@ sub getHead {
 -title => "$self->{thysimD} by UCLA Biocybernetics Lab",
 -meta  => {
     'charset'   => 'utf-8',
-    'content'   => 'width=device-width, initial-scale=1, shrink-to-fit=no',
+    'viewport'  => 'width=device-width, initial-scale=1, shrink-to-fit=no',
     'keywords'  => 'thyrosim thyroid simulator',
     'copyright' => 'Copyright 2013 by UCLA Biocybernetics Laboratory'
 },
@@ -348,7 +348,7 @@ sub insertForm {
 
     my $header = $self->getHeader();
     my $main   = $self->getMain();
-    my $footer = "";
+    my $footer = $self->getFooter();
 
     # Things to put into the form
     my $jr_ack   = $self->juniorAcknowledge();
@@ -368,14 +368,12 @@ $header
 $main
   <!-- Main end -->
 
+  <!-- Footer -->
+$footer
+  <!-- Footer end -->
+
   <!-- Bottom (footer) -->
   <div class="footer">
-
-    <div class="textaligncenter">
-      <b>$self->{thysimD} 2.1</b> &copy; 2013 by
-      <a href="http://biocyb0.cs.ucla.edu/wp/"
-         target="_blank">UCLA Biocybernetics Laboratory</a><br>
-    </div>
 
     <!-- References -->
     <div class="subdiv">
@@ -505,7 +503,7 @@ $main
 
 </form>
 
-<div class="textcenter width-100 control-div-1" style="margin: 2em;">
+<div class="container textcenter pad-t-1em" style="margin: 2em 0;">
   <span>
     All Buttons:
   </span>
@@ -615,9 +613,126 @@ Toggle:
 </button>
 <div id="parameters">$paramList</div>
 EOF
+}
+
+    my $sliders = <<EOF
+<div class="container" onmouseover="hilite('1');" onmouseout="lolite('1');">
+  <div class="grid-2-5">
+    T<span class="textsub">4</span> Secretion (0-200%):
+  </div>
+  <div class="grid-1-5">
+    <input type="text" id="dialinput1" name="dialinput1"> %
+  </div>
+  <div class="grid-2-5">
+    <div id="slidercontainer1" class="sliders"><div id="slider1"></div></div>
+  </div>
+</div>
+
+<div class="container" onmouseover="hilite('2');" onmouseout="lolite('2');">
+  <div class="grid-2-5">
+    T<span class="textsub">4</span> Absorption (0-100%):
+  </div>
+  <div class="grid-1-5">
+    <input type="text" id="dialinput2" name="dialinput2"> %
+  </div>
+  <div class="grid-2-5">
+    <div id="slidercontainer2" class="sliders"><div id="slider2"></div></div>
+  </div>
+</div>
+
+<div class="container" onmouseover="hilite('3');" onmouseout="lolite('3');">
+  <div class="grid-2-5">
+    T<span class="textsub">3</span> Secretion (0-200%):
+  </div>
+  <div class="grid-1-5">
+    <input type="text" id="dialinput3" name="dialinput3"> %
+  </div>
+  <div class="grid-2-5">
+    <div id="slidercontainer3" class="sliders"><div id="slider3"></div></div>
+  </div>
+</div>
+
+<div class="container" onmouseover="hilite('4');" onmouseout="lolite('4');">
+  <div class="grid-2-5">
+    T<span class="textsub">3</span> Absorption (0-100%):
+  </div>
+  <div class="grid-1-5">
+    <input type="text" id="dialinput4" name="dialinput4"> %
+  </div>
+  <div class="grid-2-5">
+    <div id="slidercontainer4" class="sliders"><div id="slider4"></div></div>
+  </div>
+</div>
+EOF
 ;
 
-    }
+    my $simtime = <<EOF
+Simulation Time:
+<input type="text" id="simtime" name="simtime" value="5">
+Days
+<label title="Simulation time must be &le; 100 days.">
+  <img class="info-icon-l" src="../img/info.svg">
+</label>
+EOF
+;
+
+    my $recalcIC = <<EOF
+Recalculate Initial Conditions:
+<span class="btn-group">
+  <input type="checkbox" value="1" id="recalcIC" name="recalcIC" checked>
+</span>
+<label title="When this box is checked, initial conditions (IC) are recalculated
+when secretion/absorption values are changed from default (100, 88, 100, 88).
+Uncheck this box to always use euthyroid IC.">
+  <img class="info-icon-l" src="../img/info.svg">
+</label>
+EOF
+;
+
+    my $nextRunColor = <<EOF
+Set Next Run Color:
+<span class="btn-group">
+  <label class="btn btn-blue">
+    <input type="radio" name="runRadio" id="runRadioBlue" value="Blue" checked>
+    Blue
+  </label>
+  <label class="btn btn-green">
+    <input type="radio" name="runRadio" id="runRadioGreen" value="Green">
+    Green
+  </label>
+</span>
+<label title="Simulation results are by default alternately graphed between Blue
+and Green lines. However, you may override this functionality by manually
+setting the color of the next run. Please note that only 1 line per color is
+allowed and subsequent runs replace any existing lines of that color. Please
+also note that example runs are always graphed as Blue.">
+  <img class="info-icon-l" src="../img/info.svg">
+</label>
+EOF
+;
+
+    my $buttonControls = <<EOF
+<button class="btn btn-blue" type="button" onclick="ajax_getplot();">
+  Simulate
+</button>
+<button class="btn btn-red"  type="button" onclick="location.reload();">
+  Reset All
+</button>
+<button class="btn btn-yellow" type="button" onclick="resetRun('Blue');">
+  <img class="info-icon-s" src="../img/x.png" alt="Delete">
+  Blue Run
+</button>
+<button class="btn btn-yellow" type="button" onclick="resetRun('Green');">
+  <img class="info-icon-s" src="../img/x.png" alt="Delete">
+  Green Run
+</button>
+EOF
+;
+
+    my $hiddenInputs = <<EOF
+<input type="hidden" name="thysim" id="thysim" value="$self->{thysim}">
+EOF
+;
 
     return <<EOF
 <main class="select-none">
@@ -681,133 +796,149 @@ $paramEditor
   </div>
   <!-- Container (top) end -->
 
+  <div class="bar-h-gold floatL"></div>
+
   <!-- Container (bot) -->
   <div id="container-bot" class="container">
 
-    <!-- Input Manager -->
-    <div id="input-manager" class="grid-1-2" style="border:1px solid black;">
-      Input Manager
-      Adjust pill quantity and frequency:
+    <!-- Input Panel -->
+    <div id="input-panel" class="grid-1-2">
+
+      <div class="container textcenter">
+        <span class="title"><b>Input Manager</b></span>
+      </div>
+
+      <div class="container textcenter pad-t-1em">
+        Add
+        T<span class="textsub">3</span> and
+        T<span class="textsub">4</span> inputs
+        to adjust quantity and frequency:
+      </div>
+
+      <div id="input-manager" class="container pad-t-1em"></div>
+
     </div>
-    <!-- Input Manager end -->
+    <!-- Input Panel end -->
 
     <!-- Control Panel -->
-    <div id="control-panel" class="grid-1-2" style="border:1px solid black">
+    <div id="control-panel" class="grid-1-2">
 
-<div class="textcenter width-100 floatL">
-  <b>Control Panel</b>
-</div>
+      <div class="container textcenter">
+        <span class="title"><b>Control Panel</b></span>
+      </div>
 
-<div class="textcenter width-100 control-div-1 floatL">
-  <button type="button" class="btn-icon" onclick="togScrollBars();">
-    <img id="scrollbar" class="info-icon-m"
-         src="../img/minus.png" alt="Show scroll bars">
-    Secretion/Absorption Rates:
-  </button>
-</div>
+      <div class="container textcenter pad-t-1em">
+        <button type="button" class="btn-icon" onclick="togScrollBars();">
+          <img id="scrollbar" class="info-icon-m"
+               src="../img/minus.png" alt="Hide scroll bars">
+          Secretion/Absorption Rates:
+        </button>
+      </div>
 
-<div class="container control-div-1">
-  <div class="grid-3-5" onmouseover="hilite('1');" onmouseout="lolite('1');">
-    T<span class="textsub">4</span> Secretion (0-200%):
-    <input type="text" size="5" id="dialinput1" name="dialinput1"> %
-  </div>
-  <div class="grid-2-5">
-    <div id="slidercontainer1" class="sliders"><div id="slider1"></div></div>
-  </div>
-  <div class="grid-3-5" onmouseover="hilite('2');" onmouseout="lolite('2');">
-    T<span class="textsub">4</span> Absorption (0-100%):
-    <input type="text" size="5" id="dialinput2" name="dialinput2"> %
-  </div>
-  <div class="grid-2-5">
-    <div id="slidercontainer2" class="sliders"><div id="slider2"></div></div>
-  </div>
-  <div class="grid-3-5" onmouseover="hilite('3');" onmouseout="lolite('3');">
-    T<span class="textsub">3</span> Secretion (0-200%):
-    <input type="text" size="5" id="dialinput3" name="dialinput3"> %
-  </div>
-  <div class="grid-2-5">
-    <div id="slidercontainer3" class="sliders"><div id="slider3"></div></div>
-  </div>
-  <div class="grid-3-5" onmouseover="hilite('4');" onmouseout="lolite('4');">
-    T<span class="textsub">3</span> Absorption (0-100%):
-    <input type="text" size="5" id="dialinput4" name="dialinput4"> %
-  </div>
-  <div class="grid-2-5">
-    <div id="slidercontainer4" class="sliders"><div id="slider4"></div></div>
-  </div>
-</div>
+      <div class="container pad-t-1em">$sliders</div>
 
-<div class="textcenter width-100 control-div-1 floatL">
-  Simulation Time:
-  <input type="text" id="simtime" name="simtime" size="1" value="5">
-  Days
-  <label title="Simulation time must be &le; 100 days.">
-    <img class="info-icon-l" src="../img/info.svg">
-  </label>
-</div>
+      <div class="container textcenter pad-t-1em">$simtime</div>
 
-<div class="textcenter width-100 control-div-1 floatL">
-  <span>
-    Recalculate Initial Conditions:
-  </span>
-  <span class="btn-group">
-    <input type="checkbox" value="1" id="recalcIC" name="recalcIC" checked>
-  </span>
-  <label title="When this box is checked, initial conditions (IC) are
-  recalculated when secretion/absorption values are changed from default
-  (100, 88, 100, 88). Uncheck this box to always use euthyroid IC.">
-    <img class="info-icon-l" src="../img/info.svg">
-  </label>
-</div>
+      <div class="container textcenter pad-t-1em">$recalcIC</div>
 
-<div class="textcenter width-100 control-div-1 floatL">
-  <span>
-    Set Next Run Color:
-  </span>
-  <span class="btn-group">
-    <label class="btn btn-blue">
-      <input type="radio" name="runRadio" id="runRadioBlue" value="Blue" checked>
-      Blue
-    </label>
-    <label class="btn btn-green">
-      <input type="radio" name="runRadio" id="runRadioGreen" value="Green">
-      Green
-    </label>
-  </span>
-  <label title="Simulation results are by default alternately graphed between
-  Blue and Green lines. However, you may override this functionality by manually
-  setting the color of the next run. Please note that only 1 line per color is
-  allowed and subsequent runs replace any existing lines of that color. Please
-  also note that example runs are always graphed as Blue.">
-    <img class="info-icon-l" src="../img/info.svg">
-  </label>
-</div>
+      <div class="container textcenter pad-t-1em">$nextRunColor</div>
 
-<div class="textcenter width-100 control-div-1 floatL">
-  <button class="btn btn-blue" type="button" onclick="ajax_getplot();">
-    Simulate
-  </button>
-  <button class="btn btn-red" type="button" onclick="location.reload();">
-    Reset All
-  </button>
-  <button class="btn btn-yellow" type="button" onclick="resetRun('Blue');">
-    <img class="info-icon-s" src="../img/x.png" alt="Delete">
-    Blue Run
-  </button>
-  <button class="btn btn-yellow" type="button" onclick="resetRun('Green');">
-    <img class="info-icon-s" src="../img/x.png" alt="Delete">
-    Green Run
-  </button>
-</div>
+      <div class="container textcenter pad-t-1em">$buttonControls</div>
 
-<input type="hidden" name="thysim" id="thysim" value="$self->{thysim}">
+      <div>$hiddenInputs</div>
+
     </div>
     <!-- Control Panel end -->
 
   </div>
   <!-- Container (bot) end -->
 
+  <div class="bar-h-gold floatL"></div>
+
 </main>
+EOF
+}
+
+#====================================================================
+# SUBROUTINE:   getFooter
+# DESCRIPTION:
+#   Semantic element: Header.
+#====================================================================
+sub getFooter {
+    my ($self) = @_;
+
+    return <<EOF
+<footer class="select-none">
+
+  <!-- Container (top) -->
+  <div class="container textcenter pad-t-1em">
+    <b>$self->{thysimD} 2.1</b> &copy; 2013 by
+    <a href="http://biocyb0.cs.ucla.edu/wp/"
+       target="_blank">UCLA Biocybernetics Laboratory</a>
+  </div>
+  <!-- Container (top) end -->
+
+  <!-- Container (mid) -->
+  <div class="container">
+
+    <!-- References -->
+    <div class="grid-1-3">
+      <div class="footer-title">References*</div>
+      <div class="footer-list">
+
+        <ol>
+          <li>
+            <a target="_blank"
+               href="https://doi.org/10.3389/fendo.2019.00746">
+                 DiStefano & Jonklaas 2019
+            </a>
+          </li>
+          <li>
+            <a target="_blank"
+               href="https://www.liebertpub.com/doi/10.1089/thy.2015.0373">
+                 Han et al., 2016
+            </a>
+          </li>
+          <li>
+            <a target="_blank"
+               href="https://www.liebertpub.com/doi/10.1089/thy.2011.0355">
+                 Ben-Shachar et al., 2012
+            </a>
+          </li>
+          <li>
+            <a target="_blank"
+               href="https://www.liebertpub.com/doi/10.1089/thy.2009.0349">
+                 Eisenberg et al., 2010
+            </a>
+          </li>
+          <li>
+            <a target="_blank"
+               href="https://www.liebertpub.com/doi/10.1089/thy.2008.0148">
+                 Eisenberg et al., 2009
+            </a>
+          </li>
+          <li>
+            <a target="_blank"
+               href="https://www.liebertpub.com/doi/10.1089/thy.2007.0388">
+                 Eisenberg et al., 2008
+            </a>
+          </li>
+          <li>
+            <a target="_blank"
+               href="https://www.liebertpub.com/doi/10.1089/thy.2006.0144">
+                 Eisenberg et al., 2006
+            </a>
+          </li>
+        </ol>
+
+      </div>
+    </div>
+    <!-- References end -->
+
+  </div>
+  <!-- Container (mid) end -->
+
+</footer>
 EOF
 }
 

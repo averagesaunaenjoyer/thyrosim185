@@ -44,8 +44,8 @@ button {
 img {
   border: 0;
 }
-input[type="input"],   input[type="text"],
-input[type="password"],input[type="email"], textarea {
+input[type=input],   input[type=text],
+input[type=password],input[type=email], textarea {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -68,6 +68,19 @@ html, body {
   font-family: arial,helvetica,sans-serif;
   font-size: 100%;
 }
+input[type=text] {
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 0.25em;
+  padding: 0 0.1em;
+  width: 65%;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+input[type=text]:focus {
+  border: 1px solid #555;
+  box-shadow: 0 0 0.4em rgba(102, 175, 233, .6);
+}
 
 /*--------------------------------------------------
 * Project-wide styles
@@ -83,7 +96,10 @@ html, body {
 .color-black { color: black; }
 .color-blue  { color: blue;  }
 .color-white { color: white; }
+.pad-t-1em { padding-top: 1em; }
+.pad-t-2em { padding-top: 2em; }
 .textcenter { text-align: center; }
+.title { font-size: 1.2em; }
 .width-100 { width: 100%; }
 
 /* Layouts and grids */
@@ -95,9 +111,12 @@ html, body {
 .grid-1-2 { width: calc(100% / 2); }
 .grid-1-3 { width: calc(100% / 3); }
 .grid-2-3 { width: calc(100% * 2 / 3); }
+.grid-1-5 { width: calc(100% * 1 / 5); }
 .grid-2-5 { width: calc(100% * 2 / 5); }
 .grid-3-5 { width: calc(100% * 3 / 5); }
-.grid-1-2, .grid-1-3, .grid-2-3, .grid-2-5, .grid-3-5 {
+.grid-1-2,
+.grid-1-3, .grid-2-3,
+.grid-1-5, .grid-2-5, .grid-3-5 {
   box-sizing: border-box;
   float: left;
 }
@@ -183,7 +202,7 @@ html, body {
   border: 1px solid #1d2124;
 }
 
-/* Button - Group Radio */
+/* Button - Group radio */
 .btn-group {
   display: inline-block;
   margin-left: 0.5em;
@@ -290,51 +309,46 @@ html, body {
   padding: 0.188em;
 }
 .arrow-r {
-  transform: rotate(-45deg);
   -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
 }
 .arrow-l {
-  transform: rotate(135deg);
   -webkit-transform: rotate(135deg);
+  transform: rotate(135deg);
 }
 .arrow-u {
   margin-bottom: -0.1em;
-  transform: rotate(-135deg);
   -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
 }
 .arrow-d {
   margin-bottom: 0.1em;
-  transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 
-/* Miscellaneous */
+/* Horizontal bars */
+.bar-h-gold, .bar-h-transparent {
+  height: 0.8em;
+  width: 100%;
+}
+.bar-h-gold        { background-color: gold; }
+.bar-h-transparent { background-color: transparent; }
+
+/* Icon graphics */
 .info-icon-s, .info-icon-m, .info-icon-l {
   margin-top: -0.2em;
   vertical-align: middle;
 }
-.info-icon-s {
-  height: 1em;
-}
-.info-icon-m {
-  height: 1.2em;
-}
-.info-icon-l {
-  height: 1.6em;
-}
+.info-icon-s { height: 1em; }
+.info-icon-m { height: 1.2em; }
+.info-icon-l { height: 1.6em; }
+
+/* Miscellaneous */
 .textsub { /* Subscript */
   font-size: 0.7em;
   position: relative;
   top: 0.2em;
-}
-.thysim-tooltip { /* jQuery UI tooltip customization */
-  background: #d1ecf1;
-  border: 0.125em solid #bee5eb;
-  box-shadow: none;
-  color: #0c5460;
-  font-size: 0.875em;
-  padding: 0.8em;
-  z-index: 99;
 }
 .select-none { /* Unselectable text */
   -webkit-touch-callout: none !important;
@@ -344,6 +358,26 @@ html, body {
   -ms-user-select: none !important;
   -o-user-select: none !important;
   user-select: none !important;
+}
+
+/* jQuery UI customizations */
+.thysim-tooltip { /* Tooltip customization */
+  background: #d1ecf1;
+  border: 0.125em solid #bee5eb;
+  box-shadow: none;
+  color: #0c5460;
+  font-size: 0.875em;
+  min-width: 17em;
+  max-width: 30em;
+  padding: 0.8em;
+  z-index: 99;
+}
+.ui-slider-horizontal .ui-slider-range { /* Fixes top border */
+  top: -0.02em;
+  height: 105%;
+}
+.ui-slider-horizontal .ui-slider-range-min { /* Fixes left border */
+  left: -0.02em;
 }
 
 /*--------------------------------------------------
@@ -366,24 +400,31 @@ html, body {
 *         - #parameters
 *     - section .panelR
 *       - (Graphs)
-*   - .container (middle)
-*     - (Secretion/Absorption Manager)
-*     - (Initial Condition Manager)
-*   - .container (bottom)
-*     - (Simulation Time)
-*     - (Inputs Manager)
-*     - (Blue/Green Manager)
-*     - (Control Buttons)
+*   - .bar-h-gold (Horizontal gold bar)
+*   - .container (bot)
+*     - #input-panel
+*       - #input-manager
+*     - #control-panel
+*       - (Secretion/Absorption Manager)
+*       - (Simulation Time)
+*       - (Recalculate Initial Condition Manager)
+*       - (Blue/Green Manager)
+*       - (Control Buttons)
+*   - .bar-h-gold (Horizontal gold bar)
 * - footer
 *   - .container (top)
+*     - (Copyright)
+*   - .container (mid)
 *     - (References)
 *     - (Recent News)
 *     - (Acknowledgements)
-*   - (Contact & Code Repo)
+*   - .container (bot)
+*     - (Contact & Code Repo)
 * Notes:
 *   #:  ID
 *   .:  Class
 *   (): Some content
+*   W/o markup: HTML element
 * This section is only for #wrapper and its children.
 *--------------------------------------------------*/
 
@@ -396,10 +437,8 @@ header {
   height: 4em;
 }
 main {
-
 }
 footer {
-
 }
 
 /*--------------------------------------------------
@@ -454,7 +493,7 @@ footer {
   margin: 2.3em 0 0 1em; /* margin-left same as .info-btn */
   padding: 0 1em 0 1em;
   position: absolute;
-  width: 500px;
+  width: 31.25em;
   z-index: 1; /* content does not block button */
 }
 .info-btn-c div {
@@ -487,12 +526,6 @@ footer {
   vertical-align: top;
   width: 10em;
 }
-/* Horizon gold bar */
-.bar-h-gold {
-  background-color: gold;
-  height: 0.8em;
-  width: 100%;
-}
 /* Non-IE warning */
 .non-ie-warn {
   background-color: #f8d7da;
@@ -508,6 +541,7 @@ footer {
 /* Main layout */
 #container-top {
   height: 32.5em;
+  margin-bottom: 1em;
   padding: 0.625em 0.625em 0;
 }
 #container-top>div {
@@ -516,6 +550,7 @@ footer {
 #container-bot {
 }
 #container-bot>div {
+  padding: 2em 1em;
 }
 
 /* Container (top) - Panel Left - Hormone menu sidebar */
@@ -537,8 +572,8 @@ footer {
 /* Container (top) - Panel Left - Diagram and parameters */
 #img-param {
   background-image: url("../img/sim.png");
-  background-repeat: no-repeat;
   background-position: center;
+  background-repeat: no-repeat;
   height: 100%;
   margin: 0 0 0 0.625em;
   width: 85%;
@@ -568,19 +603,6 @@ footer {
   text-align: right;
   width: 30%;
 }
-.paramcol input[type=text] {
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 0.25em;
-  padding: 0 0.1em;
-  width: 65%;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
-}
-.paramcol input[type=text]:focus {
-  border: 1px solid #555;
-  box-shadow: 0 0 0.4em rgba(102, 175, 233, .6);
-}
 .hilite {
   position: absolute;
 }
@@ -608,27 +630,73 @@ footer {
   text-align: center;
 }
 
-/* Container (bot) - Panel Left - Control panel */
-#control-panel {
-  padding: 2em 1em;
+/* Container (bot) */
+
+/* Container (bot) - Panel Left - Input panel */
+#input-panel {
+  background-color: aliceblue;
 }
-#control-panel .control-div-1 {
-  padding-top: 1em;
+.row1, .row0 { display: block; } /* Alternating input row colors */
+.row1 { background-color: thistle; }
+.row0 { background-color: transparent; }
+.input-row {
+  border-left: 1em solid transparent;
+  border-right: 1em solid transparent;
+  float: left;
+  margin: 0 -1em;
+  padding: 0.5em 0;
+  width: 100%;
 }
-#control-panel .control-div-2 {
-  padding-top: 2em;
+.input-row input[type=text] {
+  width: 3em;
+}
+.input-row input[type=text].oral-dose {
+  width: 4em;
 }
 
-/* Container (bot) - Panel Right - Input manager */
-#input-manager {
+/* Container (bot) - Panel Right - Control panel */
+#control-panel {
+  background-color: mistyrose;
+  background-color: lavenderblush;
+}
+#simtime { /* Override default text input width */
+  width: 3em;
 }
 
 /*--------------------------------------------------
 * Footer
 *--------------------------------------------------*/
 
+/* Container */
+.footer-title {
+  margin-left: 5.5em;
+}
+.footer-list {
+  float: left;
+  padding: 1em 1em 1em 3em;
+}
+.footer-list ol {
+  counter-reset: item;
+  list-style: none;
+}
+.footer-list ol li {
+  counter-increment: item;
+  font-size: 0.85em;
+}
+.footer-list ol li:before {
+  background: lightblue;
+  border-radius: 100%;
+  color: white;
+  content: counter(item);
+  display: inline-block;
+  font-size: 0.85em;
+  margin: 0.1em 0 0 -1.5em;
+  position: absolute;
+  text-align: center;
+  width: 1.2em;
+}
+
 /*--------------------------------------------------
-* Require some action
+* Temp
 *--------------------------------------------------*/
-/* Copied over for now without change because I want those buttons hidden */
-/* Want renamed */
+

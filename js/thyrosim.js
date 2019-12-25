@@ -793,19 +793,19 @@ function addInput(title) {
 
     var iNum = getNextInputNum();  // Next input number
     var rowN = getRowClass(iNum);  // Next input span row class
-    var footer = "#input-manager"; // Input container div id
+    var footer = '#input-manager'; // Input container div id
 
     // Create a new input span object
     var span = $(document.createElement('span')).attr({id:'input-'+iNum});
-    span.addClass(rowN).addClass("inputcontainer");
+    span.addClass(rowN).addClass('input-row');
 
     //---------------------------------------------------------
     // Append the new input span to the end of footer
     //---------------------------------------------------------
     var pit = parseInputTitle(title);
-    if (pit.type == "Oral")     span.append(    OralInput(pit,iNum));
-    if (pit.type == "IV")       span.append( IVPulseInput(pit,iNum));
-    if (pit.type == "Infusion") span.append(InfusionInput(pit,iNum));
+    if (pit.type == 'Oral')     span.append(    OralInput(pit,iNum));
+    if (pit.type == 'IV')       span.append( IVPulseInput(pit,iNum));
+    if (pit.type == 'Infusion') span.append(InfusionInput(pit,iNum));
 
     span.append(addDeleteIcon(iNum));
     span.appendTo(footer);
@@ -825,44 +825,44 @@ function addInput(title) {
 //   n:     The input number
 //===================================================================
 function OralInput(pit,n) {
-    return '<img src="'+pit.src+'" class="info-icon" />'
+    return '<img src="'+pit.src+'" class="info-icon-s">'
 
          + '<span class="inputs" id="label-'+n+'" name="label-'+n+'">'
          + '  Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
          + '</span>'
-         + '<br />'
+         + '<br>'
 
          + '<input type="hidden" class="inputs" id="hormone-'+n+'"'
-         + '       name="hormone-'+n+'" value="'+pit.hormoneId +'" />'
+         + '       name="hormone-'+n+'" value="'+pit.hormoneId +'">'
          + '<input type="hidden" class="inputs" id="type-'   +n+'"'
-         + '       name="type-'   +n+'" value="'+pit.typeId    +'" />'
+         + '       name="type-'   +n+'" value="'+pit.typeId    +'">'
 
          + addEnable(n)
 
          + 'Dose: '
-         + '<input size="5" class="inputs" type="text"'
-         + '       id="dose-'+n+'" name="dose-'+n+'" /> \u03BCg'
+         + '<input class="inputs oral-dose" type="text"'
+         + '       id="dose-'+n+'" name="dose-'+n+'"> &micro;g'
          + '      '
 
          + 'Dosing Interval: '
-         + '<input size="5" class="inputs" type="text"'
-         + '       id="int-'+n+'" name="int-'+n+'" /> Days'
+         + '<input class="inputs" type="text"'
+         + '       id="int-'+n+'" name="int-'+n+'"> Days'
          + '      '
 
          + '<input class="inputs" type="checkbox" value="1"'
          + '       id="singledose-'+n+'" name="singledose-'+n+'"'
-         + '       onclick="useSingleDose('+n+');" /> Single Dose'
-         + '<br />'
+         + '       onclick="useSingleDose('+n+');"> Single Dose'
+         + '<br>'
 
          + '                        '
          + 'Start Day: '
-         + '<input size="5" class="inputs" type="text"'
-         + '       id="start-'+n+'" name="start-'+n+'" />'
+         + '<input class="inputs" type="text"'
+         + '       id="start-'+n+'" name="start-'+n+'">'
          + '      '
 
          + 'End Day: '
-         + '<input size="5" class="inputs" type="text"'
-         + '       id="end-'+n+'" name="end-'+n+'" />'
+         + '<input class="inputs" type="text"'
+         + '       id="end-'+n+'" name="end-'+n+'">'
 
          + '';
 }
@@ -874,28 +874,28 @@ function OralInput(pit,n) {
 //   n:     The input number
 //===================================================================
 function IVPulseInput(pit,n) {
-    return '<img src="'+pit.src+'" class="info-icon" />'
+    return '<img src="'+pit.src+'" class="info-icon-s">'
 
          + '<span class="inputs" id="label-'+n+'" name="label-'+n+'">'
          + '  Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
          + '</span>'
-         + '<br />'
+         + '<br>'
 
          + '<input type="hidden" class="inputs" id="hormone-'+n+'"'
-         + '       name="hormone-'+n+'" value="'+pit.hormoneId +'" />'
+         + '       name="hormone-'+n+'" value="'+pit.hormoneId +'">'
          + '<input type="hidden" class="inputs" id="type-'   +n+'"'
-         + '       name="type-'   +n+'" value="'+pit.typeId    +'" />'
+         + '       name="type-'   +n+'" value="'+pit.typeId    +'">'
 
          + addEnable(n)
 
          + 'Dose: '
-         + '<input size="5" class="inputs" type="text"'
-         + '       id="dose-'+n+'" name="dose-'+n+'" /> \u03BCg'
+         + '<input class="inputs" type="text"'
+         + '       id="dose-'+n+'" name="dose-'+n+'"> &micro;g'
          + '      '
 
          + 'Start Day: '
-         + '<input size="5" class="inputs" type="text"'
-         + '       id="start-'+n+'" name="start-'+n+'" />'
+         + '<input class="inputs" type="text"'
+         + '       id="start-'+n+'" name="start-'+n+'">'
 
          + '';
 }
@@ -907,33 +907,33 @@ function IVPulseInput(pit,n) {
 //   n:     The input number
 //===================================================================
 function InfusionInput(pit,n) {
-    return '<img src="'+pit.src+'" class="info-icon" />'
+    return '<img src="'+pit.src+'" class="info-icon-s">'
 
          + '<span class="inputs" id="label-'+n+'" name="label-'+n+'">'
          + '  Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
          + '</span>'
-         + '<br />'
+         + '<br>'
 
          + '<input type="hidden" class="inputs" id="hormone-'+n+'"'
-         + '       name="hormone-'+n+'" value="'+pit.hormoneId +'" />'
+         + '       name="hormone-'+n+'" value="'+pit.hormoneId +'">'
          + '<input type="hidden" class="inputs" id="type-'   +n+'"'
-         + '       name="type-'   +n+'" value="'+pit.typeId    +'" />'
+         + '       name="type-'   +n+'" value="'+pit.typeId    +'">'
 
          + addEnable(n)
 
          + 'Dose: '
-         + '<input size="5" class="inputs" type="text"'
-         + '       id="dose-'+n+'" name="dose-'+n+'" /> \u03BCg/day'
+         + '<input class="inputs" type="text"'
+         + '       id="dose-'+n+'" name="dose-'+n+'"> &micro;g/day'
          + '      '
 
          + 'Start Day: '
-         + '<input size="5" class="inputs" type="text"'
-         + '       id="start-'+n+'" name="start-'+n+'" />'
+         + '<input class="inputs" type="text"'
+         + '       id="start-'+n+'" name="start-'+n+'">'
          + '      '
 
          + 'End Day: '
-         + '<input size="5" class="inputs" type="text"'
-         + '       id="end-'+n+'" name="end-'+n+'" />'
+         + '<input class="inputs" type="text"'
+         + '       id="end-'+n+'" name="end-'+n+'">'
 
          + '';
 }
@@ -963,8 +963,8 @@ function deleteInput(n) {
 
         //---------------------------------------------------------
         // Inner loop.
-        // Loop through the children of an inputcontainer. Find children with
-        // class 'inputs' and rename attributes: id, name.
+        // Loop through the children of an input-row. Find children with class
+        // 'inputs' and rename attributes: id, name.
         //---------------------------------------------------------
         $('#input-'+i).children('.inputs').each(function() {
             var child = $(this);
@@ -983,7 +983,7 @@ function deleteInput(n) {
             // The element with name 'label-X' contains a brief description of
             // what this input is. Change text that says 'Input X (type)'
             if (child.attr('name').match(/label/)) {
-                child.text(child.text().replace(/Input \d+/,"Input "+j));
+                child.text(child.text().replace(/Input \d+/,'Input '+j));
             }
 
             // The element with id/name 'enabled-X' or 'singledose-X' contain a
@@ -1000,11 +1000,11 @@ function deleteInput(n) {
         }); // Inner loop end.
 
         // Change the row colors
-        $("#input-"+i).removeClass("row0 row1");
-        $("#input-"+i).addClass(getRowClass(j));
+        $('#input-'+i).removeClass('row0 row1');
+        $('#input-'+i).addClass(getRowClass(j));
 
-        // Rename the inputcontainer's span id at the end
-        $("#input-"+i).attr('id','input-'+j);
+        // Rename the input-row's span id at the end
+        $('#input-'+i).attr('id','input-'+j);
 
     } // Outer loop end.
 }
@@ -1108,7 +1108,7 @@ function addEnable(n) {
 function addDeleteIcon(n) {
     return '<a class="img-input inputs"'
          + '   name="delete-'+n+'" href="javascript:deleteInput('+n+');">'
-         + '  <img class="floatR delete-icon"'
+         + '  <img class="floatR info-icon-l"'
          + '       src="../img/x.png" alt="Delete this input">'
          + '</a>'
          + '';
