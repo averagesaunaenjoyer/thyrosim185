@@ -505,7 +505,7 @@ $main
 
 </form>
 
-<div class="textcenter width-100 control-div-1">
+<div class="textcenter width-100 control-div-1" style="margin: 2em;">
   <span>
     All Buttons:
   </span>

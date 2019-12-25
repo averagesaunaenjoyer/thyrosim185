@@ -1183,7 +1183,7 @@ function useSingleDose(n) {
 // DESC:    Show/Hide the scroll bars for secretion/absorption adjustment.
 //===================================================================
 function togScrollBars() {
-    $('.sliders').toggle("blind",function() {
+    $('.sliders').toggle("blind", {direction:"left"}, function() {
         if ($('.sliders').css('display') == 'none') {
             $('#scrollbar').attr('src','../img/plus.png')
                            .attr('alt','Show scroll bars');
@@ -1271,28 +1271,16 @@ function animation() {
 
 //===================================================================
 // DESC:    Define sliders and tie slider values to dial input values.
+//          1: T4 Secretion
+//          2: T4 Absorption
+//          3: T3 Secretion
+//          4: T3 Absorption
 //===================================================================
 var sliderObj = {
-    // T4 Secretion
-    '1': { 'range' : 'min',
-           'value' : 100,
-           'min'   : 0,
-           'max'   : 200 },
-    // T4 Absorption
-    '2': { 'range' : 'min',
-           'value' : 88,
-           'min'   : 0,
-           'max'   : 100 },
-    // T3 Secretion
-    '3': { 'range' : 'min',
-           'value' : 100,
-           'min'   : 0,
-           'max'   : 200 },
-    // T3 Absorption
-    '4': { 'range' : 'min',
-           'value' : 88,
-           'min'   : 0,
-           'max'   : 100 }
+    '1':{'min':0,'max':200,'value':100,'range':'min','animate':'fast'},
+    '2':{'min':0,'max':100,'value':88, 'range':'min','animate':'fast'},
+    '3':{'min':0,'max':200,'value':100,'range':'min','animate':'fast'},
+    '4':{'min':0,'max':100,'value':88, 'range':'min','animate':'fast'}
 };
 
 //===================================================================
@@ -1353,12 +1341,13 @@ $(function() {
         var s = '#slider'+k;
         var d = '#dialinput'+k;
         $(s).slider({
-            range: o.range,
-            value: o.value,
-            min:   o.min,
-            max:   o.max,
+            min:     o.min,
+            max:     o.max,
+            value:   o.value,
+            range:   o.range,
+            animate: o.animate,
             // Change dialinput's value to match slider's value
-            slide: function(event,ui) { $(d).val(ui.value); }
+            slide:   function(event,ui) { $(d).val(ui.value); }
         });
         // Set defaultValue property
         $(d).prop('defaultValue',$(s).slider('value'));
