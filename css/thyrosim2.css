@@ -35,6 +35,9 @@ a {
   color: inherit;
   text-decoration: underline;
 }
+a:hover {
+  color: red;
+}
 b {
   font-weight: bold;
 }
@@ -98,6 +101,7 @@ input[type=text]:focus {
 .color-white { color: white; }
 .pad-t-1em { padding-top: 1em; }
 .pad-t-2em { padding-top: 2em; }
+.pad-b-1em { padding-bottom: 1em; }
 .textcenter { text-align: center; }
 .title { font-size: 1.2em; }
 .width-100 { width: 100%; }
@@ -336,15 +340,33 @@ input[type=text]:focus {
 .bar-h-transparent { background-color: transparent; }
 
 /* Icon graphics */
-.info-icon-s, .info-icon-m, .info-icon-l {
+.info-icon-s, .info-icon-m, .info-icon-l, .info-icon-fw {
   margin-top: -0.2em;
   vertical-align: middle;
 }
-.info-icon-s { height: 1em; }
-.info-icon-m { height: 1.2em; }
-.info-icon-l { height: 1.6em; }
+.info-icon-s  { height: 1em; }
+.info-icon-m  { height: 1.2em; }
+.info-icon-l  { height: 1.6em; }
+.info-icon-fw { height: 4.5em; } /* fw for follow */
 
 /* Miscellaneous */
+.follow { /* Display a waiting message box */
+  background-color: #d6d8d9;
+  border: 1px solid #bbb;
+  border-color: #c6c8ca;
+  border-radius: 0.25em;
+  color: #1b1e21;
+  display: none;
+  padding: 0.2em 0.8em 0.1em 0.2em;
+  position: absolute;
+  z-index: 50;
+}
+.follow img {
+  margin: -0.6em -0.6em -0.6em -0.3em;
+}
+.follow span {
+  margin: 0.6em 0 0 0.45em;
+}
 .textsub { /* Subscript */
   font-size: 0.7em;
   position: relative;
@@ -420,6 +442,7 @@ input[type=text]:focus {
 *     - (Acknowledgements)
 *   - .container (bot)
 *     - (Contact & Code Repo)
+* - #follow
 * Notes:
 *   #:  ID
 *   .:  Class
@@ -439,6 +462,8 @@ header {
 main {
 }
 footer {
+  background-color: #f7f7f9;
+  opacity: 0.7;
 }
 
 /*--------------------------------------------------
@@ -669,11 +694,10 @@ footer {
 
 /* Container */
 .footer-title {
-  margin-left: 5.5em;
 }
 .footer-list {
   float: left;
-  padding: 1em 1em 1em 3em;
+  padding: 1em 3em 1em 5em;
 }
 .footer-list ol {
   counter-reset: item;
@@ -684,16 +708,17 @@ footer {
   font-size: 0.85em;
 }
 .footer-list ol li:before {
-  background: lightblue;
+  background: steelblue;
   border-radius: 100%;
   color: white;
   content: counter(item);
   display: inline-block;
   font-size: 0.85em;
-  margin: 0.1em 0 0 -1.5em;
+  height: 1em;
+  margin: 0.1em 0 0 -1.4em;
   position: absolute;
   text-align: center;
-  width: 1.2em;
+  width: 1em;
 }
 
 /*--------------------------------------------------

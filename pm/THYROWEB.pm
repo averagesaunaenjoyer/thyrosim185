@@ -350,9 +350,6 @@ sub insertForm {
     my $main   = $self->getMain();
     my $footer = $self->getFooter();
 
-    # Things to put into the form
-    my $jr_ack   = $self->juniorAcknowledge();
-
     # Put form together
     return <<END
 
@@ -372,132 +369,13 @@ $main
 $footer
   <!-- Footer end -->
 
-  <!-- Bottom (footer) -->
-  <div class="footer">
-
-    <!-- References -->
-    <div class="subdiv">
-      <span class="subdivtitle">References*</span>
-      <div class="subdivlist">
-        <ol>
-          <li>
-            <a target="_blank"
-               href="https://doi.org/10.3389/fendo.2019.00746">
-                 DiStefano & Jonklaas 2019
-            </a>
-          </li>
-          <li>
-            <a target="_blank"
-               href="https://www.liebertpub.com/doi/10.1089/thy.2015.0373">
-                 Han et al., 2016
-            </a>
-          </li>
-          <li>
-            <a target="_blank"
-               href="https://www.liebertpub.com/doi/10.1089/thy.2011.0355">
-                 Ben-Shachar et al., 2012
-            </a>
-          </li>
-          <li>
-            <a target="_blank"
-               href="https://www.liebertpub.com/doi/10.1089/thy.2009.0349">
-                 Eisenberg et al., 2010
-            </a>
-          </li>
-          <li>
-            <a target="_blank"
-               href="https://www.liebertpub.com/doi/10.1089/thy.2008.0148">
-                 Eisenberg et al., 2009
-            </a>
-          </li>
-          <li>
-            <a target="_blank"
-               href="https://www.liebertpub.com/doi/10.1089/thy.2007.0388">
-                 Eisenberg et al., 2008
-            </a>
-          </li>
-          <li>
-            <a target="_blank"
-               href="https://www.liebertpub.com/doi/10.1089/thy.2006.0144">
-                 Eisenberg et al., 2006
-            </a>
-          </li>
-        </ol>
-      </div>
-    </div>
-    <!-- References end -->
-
-    <!-- Recent Updates -->
-    <div class="subdiv">
-      <span class="subdivtitle">Recent Updates</span>
-      <div class="subdivlist">
-        <ol>
-          <li>
-            December 2019: Added parameter editor (Toggle: Parameters)
-          </li>
-          <li>
-            January 2019: Added
-            Free T<span class="textsub">4</span> and
-            Free T<span class="textsub">3</span> alternatives to Total
-            T<span class="textsub">4</span> and
-            T<span class="textsub">3</span>
-            (Toggle: Free Hormone Values)
-          </li>
-        </ol>
-      </div>
-    </div>
-    <!-- Recent Updates end -->
-
-    <!-- People and Acknowledgement -->
-    <div class="subdiv">
-      <span class="subdivtitle">People & Acknowledgement</span>
-      <div class="subdivlist">
-        <ol>
-          <li>
-            JJ DiStefano III, Director
-          </li>
-          <li>
-            Web App Design and Implementation by Simon X. Han
-          </li>
-          <li>
-            Modeling and Analysis by Marisa Eisenberg, Rotem Ben-Shachar & the
-            DiStefano Lab Team
-          </li>
-          $jr_ack
-        </ol>
-      </div>
-    </div>
-    <!-- People and Acknowledgement end -->
-
-  </div>
-  <!-- Bottom end -->
-
-  <!-- Bottom 2 (footer) -->
-  <div class="footer">
-    <div class="textaligncenter">
-      Please send comments, bugs, criticisms to:
-      <a href="mailto:joed\@ucla.edu">joed\@ucla.edu</a>
-      <a href="mailto:joed\@ucla.edu">
-        <span class="ui-icon ui-icon-mail-closed"></span>
-      </a>
-      <br>
-      Code repository:
-      <a href="https://bitbucket.org/DistefanoLab/thyrosim/overview"
-         target="_blank">click here</a>
-    </div>
-  </div>
-  <!-- Bottom 2 end -->
-
   <!-- Follows the cursor while simulator is running -->
-  <div id="follow1" class="follow">
-    <img class="followimg" src="../img/loading.gif" />
-    Please wait while your experiment<br>
-    is running.
-  </div>
-  <div id="follow2" class="follow">
-    <img class="followimg" src="../img/loading.gif" />
-    Please wait ~30 secs to establish new<br>
-    initial conditions for your experiment.
+  <div id="follow" class="follow">
+    <img class="info-icon-fw floatL" src="../img/spinner.svg">
+    <span class="floatL">
+      Please wait while your experiment is running.<br>
+      This may take up to 30 seconds.
+    </span>
   </div>
   <!-- Follow end -->
 
@@ -735,7 +613,7 @@ EOF
 ;
 
     return <<EOF
-<main class="select-none">
+<main class="select-none floatL">
 
   <!-- Container (top) -->
   <div id="container-top" class="container">
@@ -867,8 +745,10 @@ EOF
 sub getFooter {
     my ($self) = @_;
 
+    my $jr_ack   = $self->juniorAcknowledge();
+
     return <<EOF
-<footer class="select-none">
+<footer class="select-none floatL">
 
   <!-- Container (top) -->
   <div class="container textcenter pad-t-1em">
@@ -879,11 +759,11 @@ sub getFooter {
   <!-- Container (top) end -->
 
   <!-- Container (mid) -->
-  <div class="container">
+  <div class="container pad-t-2em">
 
     <!-- References -->
     <div class="grid-1-3">
-      <div class="footer-title">References*</div>
+      <div class="footer-title textcenter">References*</div>
       <div class="footer-list">
 
         <ol>
@@ -935,8 +815,68 @@ sub getFooter {
     </div>
     <!-- References end -->
 
+    <!-- Recent Updates -->
+    <div class="grid-1-3">
+      <div class="footer-title textcenter">Recent Updates</div>
+      <div class="footer-list">
+
+        <ol>
+          <li>
+            December 2019: Added parameter editor (Toggle: Parameters)
+          </li>
+          <li>
+            January 2019: Added
+            Free T<span class="textsub">4</span> and
+            Free T<span class="textsub">3</span> alternatives to Total
+            T<span class="textsub">4</span> and
+            T<span class="textsub">3</span>
+            (Toggle: Free Hormone Values)
+          </li>
+        </ol>
+
+      </div>
+    </div>
+    <!-- Recent Updates end -->
+
+    <!-- People and Acknowledgement -->
+    <div class="grid-1-3">
+      <div class="footer-title textcenter">People & Acknowledgement</div>
+      <div class="footer-list">
+
+        <ol>
+          <li>
+            JJ DiStefano III, Director
+          </li>
+          <li>
+            Web App Design and Implementation by Simon X. Han
+          </li>
+          <li>
+            Modeling and Analysis by Marisa Eisenberg, Rotem Ben-Shachar & the
+            DiStefano Lab Team
+          </li>
+          $jr_ack
+        </ol>
+
+      </div>
+    </div>
+    <!-- People and Acknowledgement end -->
+
   </div>
   <!-- Container (mid) end -->
+
+  <!-- Container (bot) -->
+  <div class="container textcenter pad-t-1em pad-b-1em">
+    Please send comments, bugs, criticisms to:
+    <a href="mailto:joed\@ucla.edu">joed\@ucla.edu</a>
+    <a href="mailto:joed\@ucla.edu">
+      <span class="ui-icon ui-icon-mail-closed"></span>
+    </a>
+    <br>
+    Code repository:
+    <a href="https://bitbucket.org/DistefanoLab/thyrosim/overview"
+       target="_blank">click here</a>
+  </div>
+  <!-- Container (bot) end -->
 
 </footer>
 EOF

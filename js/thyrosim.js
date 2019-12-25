@@ -370,9 +370,8 @@ function getMsgBoxId() {
         $(d+'2').prop('defaultValue') == $(d+'2').prop('value') &&
         $(d+'3').prop('defaultValue') == $(d+'3').prop('value') &&
         $(d+'4').prop('defaultValue') == $(d+'4').prop('value')) {
-        return 'follow1';
     }
-    return $('#recalcIC').prop('checked') ? 'follow2' : 'follow1';
+    return 'follow';
 }
 
 //===================================================================
