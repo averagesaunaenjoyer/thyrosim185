@@ -369,7 +369,7 @@ $main
 $footer
   <!-- Footer end -->
 
-  <!-- Follows the cursor while simulator is running -->
+  <!-- Follow -->
   <div id="follow" class="follow">
     <img class="info-icon-fw floatL" src="../img/spinner.svg">
     <span class="floatL">
@@ -378,6 +378,18 @@ $footer
     </span>
   </div>
   <!-- Follow end -->
+
+  <!-- Overlay -->
+  <div id="overlay" class="overlay">
+    <div>
+      <button id="overlay-button" type="button" class="btn-anchor floatR"
+              onclick="toggle('overlay',100);">
+        Close
+      </button>
+      <div id="overlay-content"></div>
+    </div>
+  </div>
+  <!-- Overlay end -->
 
 </form>
 
@@ -492,6 +504,15 @@ Toggle:
 <div id="parameters">$paramList</div>
 EOF
 }
+
+    my $sliderButton = <<EOF
+<button type="button" class="btn-icon" onclick="togScrollBars();">
+  <img id="scrollbar" class="info-icon-m"
+       src="../img/minus.png" alt="Hide scroll bars">
+  Secretion/Absorption Rates:
+</button>
+EOF
+;
 
     my $sliders = <<EOF
 <div class="container" onmouseover="hilite('1');" onmouseout="lolite('1');">
@@ -705,17 +726,11 @@ $paramEditor
         <span class="title"><b>Control Panel</b></span>
       </div>
 
-      <div class="container textcenter pad-t-1em">
-        <button type="button" class="btn-icon" onclick="togScrollBars();">
-          <img id="scrollbar" class="info-icon-m"
-               src="../img/minus.png" alt="Hide scroll bars">
-          Secretion/Absorption Rates:
-        </button>
-      </div>
+      <div class="container textcenter pad-t-1em">$simtime</div>
+
+      <div class="container textcenter pad-t-1em">$sliderButton</div>
 
       <div class="container pad-t-1em">$sliders</div>
-
-      <div class="container textcenter pad-t-1em">$simtime</div>
 
       <div class="container textcenter pad-t-1em">$recalcIC</div>
 

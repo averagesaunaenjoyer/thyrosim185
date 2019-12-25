@@ -65,8 +65,9 @@ function ajax_getplot(exp) {
       .always(function() {
         hideLoadingMsg(msgBoxId); // Hide loading message
         var time2 = new Date().getTime();
-        var timeE = Math.floor((time2 - time1)/1000);
-        alert(msg + ' ' + timeE); // Elapsed
+        var timeE = Math.floor((time2 - time1)/1000); // Time elapsed
+        $('#overlay-content').html('<b>Success!</b> '+msg+' '+timeE);
+        $('.overlay').css('display','block');
       });
 }
 
@@ -1087,8 +1088,7 @@ function getRowClass(n) {
 //   n:     The input number
 //===================================================================
 function addEnable(n) {
-    return '<span title="Turn input off"'
-         + '      class="floatL tog-in tog-in-1 inputs"'
+    return '<span alt="Turn input off" class="floatL tog-in tog-in-1 inputs"'
          + '      id="enabled-'+n+'" name="enabled-'+n+'"'
          + '      onclick="togInput('+n+');">'
          + 'ON'
@@ -1128,7 +1128,7 @@ function togInput(n) {
     // Turn input off
     if (ena.hasClass('tog-in-1')) {
         ena.removeClass('tog-in-1').addClass('tog-in-2');
-        ena.attr('title','Turn input on');
+        ena.attr('alt','Turn input on');
         ena.text('OFF');
         dis.attr('value','1');
         // Gray out this input's other input boxes
@@ -1138,8 +1138,8 @@ function togInput(n) {
     // Turn input on
     } else {
         ena.removeClass('tog-in-2').addClass('tog-in-1');
+        ena.attr('alt','Turn input off');
         ena.text('ON');
-        ena.attr('title','Turn input off');
         dis.attr('value','0');
         // Un-gray out this input's other input boxes
         $('#input-'+n).children('.inputs').each(function() {
@@ -1333,6 +1333,14 @@ $(function() {
     // Initialize jQuery UI tooltip
     $(document).tooltip({
         tooltipClass: "thysim-tooltip"
+    });
+
+    // Bind #overlay to detect enter key
+    $(document).keypress(function(event){
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13'){
+            toggle('overlay',100); // Same call as #overlay-button
+        }
     });
 
     // Initialize slider objects
