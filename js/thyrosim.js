@@ -41,8 +41,7 @@ function ajax_getplot(exp) {
     //---------------------------------------------------------
     // Submit to server and process response
     //---------------------------------------------------------
-    var msgBoxId = getMsgBoxId();
-    showLoadingMsg(msgBoxId);
+    showLoadingMsg();
 
     var msg;
     var time1 = new Date().getTime();
@@ -55,7 +54,7 @@ function ajax_getplot(exp) {
         var color = $('input:radio[name=runRadio]:checked').val();
         ThyrosimGraph.setRun(color,rdata);
         graphAll();
-        runRadioNext();
+        selectRunButton(getNextRunColor());
 
         msg = "Execution time (sec):";
       })
@@ -63,11 +62,12 @@ function ajax_getplot(exp) {
         msg = "Operation timed out (sec):";
       })
       .always(function() {
-        hideLoadingMsg(msgBoxId); // Hide loading message
+        hideLoadingMsg(); // Hide loading message
         var time2 = new Date().getTime();
         var timeE = Math.floor((time2 - time1)/1000); // Time elapsed
-        $('#overlay-content').html('<b>Success!</b> '+msg+' '+timeE);
         $('.overlay').css('display','block');
+        $('#overlay-button').focus();
+        $('#overlay-content').html('<b>Success!</b> '+msg+' '+timeE);
       });
 }
 
@@ -360,42 +360,45 @@ function graph(hormone,addlabel,initgraph) {
 }
 
 //===================================================================
-// DESC:    While the ajax call is running, display a 'wait' message box that
-//          follows the cursor. Depending on whether dial values are default or
-//          whether recalculate IC is checked, the message is different. This
-//          function returns the id of the selected message.
+// DESC:    Get the next run color.
 //===================================================================
-function getMsgBoxId() {
-    var d = '#dialinput';
-    if ($(d+'1').prop('defaultValue') == $(d+'1').prop('value') &&
-        $(d+'2').prop('defaultValue') == $(d+'2').prop('value') &&
-        $(d+'3').prop('defaultValue') == $(d+'3').prop('value') &&
-        $(d+'4').prop('defaultValue') == $(d+'4').prop('value')) {
-    }
-    return 'follow';
+function getNextRunColor() {
+    var colors = Object.keys(ThyrosimGraph.colors);
+    var color = $('input:radio[name=runRadio]:checked').val();
+    var i = colors.indexOf(color);
+    var j = i + 1;
+    if (j >= colors.length) return colors[0];
+    return colors[j];
+}
+
+//===================================================================
+// DESC:    Select the next run button.
+//===================================================================
+function selectRunButton(color) {
+    $('input[name=runRadio]').parent().removeClass('active');
+    $('#runRadio'+color).parent().addClass('active');
+    $('#runRadio'+color).prop('checked', true);
 }
 
 //===================================================================
 // DESC:    Show/Hide the loading message box. The +5 offsets the box so that it
 //          doesn't interfere with mouse clicks.
-// ARGS:
-//   mid:   Message box id
 //===================================================================
-function showLoadingMsg(mid) {
+function showLoadingMsg() {
     $(window).click(function(e){
-        $('#'+mid).css('display','block')
-                  .css('top',    e.pageY + 5)
-                  .css('left',   e.pageX + 5);
+        $('#follow').css('display','block')
+                    .css('top',    e.pageY + 5)
+                    .css('left',   e.pageX + 5);
     });
     $(window).mousemove(function(e){
-        $('#'+mid).css('display','block')
-                  .css('top',    e.pageY + 5)
-                  .css('left',   e.pageX + 5);
+        $('#follow').css('display','block')
+                    .css('top',    e.pageY + 5)
+                    .css('left',   e.pageX + 5);
     });
 }
-function hideLoadingMsg(mid) {
+function hideLoadingMsg() {
     $(window).unbind();
-    $('#'+mid).css('display','none');
+    $('#follow').css('display','none');
 }
 
 //===================================================================
@@ -478,9 +481,9 @@ function getExperimentStr(exp) {
 //   exp:   The experiment name
 //===================================================================
 function executeExperiment(exp) {
-    $('#input-manager').empty();                 // Clear the input space
-    ThyrosimGraph.setRun("Green",undefined);     // Delete the Green run
-    $('input[name=runRadio]')[0].checked = true; // Set Blue as exp run
+    $('#input-manager').empty();             // Clear the input space
+    ThyrosimGraph.setRun("Green",undefined); // Delete the Green run
+    selectRunButton('Blue');                 // Set Blue as exp run
 
     if (exp == "experiment-default") {
         $('#simtime').val(5);
@@ -550,7 +553,7 @@ function addInputOral(hormone,dose,interval,singledose,start,end) {
 function ThyrosimGraph() {
     this.initGraph = true;
 
-    // Default color settings
+    // Default color settings. Color order must match button order.
     var colors = {
         Blue:  { linestyle: "",    rdata: undefined, exist: false },
         Green: { linestyle: "5,3", rdata: undefined, exist: false }
@@ -766,18 +769,6 @@ function resetRun(color) {
     graphAll();
 }
 
-//===================================================================
-// DESC:    Select the next run color. Since we only have 2 colors, this works.
-//===================================================================
-function runRadioNext() {
-    var runRadio = $('input[name=runRadio]');
-    if (runRadio[0].checked == true) {
-        runRadio[1].checked = true;
-    } else {
-        runRadio[0].checked = true;
-    }
-}
-
 //========================================================================
 // TASK:    Functions for UI interactions and animations.
 //========================================================================
@@ -806,8 +797,6 @@ function addInput(title) {
     if (pit.type == 'Oral')     span.append(    OralInput(pit,iNum));
     if (pit.type == 'IV')       span.append( IVPulseInput(pit,iNum));
     if (pit.type == 'Infusion') span.append(InfusionInput(pit,iNum));
-
-    span.append(addDeleteIcon(iNum));
     span.appendTo(footer);
 
     // Show/Hide animating gifs. 3200 ms because each gif has 8 frames and each
@@ -825,44 +814,59 @@ function addInput(title) {
 //   n:     The input number
 //===================================================================
 function OralInput(pit,n) {
-    return '<img src="'+pit.src+'" class="info-icon-s">'
+    return '<div class="container">'
+         + '  <img src="'+pit.src+'" class="info-icon-m">'
+         + '  <span class="inputs" id="label-'+n+'" name="label-'+n+'">'
+         + '    Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
+         + '  </span>'
+         +    addDeleteIcon(n)
+         + '</div>'
 
-         + '<span class="inputs" id="label-'+n+'" name="label-'+n+'">'
-         + '  Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
-         + '</span>'
-         + '<br>'
+         + '<div class="container">'
+         + '  <div class="grid-1-10">'
+         +      addOnOff(n)
+         + '  </div>'
+         + '  <div class="grid-9-10">'
+         + '    <span class="floatL">'
+         + '      Dose: '
+         + '      <input class="inputs oral-dose" type="text"'
+         + '             id="dose-'+n+'" name="dose-'+n+'"> &micro;g'
+         + '    </span>'
+         + '    <span class="floatL mar-l-1em">'
+         + '      Dosing Interval: '
+         + '      <input class="inputs" type="text"'
+         + '             id="int-'+n+'" name="int-'+n+'"> Days'
+         + '    </span>'
+         + '    <span class="floatL mar-l-1em">'
+         + '      <input class="inputs" type="checkbox" value="1"'
+         + '             id="singledose-'+n+'" name="singledose-'+n+'"'
+         + '             onclick="useSingleDose('+n+');"> Single Dose'
+         + '    </span>'
+         + '  </div>'
+         + '</div>'
+
+         + '<div class="container">'
+         + '  <div class="grid-1-10">'
+         + '    &nbsp;'
+         + '  </div>'
+         + '  <div class="grid-9-10">'
+         + '    <span class="floatL">'
+         + '      Start Day: '
+         + '      <input class="inputs" type="text"'
+         + '             id="start-'+n+'" name="start-'+n+'">'
+         + '    </span>'
+         + '    <span class="floatL mar-l-1em">'
+         + '      End Day: '
+         + '      <input class="inputs" type="text"'
+         + '             id="end-'+n+'" name="end-'+n+'">'
+         + '    </span>'
+         + '  </div>'
+         + '</div>'
 
          + '<input type="hidden" class="inputs" id="hormone-'+n+'"'
          + '       name="hormone-'+n+'" value="'+pit.hormoneId +'">'
          + '<input type="hidden" class="inputs" id="type-'   +n+'"'
          + '       name="type-'   +n+'" value="'+pit.typeId    +'">'
-
-         + addEnable(n)
-
-         + 'Dose: '
-         + '<input class="inputs oral-dose" type="text"'
-         + '       id="dose-'+n+'" name="dose-'+n+'"> &micro;g'
-         + '      '
-
-         + 'Dosing Interval: '
-         + '<input class="inputs" type="text"'
-         + '       id="int-'+n+'" name="int-'+n+'"> Days'
-         + '      '
-
-         + '<input class="inputs" type="checkbox" value="1"'
-         + '       id="singledose-'+n+'" name="singledose-'+n+'"'
-         + '       onclick="useSingleDose('+n+');"> Single Dose'
-         + '<br>'
-
-         + '                        '
-         + 'Start Day: '
-         + '<input class="inputs" type="text"'
-         + '       id="start-'+n+'" name="start-'+n+'">'
-         + '      '
-
-         + 'End Day: '
-         + '<input class="inputs" type="text"'
-         + '       id="end-'+n+'" name="end-'+n+'">'
 
          + '';
 }
@@ -874,28 +878,36 @@ function OralInput(pit,n) {
 //   n:     The input number
 //===================================================================
 function IVPulseInput(pit,n) {
-    return '<img src="'+pit.src+'" class="info-icon-s">'
+    return '<div class="container">'
+         + '  <img src="'+pit.src+'" class="info-icon-m">'
+         + '  <span class="inputs" id="label-'+n+'" name="label-'+n+'">'
+         + '    Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
+         + '  </span>'
+         +    addDeleteIcon(n)
+         + '</div>'
 
-         + '<span class="inputs" id="label-'+n+'" name="label-'+n+'">'
-         + '  Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
-         + '</span>'
-         + '<br>'
+         + '<div class="container">'
+         + '  <div class="grid-1-10">'
+         +      addOnOff(n)
+         + '  </div>'
+         + '  <div class="grid-9-10">'
+         + '    <span class="floatL">'
+         + '      Dose: '
+         + '      <input class="inputs" type="text"'
+         + '             id="dose-'+n+'" name="dose-'+n+'"> &micro;g'
+         + '    </span>'
+         + '    <span class="floatL mar-l-1em">'
+         + '      Start Day: '
+         + '      <input class="inputs" type="text"'
+         + '             id="start-'+n+'" name="start-'+n+'">'
+         + '    </span>'
+         + '  </div>'
+         + '</div>'
 
          + '<input type="hidden" class="inputs" id="hormone-'+n+'"'
          + '       name="hormone-'+n+'" value="'+pit.hormoneId +'">'
          + '<input type="hidden" class="inputs" id="type-'   +n+'"'
          + '       name="type-'   +n+'" value="'+pit.typeId    +'">'
-
-         + addEnable(n)
-
-         + 'Dose: '
-         + '<input class="inputs" type="text"'
-         + '       id="dose-'+n+'" name="dose-'+n+'"> &micro;g'
-         + '      '
-
-         + 'Start Day: '
-         + '<input class="inputs" type="text"'
-         + '       id="start-'+n+'" name="start-'+n+'">'
 
          + '';
 }
@@ -907,33 +919,41 @@ function IVPulseInput(pit,n) {
 //   n:     The input number
 //===================================================================
 function InfusionInput(pit,n) {
-    return '<img src="'+pit.src+'" class="info-icon-s">'
+    return '<div class="container">'
+         + '  <img src="'+pit.src+'" class="info-icon-m">'
+         + '  <span class="inputs" id="label-'+n+'" name="label-'+n+'">'
+         + '    Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
+         + '  </span>'
+         +    addDeleteIcon(n)
+         + '</div>'
 
-         + '<span class="inputs" id="label-'+n+'" name="label-'+n+'">'
-         + '  Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
-         + '</span>'
-         + '<br>'
+         + '<div class="container">'
+         + '  <div class="grid-1-10">'
+         +      addOnOff(n)
+         + '  </div>'
+         + '  <div class="grid-9-10">'
+         + '    <span class="floatL">'
+         + '      Dose: '
+         + '      <input class="inputs" type="text"'
+         + '             id="dose-'+n+'" name="dose-'+n+'"> &micro;g/day'
+         + '    </span>'
+         + '    <span class="floatL mar-l-1em">'
+         + '      Start Day: '
+         + '      <input class="inputs" type="text"'
+         + '             id="start-'+n+'" name="start-'+n+'">'
+         + '    </span>'
+         + '    <span class="floatL mar-l-1em">'
+         + '      End Day: '
+         + '      <input class="inputs" type="text"'
+         + '             id="end-'+n+'" name="end-'+n+'">'
+         + '    </span>'
+         + '  </div>'
+         + '</div>'
 
          + '<input type="hidden" class="inputs" id="hormone-'+n+'"'
          + '       name="hormone-'+n+'" value="'+pit.hormoneId +'">'
          + '<input type="hidden" class="inputs" id="type-'   +n+'"'
          + '       name="type-'   +n+'" value="'+pit.typeId    +'">'
-
-         + addEnable(n)
-
-         + 'Dose: '
-         + '<input class="inputs" type="text"'
-         + '       id="dose-'+n+'" name="dose-'+n+'"> &micro;g/day'
-         + '      '
-
-         + 'Start Day: '
-         + '<input class="inputs" type="text"'
-         + '       id="start-'+n+'" name="start-'+n+'">'
-         + '      '
-
-         + 'End Day: '
-         + '<input class="inputs" type="text"'
-         + '       id="end-'+n+'" name="end-'+n+'">'
 
          + '';
 }
@@ -963,10 +983,10 @@ function deleteInput(n) {
 
         //---------------------------------------------------------
         // Inner loop.
-        // Loop through the children of an input-row. Find children with class
-        // 'inputs' and rename attributes: id, name.
+        // Loop through the descendants of an input-row. Find descendants with
+        // class 'inputs' and rename attributes: id, name.
         //---------------------------------------------------------
-        $('#input-'+i).children('.inputs').each(function() {
+        $('#input-'+i).find('.inputs').each(function() {
             var child = $(this);
 
             // Rename by subtracting the number by one, ie:
@@ -1080,14 +1100,13 @@ function getRowClass(n) {
 }
 
 //===================================================================
-// DESC:    Add a clickable enable/disable input box. The button initializes as
-//          enabled. A hidden input named "disabled-X" is used to store whether
-//          the input is enabled/disabled. Value of 1 means disabled and value
-//          of 0 means enabled.
+// DESC:    Add a clickable toggle on/off input button. The button initializes
+//          as ON. A hidden input named "disabled-X" is used to store whether
+//          the input is ON/OFF. Value of 1 means OFF and value of 0 means ON.
 // ARGS:
 //   n:     The input number
 //===================================================================
-function addEnable(n) {
+function addOnOff(n) {
     return '<span alt="Turn input off" class="floatL tog-in tog-in-1 inputs"'
          + '      id="enabled-'+n+'" name="enabled-'+n+'"'
          + '      onclick="togInput('+n+');">'
@@ -1107,7 +1126,7 @@ function addEnable(n) {
 function addDeleteIcon(n) {
     return '<a class="img-input inputs"'
          + '   name="delete-'+n+'" href="javascript:deleteInput('+n+');">'
-         + '  <img class="floatR info-icon-l"'
+         + '  <img class="floatR info-icon-m"'
          + '       src="../img/x.png" alt="Delete this input">'
          + '</a>'
          + '';
@@ -1132,7 +1151,7 @@ function togInput(n) {
         ena.text('OFF');
         dis.attr('value','1');
         // Gray out this input's other input boxes
-        $('#input-'+n).children('.inputs').each(function() {
+        $('#input-'+n).find('.inputs').each(function() {
             $(this).attr('disabled',true);
         });
     // Turn input on
@@ -1142,7 +1161,7 @@ function togInput(n) {
         ena.text('ON');
         dis.attr('value','0');
         // Un-gray out this input's other input boxes
-        $('#input-'+n).children('.inputs').each(function() {
+        $('#input-'+n).find('.inputs').each(function() {
             var child = $(this);
             // Remove the 'disabled' attribute unless "Single Dose" is checked
             var sd = $('input[name="singledose-'+n+'"]:checked').length > 0;
@@ -1335,14 +1354,6 @@ $(function() {
         tooltipClass: "thysim-tooltip"
     });
 
-    // Bind #overlay to detect enter key
-    $(document).keypress(function(event){
-        var keycode = (event.keyCode ? event.keyCode : event.which);
-        if (keycode == '13'){
-            toggle('overlay',100); // Same call as #overlay-button
-        }
-    });
-
     // Initialize slider objects
     $.each(sliderObj,function(k,o) {
         var s = '#slider'+k;
@@ -1359,7 +1370,7 @@ $(function() {
         // Set defaultValue property
         $(d).prop('defaultValue',$(s).slider('value'));
         // Changes slider value when changing dialinput
-        $(d).change(function() {
+        $(d).keyup(function() {
             $(s).slider('value',this.value);
         });
     });
@@ -1386,7 +1397,7 @@ $(function() {
     });
 
     // Initialize "Next Run" as Blue
-    $('#runRadioBlue').parent().addClass('active');
+    selectRunButton('Blue');
 
 });
 
