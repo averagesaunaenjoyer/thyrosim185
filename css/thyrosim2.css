@@ -87,6 +87,9 @@ input[type=text]:focus {
 input[type=text].error {
   border: 2px solid red;
 }
+input[type=checkbox] {
+  box-sizing: border-box;
+}
 
 /*--------------------------------------------------
 * Project-wide styles
@@ -212,7 +215,7 @@ input[type=text].error {
   border: 1px solid #1d2124;
 }
 
-/* Button - Group radio */
+/* Button - Custom radio buttons */
 .btn-group {
   display: inline-block;
   margin-left: 0.5em;
@@ -240,6 +243,8 @@ input[type=text].error {
 .btn-group>label>input[type="radio"] { /* hide radio button */
   opacity: 0;
   position: absolute;
+  height: 0;
+  width: 0;
 }
 .btn-group>.active { z-index: 1 } /* set active button higher to show borders */
 .btn-group>.btn-blue.active  {box-shadow: 0 0 0 0.2rem rgba(  0,123,255,.5);}
@@ -250,6 +255,58 @@ input[type=text].error {
 .btn-group>.btn-teal.active  {box-shadow: 0 0 0 0.2rem rgba( 23,162,184,.5);}
 .btn-group>.btn-white.active {box-shadow: 0 0 0 0.2rem rgba(248,249,250,.5);}
 .btn-group>.btn-black.active {box-shadow: 0 0 0 0.2rem rgba( 52, 58, 64,.5);}
+
+/* Button - Custom checkboxes */
+.swtich {}
+.switch label {
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 0.2rem 0.5rem 0;
+}
+.switch label input[type=checkbox] {
+  opacity: 0;
+  position: absolute;
+  height: 0;
+  width: 0;
+}
+.switch label input[type=checkbox]:checked+.lever {
+  background-color: #dccfe2;
+}
+.switch label input[type=checkbox]:checked+.lever:after {
+  background-color: #a6c;
+  left: 1.5rem;
+}
+.switch label .lever {
+  background-color: #818181;
+  border-radius: 0.9375rem;
+  content: "";
+  display: inline-block;
+  margin: -0.2rem 0.625rem 0 0.625rem;
+  position: relative;
+  vertical-align: middle;
+  height: 0.9375rem;
+  width: 2.5rem;
+  -webkit-transition: background 0.3s ease;
+  transition: background 0.3s ease;
+}
+.switch label .lever:after {
+  background-color: #f1f1f1;
+  border-radius: 1.3125rem;
+  box-shadow: 0 0.0625rem 0.1875rem 0.0625rem rgba(0,0,0,0.4);
+  content: "";
+  display: inline-block;
+  position: absolute;
+  left: -0.3125rem;
+  top: -0.1875rem;
+  height: 1.3125rem;
+  width: 1.3125rem;
+  -webkit-transition: left 0.3s ease, background 0.3s ease,
+                      -webkit-box-shadow 1s ease;
+  transition: left 0.3s ease, background 0.3s ease, -webkit-box-shadow 1s ease;
+  transition: left 0.3s ease, background 0.3s ease, box-shadow 1s ease;
+  transition: left 0.3s ease, background 0.3s ease, box-shadow 1s ease,
+              -webkit-box-shadow 1s ease;
+}
 
 /* Button - Icon */
 .btn-icon {

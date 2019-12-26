@@ -576,15 +576,22 @@ EOF
 ;
 
     my $recalcIC = <<EOF
-Recalculate Initial Conditions:
-<span class="btn-group">
-  <input type="checkbox" value="1" id="recalcIC" name="recalcIC" checked>
+<span class="switch">
+  Recalculate Initial Conditions:
+  <label>
+    Off
+      <input type="checkbox" value="1" id="recalcIC" name="recalcIC" checked>
+      <span class="lever"></span>
+    On
+  </label>
 </span>
-<label title="When this box is checked, initial conditions (IC) are recalculated
-when secretion/absorption values are changed from default (100, 88, 100, 88).
-Uncheck this box to always use euthyroid IC.">
-  <img class="info-icon-l" src="../img/info.svg">
-</label>
+<span>
+  <label title="When this switch is on, the initial conditions (IC) are
+  recalculated when secretion/absorption values are changed from the default
+  (100, 88, 100, 88). Turn this switch off to always use euthyroid IC.">
+    <img class="info-icon-l" src="../img/info.svg">
+  </label>
+</span>
 EOF
 ;
 
