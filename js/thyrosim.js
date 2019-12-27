@@ -65,9 +65,7 @@ function ajax_getplot(exp) {
         hideLoadingMsg(); // Hide loading message
         var time2 = new Date().getTime();
         var timeE = Math.floor((time2 - time1)/1000); // Time elapsed
-        $('.overlay').css('display','block');
-        $('#overlay-button').focus();
-        $('#overlay-content').html('<b>Success!</b> '+msg+' '+timeE);
+        showOverlayMsg('<b>Success!</b> '+msg+' '+timeE,'green');
       });
 }
 
@@ -402,6 +400,18 @@ function hideLoadingMsg() {
 }
 
 //===================================================================
+// DESC:    Generate the overlay message.
+// ARGS:
+//   html:  Content for $('#overlay-content').html()
+//   color: Overlay colorscheme
+//===================================================================
+function showOverlayMsg(html,color) {
+    $('#overlay-content').html(html).attr('class','overlay-'+color);
+    $('#overlay').css('display','block');
+    $('#overlay-button').focus();
+}
+
+//===================================================================
 // DESC:    Validate the form. Returns 1 if validation fails.
 //===================================================================
 function validateForm() {
@@ -433,6 +443,8 @@ function validateForm() {
             }
         }
     });
+
+    if (fail) showOverlayMsg('<b>Error!</b> Form validation failed.','red');
 
     return fail;
 }

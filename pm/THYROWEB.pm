@@ -380,7 +380,7 @@ $footer
   <!-- Follow end -->
 
   <!-- Overlay -->
-  <div id="overlay" class="overlay">
+  <div id="overlay">
     <div>
       <button id="overlay-button" type="button" class="btn-anchor floatR"
               onclick="toggle('overlay',100);">
@@ -483,7 +483,7 @@ EOF
 ;
 
     my $sliders = <<EOF
-<div class="container"
+<div class="container slider-row"
      onmouseover="toggle('hilite1',1);" onmouseout="toggle('hilite1',1);">
   <div class="grid-2-5">
     T<span class="textsub">4</span> Secretion (0-200%):
@@ -492,11 +492,11 @@ EOF
     <input type="text" id="dialinput1" name="dialinput1"> %
   </div>
   <div class="grid-2-5">
-    <div id="slidercontainer1" class="sliders"><div id="slider1"></div></div>
+    <div id="slidercontainer1"><div id="slider1"></div></div>
   </div>
 </div>
 
-<div class="container"
+<div class="container slider-row"
      onmouseover="toggle('hilite2',1);" onmouseout="toggle('hilite2',1);">
   <div class="grid-2-5">
     T<span class="textsub">4</span> Absorption (0-100%):
@@ -505,11 +505,11 @@ EOF
     <input type="text" id="dialinput2" name="dialinput2"> %
   </div>
   <div class="grid-2-5">
-    <div id="slidercontainer2" class="sliders"><div id="slider2"></div></div>
+    <div id="slidercontainer2"><div id="slider2"></div></div>
   </div>
 </div>
 
-<div class="container"
+<div class="container slider-row"
      onmouseover="toggle('hilite3',1);" onmouseout="toggle('hilite3',1);">
   <div class="grid-2-5">
     T<span class="textsub">3</span> Secretion (0-200%):
@@ -518,11 +518,11 @@ EOF
     <input type="text" id="dialinput3" name="dialinput3"> %
   </div>
   <div class="grid-2-5">
-    <div id="slidercontainer3" class="sliders"><div id="slider3"></div></div>
+    <div id="slidercontainer3"><div id="slider3"></div></div>
   </div>
 </div>
 
-<div class="container"
+<div class="container slider-row"
      onmouseover="toggle('hilite4',1);" onmouseout="toggle('hilite4',1);">
   <div class="grid-2-5">
     T<span class="textsub">3</span> Absorption (0-100%):
@@ -531,7 +531,7 @@ EOF
     <input type="text" id="dialinput4" name="dialinput4"> %
   </div>
   <div class="grid-2-5">
-    <div id="slidercontainer4" class="sliders"><div id="slider4"></div></div>
+    <div id="slidercontainer4"><div id="slider4"></div></div>
   </div>
 </div>
 EOF

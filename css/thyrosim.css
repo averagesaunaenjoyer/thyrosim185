@@ -414,6 +414,46 @@ input[type=checkbox] {
 .info-icon-l  { height: 1.6em; }
 .info-icon-fw { height: 4.5em; } /* fw for follow */
 
+/* Overlay messages - Bootstrap alerts colorscheme */
+#overlay {
+  background-color: rgb(0,0,0); /* black background */
+  background-color: rgba(0,0,0,0.75); /* add opacity */
+  display: none;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  overflow-y: hidden; /* Disable vertical scroll */
+  padding-top: 20em;
+  position: fixed;
+  text-align: center;
+  z-index: 100;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+}
+#overlay>div {
+  margin: 0 auto;
+  width: 50%;
+}
+#overlay button {
+  margin-top: 0.4em;
+  margin-right: 1em
+}
+#overlay #overlay-content {
+  border: 1px solid transparent;
+  border-radius: 0.25em;
+  padding: 2em;
+}
+.overlay-green {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+.overlay-red {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+}
+
 /* Miscellaneous */
 .follow { /* Display a waiting message box */
   background-color: #d6d8d9;
@@ -432,36 +472,6 @@ input[type=checkbox] {
 }
 .follow span {
   margin: 0.6em 0 0 0.45em;
-}
-.overlay {
-  background-color: rgb(0,0,0); /* black background */
-  background-color: rgba(0,0,0,0.75); /* add opacity */
-  display: none;
-  overflow-x: hidden; /* Disable horizontal scroll */
-  overflow-y: hidden; /* Disable vertical scroll */
-  padding-top: 20em;
-  position: fixed;
-  text-align: center;
-  z-index: 100;
-  height: 100%;
-  width: 100%;
-  left: 0;
-  top: 0;
-}
-.overlay>div {
-  margin: 0 auto;
-  width: 50%;
-}
-.overlay #overlay-content {
-  background-color: #d4edda;
-  border-radius: 0.25em;
-  border: 1px solid #c3e6cb;
-  color: #155724;
-  padding: 2em;
-}
-.overlay button {
-  margin-top: 0.4em;
-  margin-right: 1em
 }
 .textsub { /* Subscript */
   font-size: 0.7em;
@@ -789,8 +799,10 @@ footer {
 
 /* Container (bot) - Panel Right - Control panel */
 #control-panel {
-  background-color: mistyrose;
   background-color: lavenderblush;
+}
+.slider-row {
+  margin-bottom: 0.25em;
 }
 #simtime { /* Override default text input width */
   width: 3em;
