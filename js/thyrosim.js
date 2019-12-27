@@ -1203,17 +1203,6 @@ function togScrollBars() {
 }
 
 //===================================================================
-// DESC:    Highlight or un-highlight the corresponding black dot in the diagram
-//          when mousing over a T4/3 secretion/absorption edit box.
-//===================================================================
-function hilite(id) {
-    $('#hilite'+id).css("display","block");
-}
-function lolite(id) {
-    $('#hilite'+id).css("display","none");
-}
-
-//===================================================================
 // DESC:    Animation manager.
 //===================================================================
 function animation() {
@@ -1241,9 +1230,9 @@ function animation() {
         var id = new Date().getTime().toString();
         var div = $('<div>').attr({
                                 'id'    : cat+'-'+id, // spill-12345
-                                'class' : 'imgcontainer '+cat // spill
+                                'class' : ''+cat // spill
                                })
-                            .appendTo('#diagram');
+                            .appendTo('#img-param');
         var img = $('<img>').attr({
                                 'id'    : cat+'img-'+id, // spillimg-12345
                                 'src'   : '../img/'+ele+'.gif?'+id
@@ -1293,6 +1282,7 @@ var sliderObj = {
 
 //===================================================================
 // DESC:    Function to show/hide an id. Takes an optional time argument.
+// NOTE:    ms cannot be 0; use 1 for shortest possible toggle.
 //===================================================================
 function toggle(id,ms) {
     $('#'+id).toggle('blind',ms);

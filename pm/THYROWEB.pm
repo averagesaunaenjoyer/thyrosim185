@@ -483,7 +483,8 @@ EOF
 ;
 
     my $sliders = <<EOF
-<div class="container" onmouseover="hilite('1');" onmouseout="lolite('1');">
+<div class="container"
+     onmouseover="toggle('hilite1',1);" onmouseout="toggle('hilite1',1);">
   <div class="grid-2-5">
     T<span class="textsub">4</span> Secretion (0-200%):
   </div>
@@ -495,7 +496,8 @@ EOF
   </div>
 </div>
 
-<div class="container" onmouseover="hilite('2');" onmouseout="lolite('2');">
+<div class="container"
+     onmouseover="toggle('hilite2',1);" onmouseout="toggle('hilite2',1);">
   <div class="grid-2-5">
     T<span class="textsub">4</span> Absorption (0-100%):
   </div>
@@ -507,7 +509,8 @@ EOF
   </div>
 </div>
 
-<div class="container" onmouseover="hilite('3');" onmouseout="lolite('3');">
+<div class="container"
+     onmouseover="toggle('hilite3',1);" onmouseout="toggle('hilite3',1);">
   <div class="grid-2-5">
     T<span class="textsub">3</span> Secretion (0-200%):
   </div>
@@ -519,7 +522,8 @@ EOF
   </div>
 </div>
 
-<div class="container" onmouseover="hilite('4');" onmouseout="lolite('4');">
+<div class="container"
+     onmouseover="toggle('hilite4',1);" onmouseout="toggle('hilite4',1);">
   <div class="grid-2-5">
     T<span class="textsub">3</span> Absorption (0-100%):
   </div>
@@ -634,10 +638,10 @@ $menuT4
       <!-- Diagram and Parameters -->
       <div id="img-param" class="floatL">
 $paramEditor
-        <img id="hilite1" src="../img/hilite.png" class="hilite hide">
-        <img id="hilite2" src="../img/hilite.png" class="hilite hide">
-        <img id="hilite3" src="../img/hilite.png" class="hilite hide">
-        <img id="hilite4" src="../img/hilite.png" class="hilite hide">
+        <img id="hilite1" src="../img/hilite.png" class="hide">
+        <img id="hilite2" src="../img/hilite.png" class="hide">
+        <img id="hilite3" src="../img/hilite.png" class="hide">
+        <img id="hilite4" src="../img/hilite.png" class="hide">
       </div>
       <!-- Diagram and Parameters end -->
 

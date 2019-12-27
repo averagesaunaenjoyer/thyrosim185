@@ -727,13 +727,13 @@ footer {
   text-align: right;
   width: 30%;
 }
-.hilite {
+#hilite1, #hilite2, #hilite3, #hilite4 {
   position: absolute;
 }
-#hilite1 {}
-#hilite2 {}
-#hilite3 {}
-#hilite4 {}
+#hilite1 { display: none; left: 16.51em ; top: 25.69em; }
+#hilite2 { display: none; left: 13.74em ; top: 19.03em; }
+#hilite3 { display: none; left: 17.78em ; top: 25.69em; }
+#hilite4 { display: none; left: 14.17em ; top: 18.57em; }
 
 /* Container (top) - Panel Right - D3 customizations */
 .d3chart {
