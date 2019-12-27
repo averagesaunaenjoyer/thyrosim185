@@ -405,40 +405,28 @@ function hideLoadingMsg() {
 // DESC:    Validate the form. Returns 1 if validation fails.
 //===================================================================
 function validateForm() {
-    var fail = 0;
+
+    $('input[type=text]').removeClass('error'); // Reset
+
+    // Only iterate over text inputs in the form
+    var fail = false;
     var maxDay = parseFloat(100.0);
-
-    // Make sure each input is a number. Decimals okay.
-    $.each($("form").serializeArray(), function(i, field) {
-
-        // Skip checking for 'runRadio'
-        if (field.name == 'runRadio') {
-            return true;
-        }
-        // Skip checking for 'thysim'
-        if (field.name == 'thysim') {
-            return true;
-        }
+    $.each($("form input[type=text]").serializeArray(), function(i, field) {
 
         // Checking for numeric
-        if (field.value.match(/^-?\+?[0-9]*\.?[0-9]+$/)) {
-            $('#'+field.name).removeClass('error');
-        } else {
+        if (!field.value.match(/^-?\+?[0-9]*\.?[0-9]+$/)) {
             $('#'+field.name).addClass('error');
-            fail = 1;
+            fail = true;
         }
-    });
 
-    // For inputs, check the following:
-    // 1. Check that start, end, and simulation time are <= maxDay.
-    // 2. Update simulation time with the highest end day.
-    $.each($("form").serializeArray(), function(i, field) {
+        // 1. Check that start, end, and simulation time are <= maxDay
+        // 2. Update simulation time with the highest end day
         if (field.name.match(/^start-/) ||
             field.name.match(/^end-/)   ||
             field.name.match(/^simtime/)) {
             if (parseFloat(field.value) > maxDay) {
                 $('#'+field.name).addClass('error');
-                fail = 1;
+                fail = true;
             } else if (parseFloat(field.value) >
                        parseFloat($("#simtime").val())) {
                 $("#simtime").val(field.value);
@@ -838,9 +826,11 @@ function OralInput(pit,n) {
          + '             id="int-'+n+'" name="int-'+n+'"> Days'
          + '    </span>'
          + '    <span class="floatL mar-l-1em">'
-         + '      <input class="inputs" type="checkbox" value="1"'
-         + '             id="singledose-'+n+'" name="singledose-'+n+'"'
-         + '             onclick="useSingleDose('+n+');"> Single Dose'
+         + '      <label>'
+         + '        <input class="inputs" type="checkbox" value="1"'
+         + '               id="singledose-'+n+'" name="singledose-'+n+'"'
+         + '               onclick="useSingleDose('+n+');"> Single Dose'
+         + '      </label>'
          + '    </span>'
          + '  </div>'
          + '</div>'

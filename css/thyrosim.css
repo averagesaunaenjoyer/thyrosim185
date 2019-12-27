@@ -1,481 +1,829 @@
 /*--------------------------------------------------
-* FILE:         content.css
+* FILE:         thyrosim.css
 * AUTHOR:       Simon X. Han
 * DESCRIPTION:
-*   All css rules.
+*   Thyrosim css rules.
 *--------------------------------------------------*/
-html * {
-  font-family: arial,helvetica,sans-serif;
-  font-size: 16px;
-}
-#wrapper {
-  width: 900px;
-  margin: 0px auto;
-}
-#header {
-  border: 1px solid #bbb;
-  padding: 0.625em;
-  font-size: 1.2em;
-  height: 1.5em;
-}
-/* Applies to specific divs within header div */
-#header div {
-}
-#content {
-  margin-top: 0.625em;
-  padding-bottom: 0.625em;
-}
-.textsub {
-  position: relative;
-  top: 0.3em;
-  font-size: 70%;
-}
-#ucla {
-  background-color: #2c5e91;
-  font-size: 2.4em;
-  margin: -11px 10px -11px -11px;
-  padding: 0px 5px 0px 2px;
-  color: white;
-  font-weight: bold;
-  font-style: italic;
-}
-#biocyb {
-  background-color: #72b626;
-  font-size: 25px;
-  margin: -11px -11px -11px -11px;
-  padding: 8px 9px 7px 9px;
-  color: white;
-  font-weight: bold;
-  font-style: italic;
-}
-a.showhide:link {
-  border-bottom: none;
-}
-.hormone-dropdown {
-  border-radius: 5px;
-  border: 4px solid #eee;
-  background-color: #eee;
-  width: 40px;
-  height: 40px;
-  margin: 0px -3px 8px -3px;
-  font-weight: bold;
-}
-.hormone-dropdown-text-small {
-  margin-left: -1px;
-  font-size: 14px;
-}
-.downimg {
-  vertical-align: bottom;
-  width: 15px;
-}
-/* Applies to all divs within the content div */
+
 /*--------------------------------------------------
-* PROBLEM HERE: #content div declaration interferes with jqueryui
+* General rules and notes:
+* 1. Do not use unit with 0.
+* 2. Balance readability and alphabetization.
+* 3. Block elements take up all available width.
+* 4. Inline elements take up as much width as needed.
 *--------------------------------------------------*/
-#interactive-interface {
-  width: 450px;
-  height: 500px;
-  padding: 10px;
+
+/*--------------------------------------------------
+* Reset and generic elements
+*--------------------------------------------------*/
+
+/* Reset */
+html * {
+  border: 0;
+  margin: 0;
+  outline: 0;
+  padding: 0;
+  font-family: inherit;
+  font-size: 100%;
+  font-style: inherit;
+  font-weight: inherit;
 }
-#content div {
-  border: 1px solid #bbb;
-  float: left;
-}
-#content div.content-center {
-  border-collapse: collapse;
-  border: 0px; /* To counteract 1px border from above */
-  width: 42px;
-}
-#content-right {
-  padding: 10px;
-  margin-left: 10px;
-  width: 396px;
-  height: 500px;
-}
-#content-right div {
-  border-collapse: collapse;
-  border: 0px; /* To counteract 1px border from above */
-  /* height and width of the graphs are defined in thyrosim.js
-   * where D3 is defined */
-}
-#content div.interface-input-options {
-  display: block;
-  border: none;
-  margin: -16px 0px 10px -3px;
-  width: 34px;
-  border-radius: 5px;
-  background-color: #eee;
-  padding: 10px 2px 2px 0px;
-}
-.interface-input {
-  box-shadow: none;
-}
-.interface-input-t3:hover, .interface-input-t3:active {
-  box-shadow: 2px 2px 5px #12249c;
-  border-radius: 5px;
-}
-.interface-input-t4:hover, .interface-input-t4:active {
-  box-shadow: 2px 2px 5px #1c9c30;
-  border-radius: 5px;
+body {
+  line-height: 1;
 }
 a {
-  text-decoration: none;
-  color: gray;
-}
-a:link {
-  border-bottom: 1px dotted;
+  color: inherit;
+  text-decoration: underline;
 }
 a:hover {
   color: red;
 }
-a.img-input:link {
-  border-bottom: none;
+b {
+  font-weight: bold;
 }
-a.header-buttons-link {
+button {
+  cursor: pointer;
 }
-a.header-buttons-link:hover {
-  color: inherit;
+img {
+  border: 0;
 }
-.infoButton-clicked a.header-buttons-link:hover {
-  color: white;
+input[type=input],   input[type=text],
+input[type=password],input[type=email], textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
-a.header-buttons-link:link {
-  border-bottom: none;
+label {
+  cursor: pointer;
 }
-.interface-input-options a:link {
-  border-bottom: none;
-}
-#content div.interface-diagram {
-  padding: 10px;
-  margin-left: 10px;
-  width: 374px;
-  height: 478px;
-  background-image: url("../img/sim.png");
-  background-repeat: no-repeat;
-  background-position: 50% 30%;
-  border: 1px dashed #bbb;
-}
-#content div.parameditdiv {
-  background-color: white;
-  margin-top: 10px;
-  width: 372px;
-  height: 90%;
-  border-collapse: collapse;
-  border: 0px; /* To counteract 1px border from #content */
-  display: none;
-}
-#content .paraminput {
-}
-#content label {
-  font-size: 12px;
-  display: inline-block;
-  width: 30%;
-}
-#content .paramcol {
-  font-size: 12px;
-  float: left;
-  width: 32.3%;
-  margin-left: 2px;
-  border-collapse: collapse;
-  border: 0px; /* To counteract 1px border from #content */
-}
-#content .paramrow {
-  width: 100%;
-  margin-top: 2px;
-  border-collapse: collapse;
-  border: 0px; /* To counteract 1px border from #content */
-}
-#content .paramrow:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-/* Container for images */
-#content div.imgcontainer {
-  position: absolute;
-  border-collapse: collapse;
-  border: 0px; /* To counteract 1px border from #content */
-}
-.displaynone {
-  display: none;
-}
-/* Define location of the highlight images */
-#hilite1 {
-  top: 315px;
-  left: 168px;
-}
-#hilite2 {
-  top: 208px;
-  left: 124px;
-}
-#hilite3 {
-  top: 315px;
-  left: 188.5px;
-}
-#hilite4 {
-  top: 200px;
-  left: 131px;
-}
-/* Define location of the swallow pill images */
-.spill {
-  top: 79.7px;
-  left: 34px;
-}
-/* Define location of the inject images */
-.inject {
-  top: 202px;
-  left: 6px;
-}
-/* Define location of the infuse images */
-.infuse {
-  top: 249px;
-  left: 6px;
-}
-/* This section deals with content-lower and what's in it */
-#content-lower {
-  float: left;
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #bbb;
-  width: 878px;
-}
-.relative {
-  position: relative;
-}
-.adjuster {
-  float: left;
-  padding: 10px;
-  width: 199px;
-}
-.slidercontainer {
-  display: none;
-  margin-top: 10px;
-}
-.textaligntop {
-  vertical-align: text-top;
-}
-.textaligncenter {
-  text-align: center;
-}
-.scrollbars {
-  top: -4px;
-}
-/* This section deals with footer and what's in it */
-.footer {
-  float: left;
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #bbb;
-  width: 878px;
-}
-.subdiv {
-  float: left;
-  margin-top: 10px;
-  margin-left: -30px;
-  padding-left: 10px;
-  width: 35%;
-}
-.subdiv .subdivtitle {
-  margin-left: 50px;
-}
-.subdiv .subdivlist {
-  margin-top: -10px;
-  margin-left: 10px;
-  margin-right: 20px;
-}
-.subdiv a {
-  font-size: 12px;
-}
-.subdiv ol {
+ol, ul {
   list-style: none;
-  counter-reset: item;
 }
-.subdiv ol li {
-  counter-increment: item;
-  font-size: 12px;
+p {
+  display: block;
+  margin: 1.5em 0;
 }
-.subdiv ol li:before {
-  position: absolute;
-  margin-left: -20px;
-  content: counter(item);
-  background: lightblue;
-  border-radius: 100%;
-  color: white;
-  width: 1.2em;
-  text-align: center;
-  display: inline-block;
-  font-size: 11px;
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
 }
-.padding-10 {
-  padding: 10px;
+
+/* Generic elements */
+html, body {
+  height: 100%;
+  font-family: arial,helvetica,sans-serif;
+  font-size: 100%;
 }
-.margin-bot-10 {
-  margin-bottom: 10px;
+input[type=text] {
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 0.25em;
+  padding: 0 0.1em;
+  width: 65%;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
 }
-/* To be aesthetically pleasing, the delete input buttons should bank right */
-.bank-right {
-  float: right;
+input[type=text]:focus {
+  border: 1px solid #555;
+  box-shadow: 0 0 0.4em rgba(102, 175, 233, .6);
 }
-.bank-left {
+input[type=text].error {
+  border: 2px solid red;
+}
+input[type=checkbox] {
+  box-sizing: border-box;
+}
+
+/*--------------------------------------------------
+* Project-wide styles
+*--------------------------------------------------*/
+
+/* One-liners */
+.cursor-pointer { cursor: pointer; }
+.floatL { float: left; }
+.floatR { float: right; }
+.hide { display: none; }
+.show { display: block; }
+.color-black { color: black; }
+.color-blue  { color: blue;  }
+.color-white { color: white; }
+.mar-l-1em { margin-left: 1em; }
+.pad-t-1em { padding-top: 1em; }
+.pad-t-2em { padding-top: 2em; }
+.pad-b-1em { padding-bottom: 1em; }
+.pad-b-2em { padding-bottom: 2em; }
+.textcenter { text-align: center; }
+.title { font-size: 1.2em; }
+.width-100 { width: 100%; }
+
+/* Layouts and grids */
+.container {
+  box-sizing: border-box;
+  float: left;
+  width: 100%;
+}
+.grid-1-2 { width: calc(100% / 2); }
+.grid-1-3 { width: calc(100% / 3); }
+.grid-2-3 { width: calc(100% * 2 / 3); }
+.grid-1-5 { width: calc(100% * 1 / 5); }
+.grid-2-5 { width: calc(100% * 2 / 5); }
+.grid-3-5 { width: calc(100% * 3 / 5); }
+.grid-1-10 { width: calc(100% * 1 / 10); }
+.grid-9-10 { width: calc(100% * 9 / 10); }
+.grid-1-2,
+.grid-1-3, .grid-2-3,
+.grid-1-5, .grid-2-5, .grid-3-5,
+.grid-1-10, .grid-9-10 {
+  box-sizing: border-box;
   float: left;
 }
 
-#footer-input {
-  display: inline-block;
-  padding-bottom: 20px;
+/* Buttons - Bootstrap buttons colorscheme */
+.btn {
+  border: 1px solid transparent;
+  border-radius: 0.25em;
+  line-height: 1;
+  margin: 0.1em 0.3em;
+  padding: 0.4em;
 }
-/* Alternating input row colors */
-/* row1 is not really needed b/c it's just a white background, but
- * included for consistency */
-.row1 {
-  display: block;
-  background-color: #ffffff;
-}
-.row0 {
-  display: block;
-  background-color: #e5e5e5;
-}
-.inputcontainer {
-  float: left;
-  white-space: pre;
-  width: 878px;
-  padding: 1px 10px 1px 10px;
-  margin-left: -10px;
-}
-.inputcontainer input[type=text] {
-  line-height: 18px;
-}
-.inputimg {
-  vertical-align: bottom;
-  width: 18px;
-}
-/* Given to inputs in footer-input div, so jQuery can be used to easily select
- * the elements to rename when deleting inputs */
-.inputs {
-   margin-bottom: 2px;
-}
-/* Added and removed by thyrosim.js for invalid inputs */
-.error {
-  border: 2px solid red;
-}
-/* Given to the enable/disable span boxes.
- * 'enable' gives a yellowgreen background,
- * 'disable' gives a pinkish-red background.
- * Both get a dashed border */
-.enDisInput {
-  padding-left: 4px;
-  padding-right: 4px;
-  border: 1px dashed #bbb;
-  cursor: pointer;
-  width: 80px;
-  text-align: center;
-}
-.enaInput {
-  background-color: #7CFC00;
-}
-.disInput {
-  background-color: #FFA6C9;
-}
-.delete-icon {
-}
-.info-icon {
-  height: 20px;
-  vertical-align: middle;
-  margin-top: -0.2em;
-}
-.cursor-pointer {
-  cursor: pointer;
-}
-/* A loading.gif that follows the cursor */
-/* loading.gif hidden at first */
-.follow {
-  display: none;
-  position: absolute;
-  background-color: #eeeeee;
-  border: 1px dashed #bbb;
-  padding: 4px 5px 1px;
-  z-index: 2;
-}
-.followimg {
-  display: inline;
-  float: left;
-}
-/* Info buttons for displaying information */
-.nonIEMsg {
-  border: 2px solid red;
-  background-color: #ffc0c0;
-  padding: 2px;
-}
-.infoButton {
-  border: 1px solid #5dacdf;
-  background-color: #e2ebf1;
-  margin-right: 10px;
-  padding: 2px;
-}
-.infoButton div {
-  position: absolute;
-  visibility: hidden;
-  z-index: 1;
-}
-.infoButton-clicked {
-  border: 1px solid white;
-  background-color: #696969;
-}
-.infoButton-clicked div {
-  visibility: visible;
-}
-.infoButton-close {
-  cursor: pointer;
-  color: blue;
-}
-.color-black {
-  color: black;
-}
-.color-white {
+.btn-blue {
+  background-color: #007bff;
+  border: 1px solid #007bff;
   color: white;
 }
-.infoButton .popup-rollover {
-  border: 9px solid #696969;
-  background-color: #F0F8FF;
-  width: 500px;
-  padding: 0px 15px 0px 15px;
-  color: black;
-  margin-left: -2px;
+.btn-blue:hover, .btn-blue.active {
+  background-color: #0069d9;
+  border: 1px solid #0062cc;
 }
-.unselectable {
-  /* Makes text unselectable */
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  -o-user-select: none;
+.btn-gray {
+  background-color: #6c757d;
+  border: 1px solid #6c757d;
+  color: white;
 }
-.example-text {
-  width: 65%;
-  margin-right: 10px;
+.btn-gray:hover, .btn-gray.active {
+  background-color: #5a6268;
+  border: 1px solid #545b62;
 }
-.example-image {
-  vertical-align: top;
-  width: 160px;
+.btn-green {
+  background-color: #28a745;
+  border: 1px solid #28a745;
+  color: white;
 }
+.btn-green:hover, .btn-green.active {
+  background-color: #218838;
+  border: 1px solid #1e7e34;
+}
+.btn-red {
+  background-color: #dc3545;
+  border: 1px solid #dc3545;
+  color: white;
+}
+.btn-red:hover, .btn-red.active {
+  background-color: #c82333;
+  border: 1px solid #bd2130;
+}
+.btn-yellow {
+  background-color: #ffc107;
+  border: 1px solid #ffc107;
+  color: #212529;
+}
+.btn-yellow:hover, .btn-yellow.active {
+  background-color: #e0a800;
+  border: 1px solid #d39e00;
+}
+.btn-teal {
+  background-color: #17a2b8;
+  border: 1px solid #17a2b8;
+  color: white;
+}
+.btn-teal:hover, .btn-teal.active {
+  background-color: #138496;
+  border: 1px solid #117a8b;
+}
+.btn-white {
+  background-color: #f8f9fa;
+  border: 1px solid #f8f9fa;
+  color: #212529;
+}
+.btn-white:hover, .btn-white.active {
+  background-color: #e2e6ea;
+  border: 1px solid #dae0e5;
+}
+.btn-black {
+  background-color: #343a40;
+  border: 1px solid #343a40;
+  color: white;
+}
+.btn-black:hover, .btn-black.active {
+  background-color: #23272b;
+  border: 1px solid #1d2124;
+}
+
+/* Button - Custom radio buttons */
+.btn-group {
+  display: inline-block;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+.btn-group>.btn {
+  position: relative;
+}
+.btn-group>label {
+  margin: 0 0 0 0; /* reset .btn margins */
+  padding-left: 0.6em;
+}
+.btn-group>label:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.btn-group>label:last-child {
+  padding-right: 0.6em;
+}
+.btn-group>label:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.btn-group>label>input[type="radio"] { /* hide radio button */
+  opacity: 0;
+  position: absolute;
+  height: 0;
+  width: 0;
+}
+.btn-group>.active { z-index: 1 } /* set active button higher to show borders */
+.btn-group>.btn-blue.active  {box-shadow: 0 0 0 0.2rem rgba(  0,123,255,.5);}
+.btn-group>.btn-gray.active  {box-shadow: 0 0 0 0.2rem rgba(108,117,125,.5);}
+.btn-group>.btn-green.active {box-shadow: 0 0 0 0.2rem rgba( 40,167, 69,.5);}
+.btn-group>.btn-red.active   {box-shadow: 0 0 0 0.2rem rgba(220, 53, 69,.5);}
+.btn-group>.btn-yellow.active{box-shadow: 0 0 0 0.2rem rgba(255,193,  7,.5);}
+.btn-group>.btn-teal.active  {box-shadow: 0 0 0 0.2rem rgba( 23,162,184,.5);}
+.btn-group>.btn-white.active {box-shadow: 0 0 0 0.2rem rgba(248,249,250,.5);}
+.btn-group>.btn-black.active {box-shadow: 0 0 0 0.2rem rgba( 52, 58, 64,.5);}
+
+/* Button - Custom checkboxes */
+.swtich {}
+.switch label {
+  display: inline-block;
+  margin: 0 0.2rem 0.5rem 0;
+}
+.switch label input[type=checkbox] {
+  opacity: 0;
+  position: absolute;
+  height: 0;
+  width: 0;
+}
+.switch label input[type=checkbox]:checked+.lever {
+  background-color: #dccfe2;
+}
+.switch label input[type=checkbox]:checked+.lever:after {
+  background-color: #a6c;
+  left: 1.5rem;
+}
+.switch label .lever {
+  background-color: #818181;
+  border-radius: 0.9375rem;
+  content: "";
+  display: inline-block;
+  margin: -0.2rem 0.625rem 0 0.625rem;
+  position: relative;
+  vertical-align: middle;
+  height: 0.9375rem;
+  width: 2.5rem;
+  -webkit-transition: background 0.3s ease;
+  transition: background 0.3s ease;
+}
+.switch label .lever:after {
+  background-color: #f1f1f1;
+  border-radius: 1.3125rem;
+  box-shadow: 0 0.0625rem 0.1875rem 0.0625rem rgba(0,0,0,0.4);
+  content: "";
+  display: inline-block;
+  position: absolute;
+  left: -0.3125rem;
+  top: -0.1875rem;
+  height: 1.3125rem;
+  width: 1.3125rem;
+  -webkit-transition: left 0.3s ease, background 0.3s ease,
+                      -webkit-box-shadow 1s ease;
+  transition: left 0.3s ease, background 0.3s ease, -webkit-box-shadow 1s ease;
+  transition: left 0.3s ease, background 0.3s ease, box-shadow 1s ease;
+  transition: left 0.3s ease, background 0.3s ease, box-shadow 1s ease,
+              -webkit-box-shadow 1s ease;
+}
+
+/* Button - Icon */
+.btn-icon {
+  background-color: transparent;
+}
+.btn-icon:hover, .btn-icon:active {
+  border-radius: 0.3em;
+  box-shadow: 0.125em 0.125em 0.3em #000000;
+  position: relative; /* position required for z-index */
+  z-index: 2;
+}
+
+/* Button - Icon for T3 and T4 */
+.btn-icon-t3:hover, .btn-icon-t3:active {
+  box-shadow: 0.125em 0.125em 0.3em #12249c;
+}
+.btn-icon-t4:hover, .btn-icon-t4:active {
+  box-shadow: 0.125em 0.125em 0.3em #1c9c30;;
+}
+
+/* Button - Anchor */
+.btn-anchor {
+  background-color: transparent;
+  border-radius: 0.3em;
+  color: #818a91;
+  font-size: 0.7em;
+  margin: 0.2em;
+  padding: 0.3em;
+}
+.btn-anchor:hover {
+  background-color: #027de7;
+  color: white;
+}
+
+/* Toggle input on/off */
+.tog-in {
+  border: 1px solid transparent;
+  border-radius: 0.25em;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 1;
+  padding: 0 0.25em;
+  text-align: center;
+  width: 2.2em;
+}
+.tog-in-1 { /* Toggle on */
+  background-color: #d3eda3;
+  color: #72962e;
+}
+.tog-in-1:hover {
+  background-color: #bfd693;
+}
+.tog-in-2 { /* Toggle off */
+  background-color: #f5ab9e;
+  color: #8c3a2b;
+}
+.tog-in-2:hover {
+  background-color: #dd9a8f;
+}
+
+/* Arrow */
+.arrow {
+  border: solid black;
+  border-width: 0 0.188em 0.188em 0;
+  display: inline-block;
+  margin: 0 0.3em;
+  padding: 0.188em;
+}
+.arrow-r {
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+.arrow-l {
+  -webkit-transform: rotate(135deg);
+  transform: rotate(135deg);
+}
+.arrow-u {
+  margin-bottom: -0.1em;
+  -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+}
+.arrow-d {
+  margin-bottom: 0.1em;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* Horizontal bars */
+.bar-h-gold, .bar-h-transparent {
+  height: 0.8em;
+  width: 100%;
+}
+.bar-h-gold        { background-color: gold; }
+.bar-h-transparent { background-color: transparent; }
+
+/* Icon graphics */
+.info-icon-s, .info-icon-m, .info-icon-l, .info-icon-fw {
+  margin-top: -0.2em;
+  vertical-align: middle;
+}
+.info-icon-s  { height: 1em; }
+.info-icon-m  { height: 1.2em; }
+.info-icon-l  { height: 1.6em; }
+.info-icon-fw { height: 4.5em; } /* fw for follow */
+
+/* Miscellaneous */
+.follow { /* Display a waiting message box */
+  background-color: #d6d8d9;
+  border: 1px solid #bbb;
+  border-color: #c6c8ca;
+  border-radius: 0.25em;
+  color: #1b1e21;
+  display: none;
+  padding: 0.2em 0.8em 0.1em 0.2em;
+  position: absolute;
+  width: 25em;
+  z-index: 50;
+}
+.follow img { /* from https://loading.io/ */
+  margin: -0.6em -0.6em -0.6em -0.3em;
+}
+.follow span {
+  margin: 0.6em 0 0 0.45em;
+}
+.overlay {
+  background-color: rgb(0,0,0); /* black background */
+  background-color: rgba(0,0,0,0.75); /* add opacity */
+  display: none;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  overflow-y: hidden; /* Disable vertical scroll */
+  padding-top: 20em;
+  position: fixed;
+  text-align: center;
+  z-index: 100;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+}
+.overlay>div {
+  margin: 0 auto;
+  width: 50%;
+}
+.overlay #overlay-content {
+  background-color: #d4edda;
+  border-radius: 0.25em;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  padding: 2em;
+}
+.overlay button {
+  margin-top: 0.4em;
+  margin-right: 1em
+}
+.textsub { /* Subscript */
+  font-size: 0.7em;
+  position: relative;
+  top: 0.2em;
+}
+.select-none { /* Unselectable text */
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  -khtml-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  -o-user-select: none !important;
+  user-select: none !important;
+}
+
+/* jQuery UI customizations */
+.thysim-tooltip { /* Tooltip customization */
+  background: #d1ecf1;
+  border: 0.125em solid #bee5eb;
+  box-shadow: none;
+  color: #0c5460;
+  font-size: 0.875em;
+  min-width: 17em;
+  max-width: 30em;
+  padding: 0.8em;
+  z-index: 99;
+}
+.ui-slider-horizontal .ui-slider-range { /* Fixes top border */
+  top: -0.02em;
+  height: 105%;
+}
+.ui-slider-horizontal .ui-slider-range-min { /* Fixes left border */
+  left: -0.02em;
+}
+
 /*--------------------------------------------------
-* Styles for line graph
+* Overall layout
+* #wrapper
+* - header
+*   - #ucla (UCLA logo)
+*   - (Directions, Examples, Disclaimer buttons)
+*   - #biocyb (Biocybernetics logo)
+*   - .bar-h-gold (Horizontal gold bar)
+*   - #non-ie-warn (Warning for non-IE browsers)
+* - #navbar (empty)
+* - main
+*   - .container (top)
+*     - section .panelL
+*       - #sidebar
+*         - (T3 inputs)
+*         - (T4 inputs)
+*       - #img-param
+*         - #parameters
+*     - section .panelR
+*       - (Graphs)
+*   - .bar-h-gold (Horizontal gold bar)
+*   - .container (bot)
+*     - #input-panel
+*       - #input-manager
+*     - #control-panel
+*       - (Secretion/Absorption Manager)
+*       - (Simulation Time)
+*       - (Recalculate Initial Condition Manager)
+*       - (Blue/Green Manager)
+*       - (Control Buttons)
+*   - .bar-h-gold (Horizontal gold bar)
+* - footer
+*   - .container (top)
+*     - (Copyright)
+*   - .container (mid)
+*     - (References)
+*     - (Recent News)
+*     - (Acknowledgements)
+*   - .container (bot)
+*     - (Contact & Code Repo)
+* - #follow
+* Notes:
+*   #:  ID
+*   .:  Class
+*   (): Some content
+*   W/o markup: HTML element
+* This section is only for #wrapper and its children.
 *--------------------------------------------------*/
-/* Axes stroke affect both axes and tick labels so we have to */
-/* correct tick labels independently. */
-.tick text {
-  stroke: black;
-  stroke-width: 0px;
-  font: 11px sans-serif;
+
+#wrapper {
+  margin: 0 auto;
+  width: 1050px;
 }
-div.tooltip {
+header {
+  background-color: #fafafa;
+  height: 4em;
+}
+main {
+}
+footer {
+  background-color: #f7f7f9;
+  opacity: 0.7;
+}
+
+/*--------------------------------------------------
+* Header
+*--------------------------------------------------*/
+
+/* UCLA logo */
+#ucla {
+  background-color: #2c5e91;
+  color: white;
+  font-style: italic;
+  font-weight: bold;
+  padding: 0.45em 0.3em 0.35em 0.2em;
+}
+#ucla span {
+  font-size: 2.4em;
+}
+/* Biocyb logo */
+#biocyb {
+  background-color: #72b626;
+  color: white;
+  font-style: italic;
+  font-weight: bold;
+  padding: 0.8em 0.5em 0.8em 0.5em;
+}
+#biocyb span {
+  font-size: 1.6em;
+}
+/* Info button and content */
+.info-btn {
+  background-color: #008ed4;
+  border: 1px solid transparent;
+  border-radius: 0.25em;
+  color: white;
+  margin: 0.6em 0 0 1em;
+  padding: 0.4em;
+}
+.info-btn:hover {
+  background-color: #0273ac;
+}
+.info-btn-a, .info-btn-a:hover { /* a for active */
+  background-color: #696969;
+  position: relative; /* position required for z-index */
+  z-index: 2;
+}
+.info-btn-c { /* c for content */
+  background-color: #F0F8FF;
+  border: 0.563em solid #696969;
+  border-radius: 0 1em 1em 1em;
+  display: none;
+  line-height: 1.4;
+  margin: 2.3em 0 0 1em; /* margin-left same as .info-btn */
+  padding: 0 1em 0 1em;
+  position: absolute;
+  width: 31.25em;
+  z-index: 1; /* content does not block button */
+}
+.info-btn-c div {
+  display: block;
+  margin: 1.8em 0 1.5em 0;
+}
+.info-btn-c ol {
+  list-style-type: decimal;
+  margin: 1em 0 1em;
+  padding-left: 2.5em;
+}
+.info-btn-c ol ol {
+  list-style-type: lower-alpha;
+}
+/* Examples */
+.example {
+  margin-bottom: 0.8em;
+}
+.example-wrp { /* wrp for wrapper */
+  margin-right: 0.8em;
+  width: 65%;
+}
+.example-txt { /* txt for text */
+  display: block;
+  margin-bottom: 1em;
+}
+.example-tbn { /* tbn for thumbnail */
+  border-radius: 0.6em;
+  box-shadow: 0.8em 0.8em 0.5em -0.4em rgba(0,0,0,0.5);
+  vertical-align: top;
+  width: 10em;
+}
+/* Non-IE warning */
+.non-ie-warn {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 0.75em 1.25em;
+}
+
+/*--------------------------------------------------
+* Main
+*--------------------------------------------------*/
+
+/* Main layout */
+#container-top {
+  height: 32.5em;
+  margin-bottom: 1em;
+  padding: 0.625em 0.625em 0;
+}
+#container-top>div {
+  height: 100%;
+}
+#container-bot {
+}
+#container-bot>div {
+  padding: 2em 1em;
+}
+
+/* Container (top) - Panel Left - Hormone menu sidebar */
+#sidebar {
+  width: 3em;
+}
+.T-menu-head {
+  margin-bottom: 0.625em;
+}
+.T-menu-head button {
+  padding: 0.3em 0;
+}
+.T-menu {
+  background-color: #fafafa;
+  margin: -0.625em 0 0.625em 0;
+  text-align: center;
+}
+.T-menu button {
+  margin: 0.4em;
+}
+
+/* Container (top) - Panel Left - Diagram and parameters */
+#img-param {
+  background-image: url("../img/sim.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100%;
+  margin: 0 0 0 0.625em;
+  width: 85%;
+}
+#parameters {
+  background-color: white;
+  display: none;
+  height: 90%;
+  line-height: 1.6;
+  padding: 0.625em 0 0 0.625em;
+}
+.paramrow {
+  width: 100%;
+}
+.paramrow:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+.paramcol {
+  float: left;
+  font-size: 0.7em;
+  width: 33%;
+}
+.paramcol span {
+  display: inline-block;
+  text-align: right;
+  width: 30%;
+}
+.hilite {
+  position: absolute;
+}
+#hilite1 {}
+#hilite2 {}
+#hilite3 {}
+#hilite4 {}
+
+/* Container (top) - Panel Right - D3 customizations */
+.d3chart {
+}
+.d3chart .tick text {
+  font: 0.688em sans-serif;
+  stroke: black;
+  stroke-width: 0;
+}
+.d3chart .tooltip {
+  background: lightsteelblue;
+  border: 0;
+  border-radius: 0.5em;
+  font: 0.875em sans-serif;
+  padding: 0.125em 0.4em;
+  pointer-events: none;
   position: absolute;
   text-align: center;
-  width: 90px;
-  height: 32px;
-  padding: 2px;
-  font: 14px sans-serif;
-  background: lightsteelblue;
-  border: 0px;
-  border-radius: 8px;
-  pointer-events: none;
 }
+
+/* Container (bot) */
+
+/* Container (bot) - Panel Left - Input panel */
+#input-panel {
+  background-color: aliceblue;
+}
+#input-manager {
+  font-size: 0.9em;
+}
+.row1, .row0 { display: block; } /* Alternating input row colors */
+.row1 { background-color: thistle; }
+.row0 { background-color: transparent; }
+.input-row {
+  border-left: 1em solid transparent;
+  border-right: 1em solid transparent;
+  float: left;
+  margin: 0 -1em;
+  padding: 0.5em 0;
+  width: 100%;
+}
+.input-row input[type=text] {
+  width: 3em;
+}
+.input-row input[type=text].oral-dose {
+  width: 4em;
+}
+
+/* Container (bot) - Panel Right - Control panel */
+#control-panel {
+  background-color: mistyrose;
+  background-color: lavenderblush;
+}
+#simtime { /* Override default text input width */
+  width: 3em;
+}
+
+/*--------------------------------------------------
+* Footer
+*--------------------------------------------------*/
+
+/* Container */
+.footer-title {
+}
+.footer-list {
+  float: left;
+  padding: 1em 3em 1em 5em;
+}
+.footer-list ol {
+  counter-reset: item;
+  list-style: none;
+}
+.footer-list ol li {
+  counter-increment: item;
+  font-size: 0.85em;
+}
+.footer-list ol li:before {
+  background: steelblue;
+  border-radius: 100%;
+  color: white;
+  content: counter(item);
+  display: inline-block;
+  font-size: 0.85em;
+  height: 1em;
+  margin: 0.1em 0 0 -1.4em;
+  position: absolute;
+  text-align: center;
+  width: 1em;
+}
+
+/*--------------------------------------------------
+* Temp
+*--------------------------------------------------*/
+

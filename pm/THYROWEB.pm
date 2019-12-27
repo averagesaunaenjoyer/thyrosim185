@@ -293,7 +293,7 @@ sub getHead {
 -style => {
     'src'           => [
         '../css/ui-lightness/jquery-ui.min.css',
-        '../css/thyrosim2.css',
+        '../css/thyrosim.css',
         #'../css/bootstrap.min.css'
     ]
 },
@@ -392,38 +392,6 @@ $footer
   <!-- Overlay end -->
 
 </form>
-
-<div class="container textcenter pad-t-1em" style="margin: 2em 0;">
-  <span>
-    All Buttons:
-  </span>
-  <span class="btn-group">
-    <label class="btn btn-blue">
-      <input type="radio" name="options" id="option1" value="Blue">Blue
-    </label>
-    <label class="btn btn-gray">
-      <input type="radio" name="options" id="option2" value="Gray">Gray
-    </label>
-    <label class="btn btn-green">
-      <input type="radio" name="options" id="option3" value="Green">Green
-    </label>
-    <label class="btn btn-red">
-      <input type="radio" name="options" id="option4" value="Red">Red
-    </label>
-    <label class="btn btn-yellow">
-      <input type="radio" name="options" id="option5" value="Yellow">Yellow
-    </label>
-    <label class="btn btn-teal">
-      <input type="radio" name="options" id="option6" value="Teal">Teal
-    </label>
-    <label class="btn btn-white">
-      <input type="radio" name="options" id="option7" value="White">White
-    </label>
-    <label class="btn btn-black">
-      <input type="radio" name="options" id="option8" value="Black">Black
-    </label>
-  </span>
-</div>
 
 </div>
 <!-- Wrapper end -->
@@ -887,7 +855,7 @@ sub getFooter {
   <!-- Container (mid) end -->
 
   <!-- Container (bot) -->
-  <div class="container textcenter pad-t-1em pad-b-1em">
+  <div class="container textcenter pad-t-1em pad-b-2em">
     Please send comments, bugs, criticisms to:
     <a href="mailto:joed\@ucla.edu">joed\@ucla.edu</a>
     <a href="mailto:joed\@ucla.edu">
@@ -973,7 +941,7 @@ sub printParams {
 sub getParamInput {
     my ($self,$p,$v) = @_;
     return <<EOF
-<label>$p:</label>
+<span>$p:</span>
 <input type="text" id="$p" name="$p" value="$v">
 EOF
 }
