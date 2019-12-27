@@ -1228,16 +1228,9 @@ function animation() {
     this.showAnimation = showAnimation;
     function showAnimation(cat,ele) {
         var id = new Date().getTime().toString();
-        var div = $('<div>').attr({
-                                'id'    : cat+'-'+id, // spill-12345
-                                'class' : ''+cat // spill
-                               })
-                            .appendTo('#img-param');
-        var img = $('<img>').attr({
-                                'id'    : cat+'img-'+id, // spillimg-12345
-                                'src'   : '../img/'+ele+'.gif?'+id
-                               })
-                            .appendTo(div);
+        $('<div>').attr({'id':cat+'-'+id,'class':cat}).html(
+        $('<img>').attr({'id':cat+'img-'+id,'src':'../img/'+ele+'.gif?'+id}))
+        .appendTo('#img-param');
         return id;
     }
 

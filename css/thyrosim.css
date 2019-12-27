@@ -734,6 +734,12 @@ footer {
 #hilite2 { display: none; left: 13.74em ; top: 19.03em; }
 #hilite3 { display: none; left: 17.78em ; top: 25.69em; }
 #hilite4 { display: none; left: 14.17em ; top: 18.57em; }
+.spill, .inject, .infuse {
+  position: absolute;
+}
+.spill  { left: 8.15em; top: 10.98em; }
+.inject { left: 5.55em; top: 18.35em; }
+.infuse { left: 5.95em; top: 21.55em; }
 
 /* Container (top) - Panel Right - D3 customizations */
 .d3chart {
