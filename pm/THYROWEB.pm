@@ -492,7 +492,7 @@ EOF
     <input type="text" id="dialinput1" name="dialinput1"> %
   </div>
   <div class="grid-2-5">
-    <div id="slidercontainer1"><div id="slider1"></div></div>
+    <div id="slidercontainer1" class="sliders"><div id="slider1"></div></div>
   </div>
 </div>
 
@@ -505,7 +505,7 @@ EOF
     <input type="text" id="dialinput2" name="dialinput2"> %
   </div>
   <div class="grid-2-5">
-    <div id="slidercontainer2"><div id="slider2"></div></div>
+    <div id="slidercontainer2" class="sliders"><div id="slider2"></div></div>
   </div>
 </div>
 
@@ -518,7 +518,7 @@ EOF
     <input type="text" id="dialinput3" name="dialinput3"> %
   </div>
   <div class="grid-2-5">
-    <div id="slidercontainer3"><div id="slider3"></div></div>
+    <div id="slidercontainer3" class="sliders"><div id="slider3"></div></div>
   </div>
 </div>
 
@@ -531,7 +531,7 @@ EOF
     <input type="text" id="dialinput4" name="dialinput4"> %
   </div>
   <div class="grid-2-5">
-    <div id="slidercontainer4"><div id="slider4"></div></div>
+    <div id="slidercontainer4" class="sliders"><div id="slider4"></div></div>
   </div>
 </div>
 EOF
