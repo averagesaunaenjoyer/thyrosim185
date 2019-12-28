@@ -545,8 +545,8 @@ EOF
   Recalculate Initial Conditions:
   <label>
     Off
-      <input type="checkbox" value="1" id="recalcIC" name="recalcIC" checked>
-      <span class="lever"></span>
+    <input type="checkbox" value="1" id="recalcIC" name="recalcIC" checked>
+    <span class="lever"></span>
     On
   </label>
 </span>

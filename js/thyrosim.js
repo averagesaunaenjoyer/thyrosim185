@@ -814,7 +814,7 @@ function addInput(title) {
 //   n:     The input number
 //===================================================================
 function OralInput(pit,n) {
-    return '<div class="container">'
+    return '<div class="container input-subrow">'
          + '  <img src="'+pit.src+'" class="info-icon-m">'
          + '  <span class="inputs" id="label-'+n+'" name="label-'+n+'">'
          + '    Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
@@ -822,7 +822,7 @@ function OralInput(pit,n) {
          +    addDeleteIcon(n)
          + '</div>'
 
-         + '<div class="container">'
+         + '<div class="container input-subrow">'
          + '  <div class="grid-1-10">'
          +      addOnOff(n)
          + '  </div>'
@@ -832,22 +832,19 @@ function OralInput(pit,n) {
          + '      <input class="inputs oral-dose" type="text"'
          + '             id="dose-'+n+'" name="dose-'+n+'"> &micro;g'
          + '    </span>'
-         + '    <span class="floatL mar-l-1em">'
-         + '      Dosing Interval: '
-         + '      <input class="inputs" type="text"'
-         + '             id="int-'+n+'" name="int-'+n+'"> Days'
-         + '    </span>'
-         + '    <span class="floatL mar-l-1em">'
+         + '    <span class="floatL mar-l-1em switch">'
+         + '      Use Single Dose: '
          + '      <label>'
          + '        <input class="inputs" type="checkbox" value="1"'
          + '               id="singledose-'+n+'" name="singledose-'+n+'"'
-         + '               onclick="useSingleDose('+n+');"> Single Dose'
+         + '               onclick="useSingleDose('+n+');">'
+         + '        <span class="lever"></span>'
          + '      </label>'
          + '    </span>'
          + '  </div>'
          + '</div>'
 
-         + '<div class="container">'
+         + '<div class="container input-subrow">'
          + '  <div class="grid-1-10">'
          + '    &nbsp;'
          + '  </div>'
@@ -856,6 +853,11 @@ function OralInput(pit,n) {
          + '      Start Day: '
          + '      <input class="inputs" type="text"'
          + '             id="start-'+n+'" name="start-'+n+'">'
+         + '    </span>'
+         + '    <span class="floatL mar-l-1em">'
+         + '      Dosing Interval: '
+         + '      <input class="inputs" type="text"'
+         + '             id="int-'+n+'" name="int-'+n+'"> Days'
          + '    </span>'
          + '    <span class="floatL mar-l-1em">'
          + '      End Day: '
@@ -880,7 +882,7 @@ function OralInput(pit,n) {
 //   n:     The input number
 //===================================================================
 function IVPulseInput(pit,n) {
-    return '<div class="container">'
+    return '<div class="container input-subrow">'
          + '  <img src="'+pit.src+'" class="info-icon-m">'
          + '  <span class="inputs" id="label-'+n+'" name="label-'+n+'">'
          + '    Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
@@ -888,7 +890,7 @@ function IVPulseInput(pit,n) {
          +    addDeleteIcon(n)
          + '</div>'
 
-         + '<div class="container">'
+         + '<div class="container input-subrow">'
          + '  <div class="grid-1-10">'
          +      addOnOff(n)
          + '  </div>'
@@ -921,7 +923,7 @@ function IVPulseInput(pit,n) {
 //   n:     The input number
 //===================================================================
 function InfusionInput(pit,n) {
-    return '<div class="container">'
+    return '<div class="container input-subrow">'
          + '  <img src="'+pit.src+'" class="info-icon-m">'
          + '  <span class="inputs" id="label-'+n+'" name="label-'+n+'">'
          + '    Input '+n+' ('+pit.hormone+'-'+pit.type+'):'
@@ -929,7 +931,7 @@ function InfusionInput(pit,n) {
          +    addDeleteIcon(n)
          + '</div>'
 
-         + '<div class="container">'
+         + '<div class="container input-subrow">'
          + '  <div class="grid-1-10">'
          +      addOnOff(n)
          + '  </div>'

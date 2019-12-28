@@ -171,8 +171,8 @@ sub new {
     # Define default thysim
     $self->{thysim}  = $params{thysim}  // "Thyrosim";
 
-    # Define default recalculate IC (1 for yes)
-    $self->{recalcIC} = 1;
+    # Define default recalculate IC (0 for no)
+    $self->{recalcIC} = 0;
 
     # Define molecular weights of T3 & T4, to convert between mcg and mols
     $self->{toMols}->{3}   = 651;
