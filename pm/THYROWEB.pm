@@ -294,7 +294,6 @@ sub getHead {
     'src'           => [
         '../css/ui-lightness/jquery-ui.min.css',
         '../css/thyrosim.css',
-        #'../css/bootstrap.min.css'
     ]
 },
 -script => [
@@ -307,12 +306,6 @@ sub getHead {
         -type => 'text/javascript',
         -src  => '../js/jquery.min.js'
     },
-#--------------------------------------------------
-#     {
-#         -type => 'text/javascript',
-#         -src  => '../js/bootstrap.bundle.min.js'
-#     },
-#-------------------------------------------------- 
     {
         -type => 'text/javascript',
         -src  => '../js/jquery-ui.min.js'
