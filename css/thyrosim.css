@@ -11,6 +11,7 @@
 * 2. Balance readability and alphabetization.
 * 3. Block elements take up all available width.
 * 4. Inline elements take up as much width as needed.
+* 5. Position required for z-index.
 *--------------------------------------------------*/
 
 /*--------------------------------------------------
@@ -318,7 +319,7 @@ input[type=checkbox] {
 .btn-icon:hover, .btn-icon:active {
   border-radius: 0.3em;
   box-shadow: 0.125em 0.125em 0.3em #000000;
-  position: relative; /* position required for z-index */
+  position: relative;
   z-index: 2;
 }
 
@@ -468,7 +469,7 @@ input[type=checkbox] {
   width: 25em;
   z-index: 50;
 }
-.follow img { /* from https://loading.io/ */
+.follow img { /* Spinner from https://loading.io/ */
   margin: -0.6em -0.6em -0.6em -0.3em;
 }
 .follow span {
@@ -478,6 +479,9 @@ input[type=checkbox] {
   font-size: 0.7em;
   position: relative;
   top: 0.2em;
+}
+.button-row {
+  height: 2.125em;
 }
 .select-none { /* Unselectable text */
   -webkit-touch-callout: none !important;
@@ -613,7 +617,7 @@ footer {
 }
 .info-btn-a, .info-btn-a:hover { /* a for active */
   background-color: #696969;
-  position: relative; /* position required for z-index */
+  position: relative;
   z-index: 2;
 }
 .info-btn-c { /* c for content */
@@ -719,6 +723,8 @@ footer {
   height: 90%;
   line-height: 1.6;
   padding: 0.625em 0 0 0.625em;
+  position: relative;
+  z-index: 1;
 }
 .paramrow {
   width: 100%;
@@ -739,12 +745,13 @@ footer {
   width: 30%;
 }
 #hilite1, #hilite2, #hilite3, #hilite4 {
-  position: absolute;
+  display: none;
+  position: relative;
 }
-#hilite1 { display: none; left: 16.51em ; top: 25.69em; }
-#hilite2 { display: none; left: 13.74em ; top: 19.03em; }
-#hilite3 { display: none; left: 17.78em ; top: 25.69em; }
-#hilite4 { display: none; left: 14.17em ; top: 18.57em; }
+#hilite1 { left: 15.45em ; top: -10.79em; }
+#hilite2 { left: 12.68em ; top: -17.45em; }
+#hilite3 { left: 16.72em ; top: -10.79em; }
+#hilite4 { left: 13.11em ; top: -17.91em; }
 .spill, .inject, .infuse {
   position: absolute;
 }

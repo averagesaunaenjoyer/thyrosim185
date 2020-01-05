@@ -453,18 +453,23 @@ sub getMain {
     my $menuT4 = $self->getHormoneMenu('T4');
 
     # Parameter list only for advanced
-    my $paramEditor = "";
+    my $paramList = "";
+    my $paramTogg = "";
     if ($self->{showParams}) {
-        my $paramList = $self->printParams();
-        $paramEditor = <<EOF
+        $paramList = $self->printParams();
+        $paramTogg = <<EOF
 Toggle:
-<button class="btn btn-teal" type="button"
-        onclick="toggle('parameters',200);">
+<button class="btn btn-teal" type="button" onclick="toggle('parameters',200);">
   Parameters
 </button>
-<div id="parameters">$paramList</div>
 EOF
-}
+;
+    }
+    my $paramEditor = <<EOF
+<div class="container button-row">$paramTogg</div>
+<div class="container" id="parameters">$paramList</div>
+EOF
+;
 
     my $sliderButton = <<EOF
 <button type="button" class="btn-icon" onclick="togScrollBars();">
@@ -631,12 +636,13 @@ $menuT4
       <!-- Diagram and Parameters -->
       <div id="img-param" class="floatL">
 $paramEditor
-        <img id="hilite1" src="../img/hilite.png" class="hide">
-        <img id="hilite2" src="../img/hilite.png" class="hide">
-        <img id="hilite3" src="../img/hilite.png" class="hide">
-        <img id="hilite4" src="../img/hilite.png" class="hide">
       </div>
       <!-- Diagram and Parameters end -->
+
+      <img id="hilite1" src="../img/hilite.png" class="hide">
+      <img id="hilite2" src="../img/hilite.png" class="hide">
+      <img id="hilite3" src="../img/hilite.png" class="hide">
+      <img id="hilite4" src="../img/hilite.png" class="hide">
 
     </div>
     <!-- Panel Left end -->
@@ -644,14 +650,19 @@ $paramEditor
     <!-- Panel Right -->
     <div class="grid-1-2">
 
+      <!-- Button Row -->
+      <div class="container button-row">
+        Toggle:
+        <button class="btn btn-teal" type="button" onclick="togFreeHormone();">
+          Free Hormone Values
+        </button>
+        <button class="btn btn-teal" type="button" id="togNormRange">
+          Normal Range
+        </button>
+      </div>
+      <!-- Button Row end -->
+
       <!-- Graphs -->
-      Toggle:
-      <button class="btn btn-teal" type="button" onclick="togFreeHormone();">
-        Free Hormone Values
-      </button>
-      <button class="btn btn-teal" type="button" id="togNormRange">
-        Normal Range
-      </button>
       <div class="textcenter">
         <div id="FT4graph" class="hide d3chart"></div>
         <div id="FT3graph" class="hide d3chart"></div>
