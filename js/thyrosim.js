@@ -423,23 +423,37 @@ function validateForm() {
     var maxDay = parseFloat(100.0);
     $.each($("form input[type=text]").serializeArray(), function(i, field) {
 
-        // Checking for numeric
-        if (!field.value.match(/^-?\+?[0-9]*\.?[0-9]+$/)) {
+        // Get current value and use parseFloat for validation
+        field.value = parseFloat($('#'+field.name).val());
+        if (!isNaN(field.value)) { // Only overwrite when not NaN
+            $('#'+field.name).val(field.value);
+        }
+
+        // Check for numeric
+        if (/^-?\+?[0-9]*\.?[0-9]+$/.test(field.value) == false) {
             $('#'+field.name).addClass('error');
             fail = true;
         }
 
-        // 1. Check that start, end, and simulation time are <= maxDay
-        // 2. Update simulation time with the highest end day
-        if (field.name.match(/^start-/) ||
-            field.name.match(/^end-/)   ||
-            field.name.match(/^simtime/)) {
-            if (parseFloat(field.value) > maxDay) {
+        // Check dials for range
+        if (/^dialinput(\d+)/.test(field.name)) {
+            var num = field.name.match(/^dialinput(\d+)/);
+            if (field.value < sliderObj[num[1]].min ||
+                field.value > sliderObj[num[1]].max) {
                 $('#'+field.name).addClass('error');
                 fail = true;
-            } else if (parseFloat(field.value) >
-                       parseFloat($("#simtime").val())) {
-                $("#simtime").val(field.value);
+            }
+        }
+
+        // 1. Check that start, end, and simtime are <= maxDay
+        // 2. Update simtime with the highest start or end day
+        if (/^start-/.test(field.name) || /^end-/.test(field.name) ||
+            /^simtime/.test(field.name)) {
+            if (field.value > maxDay) {
+                $('#'+field.name).addClass('error');
+                fail = true;
+            } else if (field.value > parseFloat($('#simtime').val())) {
+                $('#simtime').val(field.value);
             }
         }
     });
