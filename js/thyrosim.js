@@ -331,7 +331,6 @@ function graph(hormone,addlabel,initgraph) {
                     }
 
                     $(this).attr("fill",color); // Dot color
-                    //$(this).attr("fill",ThyrosimGraph.getLinecolor(color));
                     tooltip.transition()
                         .duration(200)
                         .style("opacity",0.8);

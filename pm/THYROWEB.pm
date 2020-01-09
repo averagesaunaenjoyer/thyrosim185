@@ -194,6 +194,10 @@ Features:
     <img class="info-icon-m" src="../img/minus.png" alt="minus">
     icons: click to show or hide scrollbars.
   </li>
+  <li>
+    <img class="info-icon-m" src="../img/info.svg" alt="info">
+    icon: hover mouse over to see additional info.
+  </li>
 </ol>
 
 EOF
@@ -541,7 +545,7 @@ Simulation Time:
 <input type="text" id="simtime" name="simtime" value="5">
 Days
 <label title="Simulation Time must be &le; 100 days.">
-  <img class="info-icon-l" src="../img/info.svg">
+  <img class="info-icon-l" src="../img/info.svg" alt="info">
 </label>
 EOF
 ;
@@ -560,7 +564,7 @@ EOF
   <label title="When this switch is on, the initial conditions (IC) are
   recalculated when secretion/absorption values are changed from the default
   (100, 88, 100, 88). Turn this switch off to always use euthyroid IC.">
-    <img class="info-icon-l" src="../img/info.svg">
+    <img class="info-icon-l" src="../img/info.svg" alt="info">
   </label>
 </span>
 EOF
@@ -583,7 +587,7 @@ and Green lines. However, you may override this functionality by manually
 setting the color of the next run. Please note that only 1 line per color is
 allowed and subsequent runs replace any existing lines of that color. Please
 also note that example runs are always graphed as Blue.">
-  <img class="info-icon-l" src="../img/info.svg">
+  <img class="info-icon-l" src="../img/info.svg" alt="info">
 </label>
 EOF
 ;
@@ -751,7 +755,7 @@ sub getFooter {
 
   <!-- Container (top) -->
   <div class="container textcenter pad-t-1em">
-    <b>$self->{thysimD} 2.1</b> &copy; 2013 by
+    <b>$self->{thysimD} 3.0</b> &copy; 2013 by
     <a href="http://biocyb0.cs.ucla.edu/wp/"
        target="_blank">UCLA Biocybernetics Laboratory</a>
   </div>
@@ -909,7 +913,7 @@ sub insertExample {
     <span class="example-txt"><b>$exp->{bold}</b> $exp->{text}</span>
     <button class="btn btn-blue" type="button"
             onclick="ajax_getplot('$exp->{name}');togInfoBtn('Example');">
-      Simulate
+      Run Example
     </button>
   </span>
   <img src="$exp->{img}" alt="$exp->{alt}" class="example-tbn" />
