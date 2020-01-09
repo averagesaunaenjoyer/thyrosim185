@@ -813,7 +813,7 @@ footer {
   background-color: lavenderblush;
 }
 .slider-row {
-  margin-bottom: 0.25em;
+  padding-bottom: 0.25em;
 }
 #simtime { /* Override default text input width */
   width: 3em;

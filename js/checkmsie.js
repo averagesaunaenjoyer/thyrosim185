@@ -1,4 +1,4 @@
-//--------------------------------------------------
+//=============================================================================
 // FILE:        checkmsie.js
 // AUTHOR:      Simon X. Han
 // DESCRIPTION:
@@ -9,9 +9,9 @@
 // NOTE:
 //   This may not work all the time because browsers have the ability to spoof
 //   their userAgent.
-//-------------------------------------------------- 
+//=============================================================================
 function checkMSIE() {
     if (navigator.userAgent.match(/msie/i)) {
-        $('#nonIEMsgDiv').css("display","block");
+        $('#non-ie-warn').css("display","block");
     }
 }

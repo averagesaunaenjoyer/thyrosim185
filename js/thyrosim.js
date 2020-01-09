@@ -35,7 +35,7 @@ function ajax_getplot(exp) {
         if (hasFormError) {
             return false;
         }
-        formdata = $("form").serialize();
+        formdata = $('form').serialize();
     }
 
     //---------------------------------------------------------
@@ -44,9 +44,10 @@ function ajax_getplot(exp) {
     showLoadingMsg();
 
     var msg;
+    var msgColor;
     var time1 = new Date().getTime();
     $.ajaxSetup({timeout:120000}); // No run should take more than 2 mins
-    $.post( "ajax_getplot.cgi", { data: formdata })
+    $.post('ajax_getplot.cgi', { data: formdata })
       .done(function( data ) {
 
         // Graph results from this run
@@ -56,16 +57,18 @@ function ajax_getplot(exp) {
         graphAll();
         selectRunButton(getNextRunColor());
 
-        msg = "Execution time (sec):";
+        msg = '<b>Success!</b> Execution time (sec):';
+        msgColor = 'green';
       })
       .fail(function (data ) {
-        msg = "Operation timed out (sec):";
+        msg = '<b>Error!</b> Operation timed out (sec):';
+        msgColor = 'red';
       })
       .always(function() {
         hideLoadingMsg(); // Hide loading message
         var time2 = new Date().getTime();
         var timeE = Math.floor((time2 - time1)/1000); // Time elapsed
-        showOverlayMsg('<b>Success!</b> '+msg+' '+timeE,'green');
+        showOverlayMsg(msg+' '+timeE, msgColor);
       });
 }
 
@@ -233,8 +236,8 @@ function graph(hormone,addlabel,initgraph) {
                 .data([data])
                 .attr("d",line)
                 .attr("class","line"+color)
-                .attr("stroke",color)
-                .attr("stroke-width","1.5")
+                .attr("stroke",ThyrosimGraph.getLinecolor(color))
+                .attr("stroke-width","2.5")
                 .attr("fill","none")
                 .style("stroke-dasharray",ThyrosimGraph.getLinestyle(color));
 
@@ -311,7 +314,7 @@ function graph(hormone,addlabel,initgraph) {
             circle.data(valuesD).enter().append("circle")
                 .attr("class","dot"+color)
                 .attr("fill","transparent")
-                .attr("r",5)
+                .attr("r",7)
                 .attr("cx",function(d,i) {return x(valuesT[i]/24);})
                 .attr("cy",function(d,i) {return y(d);})
                 .on("mouseover",function(d,i) {
@@ -327,7 +330,8 @@ function graph(hormone,addlabel,initgraph) {
                         dT = dT - 32;
                     }
 
-                    $(this).attr("fill",color);
+                    $(this).attr("fill",color); // Dot color
+                    //$(this).attr("fill",ThyrosimGraph.getLinecolor(color));
                     tooltip.transition()
                         .duration(200)
                         .style("opacity",0.8);
@@ -569,8 +573,11 @@ function ThyrosimGraph() {
 
     // Default color settings. Color order must match button order.
     var colors = {
-        Blue:  { linestyle: "",    rdata: undefined, exist: false },
-        Green: { linestyle: "5,3", rdata: undefined, exist: false }
+        Blue:  { linecolor: '#619cff', linestyle: '',
+                 rdata: undefined, exist: false },
+        Green: { linecolor: '#00ba38', linestyle: '5,3',
+                 rdata: undefined, exist: false }
+        //Red: { linecolor: '#f8766d'}
     };
     this.colors = colors;
 
@@ -730,6 +737,11 @@ function ThyrosimGraph() {
     this.getLinestyle = getLinestyle;
     function getLinestyle(color) {
         return this.colors[color].linestyle;
+    }
+
+    this.getLinecolor = getLinecolor;
+    function getLinecolor(color) {
+        return this.colors[color].linecolor;
     }
 
     // Function to repeat a string. Essentially, "n" x 3 = "nnn".
@@ -1216,16 +1228,16 @@ function useSingleDose(n) {
 }
 
 //===================================================================
-// DESC:    Show/Hide the scroll bars for secretion/absorption adjustment.
+// DESC:    Show/Hide the scrollbars for secretion/absorption adjustment.
 //===================================================================
 function togScrollBars() {
     $('.sliders').toggle("blind", {direction:"left"}, function() {
         if ($('.sliders').css('display') == 'none') {
             $('#scrollbar').attr('src','../img/plus.png')
-                           .attr('alt','Show scroll bars');
+                           .attr('alt','Show scrollbars');
         } else {
             $('#scrollbar').attr('src','../img/minus.png')
-                           .attr('alt','Hide scroll bars');
+                           .attr('alt','Hide scrollbars');
         }
     });
 }

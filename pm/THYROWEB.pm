@@ -140,7 +140,7 @@ of simulation results.
 Minimum Usage:
 <ol>
   <li>
-    To see normal thyroid hormone behavior: click "RUN".
+    To see normal thyroid hormone behavior: click "Simulate".
   </li>
   <li>
     To simulate hypo/hyperthyroidism: change
@@ -190,8 +190,9 @@ Features:
     icons: click to turn input on or off for the next run.
   </li>
   <li>
-    <img class="info-icon-m" src="../img/plus.png" alt="plus">
-    icon: click to modify secretion/absorption via scrollbars.
+    <img class="info-icon-m" src="../img/plus.png"  alt="plus">
+    <img class="info-icon-m" src="../img/minus.png" alt="minus">
+    icons: click to show or hide scrollbars.
   </li>
 </ol>
 
@@ -474,7 +475,7 @@ EOF
     my $sliderButton = <<EOF
 <button type="button" class="btn-icon" onclick="togScrollBars();">
   <img id="scrollbar" class="info-icon-m"
-       src="../img/minus.png" alt="Hide scroll bars">
+       src="../img/minus.png" alt="Hide scrollbars">
   Secretion/Absorption Rates:
 </button>
 EOF
@@ -539,7 +540,7 @@ EOF
 Simulation Time:
 <input type="text" id="simtime" name="simtime" value="5">
 Days
-<label title="Simulation time must be &le; 100 days.">
+<label title="Simulation Time must be &le; 100 days.">
   <img class="info-icon-l" src="../img/info.svg">
 </label>
 EOF
