@@ -916,7 +916,9 @@ sub insertExample {
       Run Example
     </button>
   </span>
-  <img src="$exp->{img}" alt="$exp->{alt}" class="example-tbn" />
+  <a target="_blank" href="$exp->{img}">
+    <img src="$exp->{img}" alt="$exp->{alt}" class="example-tbn">
+  </a>
 </span>
 <!-- Example $exp->{name} end -->
 EOF
