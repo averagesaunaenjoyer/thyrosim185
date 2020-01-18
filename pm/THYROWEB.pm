@@ -624,19 +624,10 @@ EOF
     <!-- Panel Left -->
     <div class="grid-1-2">
 
-      <!-- Sidebar -->
       <div id="sidebar" class="floatL">
-
-        <!-- T3 Inputs Menu -->
 $menuT3
-        <!-- T3 Inputs Menu end -->
-
-        <!-- T4 Inputs Menu -->
 $menuT4
-        <!-- T4 Inputs Menu end -->
-
       </div>
-      <!-- Sidebar end -->
 
       <!-- Diagram and Parameters -->
       <div id="img-param" class="floatL">
