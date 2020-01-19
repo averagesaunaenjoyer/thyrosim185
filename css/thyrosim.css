@@ -620,7 +620,7 @@ footer {
 .info-btn-a, .info-btn-a:hover { /* a for active */
   background-color: #696969;
   position: relative;
-  z-index: 2;
+  z-index: 3;
 }
 .info-btn-c { /* c for content */
   background-color: #F0F8FF;
@@ -632,7 +632,7 @@ footer {
   padding: 0 1em 0 1em;
   position: absolute;
   width: 28.5em;
-  z-index: 1; /* content does not block button */
+  z-index: 2; /* content does not block button */
 }
 .info-btn-c div {
   display: block;
