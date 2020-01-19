@@ -287,7 +287,7 @@ sub getHead {
 -title => "$self->{thysimD} by UCLA Biocybernetics Lab",
 -meta  => {
     'charset'   => 'utf-8',
-    'viewport'  => 'width=device-width, initial-scale=1, shrink-to-fit=no',
+    'viewport'  => 'width=device-width, initial-scale=1.0, shrink-to-fit=no',
     'keywords'  => 'thyrosim thyroid simulator',
     'copyright' => 'Copyright 2013 by UCLA Biocybernetics Laboratory'
 },
@@ -417,12 +417,12 @@ sub getHeader {
   <div id="ucla" class="floatL">
     <span>UCLA</span>
   </div>
-$infoBtn_About
-$infoBtn_Examp
-$infoBtn_Discl
   <div id="biocyb" class="floatR">
     <span>Biocybernetics Laboratory</span>
   </div>
+$infoBtn_About
+$infoBtn_Examp
+$infoBtn_Discl
   <!-- Logos and Info end -->
 
   <div class="bar-h-gold floatL"></div>
@@ -622,7 +622,7 @@ EOF
   <div id="container-top" class="container">
 
     <!-- Panel Left -->
-    <div class="grid-1-2">
+    <div id="container-top-left" class="grid-1-2 m-grid-1-1">
 
       <div id="sidebar" class="floatL">
 $menuT3
@@ -632,19 +632,19 @@ $menuT4
       <!-- Diagram and Parameters -->
       <div id="img-param" class="floatL">
 $paramEditor
+        <img id="hilite1" src="../img/hilite.png" class="hide">
+        <img id="hilite2" src="../img/hilite.png" class="hide">
+        <img id="hilite3" src="../img/hilite.png" class="hide">
+        <img id="hilite4" src="../img/hilite.png" class="hide">
       </div>
       <!-- Diagram and Parameters end -->
 
-      <img id="hilite1" src="../img/hilite.png" class="hide">
-      <img id="hilite2" src="../img/hilite.png" class="hide">
-      <img id="hilite3" src="../img/hilite.png" class="hide">
-      <img id="hilite4" src="../img/hilite.png" class="hide">
 
     </div>
     <!-- Panel Left end -->
 
     <!-- Panel Right -->
-    <div class="grid-1-2">
+    <div class="grid-1-2 m-grid-1-1">
 
       <!-- Button Row -->
       <div class="container button-row">
@@ -680,7 +680,7 @@ $paramEditor
   <div id="container-bot" class="container">
 
     <!-- Input Panel -->
-    <div id="input-panel" class="grid-1-2">
+    <div id="input-panel" class="grid-1-2 m-grid-1-1">
 
       <div class="container textcenter">
         <span class="title"><b>Input Manager</b></span>
@@ -699,7 +699,7 @@ $paramEditor
     <!-- Input Panel end -->
 
     <!-- Control Panel -->
-    <div id="control-panel" class="grid-1-2">
+    <div id="control-panel" class="grid-1-2 m-grid-1-1">
 
       <div class="container textcenter">
         <span class="title"><b>Control Panel</b></span>
@@ -756,7 +756,7 @@ sub getFooter {
   <div class="container pad-t-2em">
 
     <!-- References -->
-    <div class="grid-1-3">
+    <div class="grid-1-3 m-grid-1-2">
       <div class="footer-title textcenter">References*</div>
       <div class="footer-list">
 
@@ -810,7 +810,7 @@ sub getFooter {
     <!-- References end -->
 
     <!-- Recent Updates -->
-    <div class="grid-1-3">
+    <div class="grid-1-3 m-grid-1-2">
       <div class="footer-title textcenter">Recent Updates</div>
       <div class="footer-list">
 
@@ -833,7 +833,7 @@ sub getFooter {
     <!-- Recent Updates end -->
 
     <!-- People and Acknowledgement -->
-    <div class="grid-1-3">
+    <div class="grid-1-3 m-grid-1-2">
       <div class="footer-title textcenter">People & Acknowledgement</div>
       <div class="footer-list">
 
@@ -997,7 +997,7 @@ sub _getInfoBtn {
     my ($self,$key,$val,$content) = @_;
 
     return <<EOF
-<div class="floatL">
+<div class="floatL m-grid-1-1">
   <button id="info-btn-$key" type="button" class="info-btn floatL"
           onclick="togInfoBtn('$key');">
     $val

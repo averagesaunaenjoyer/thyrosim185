@@ -1269,7 +1269,7 @@ function animation() {
         var id = new Date().getTime().toString();
         $('<div>').attr({'id':cat+'-'+id,'class':cat}).html(
         $('<img>').attr({'id':cat+'img-'+id,'src':'../img/'+ele+'.gif?'+id}))
-        .appendTo('#container-top');
+        .appendTo('#img-param');
         return id;
     }
 

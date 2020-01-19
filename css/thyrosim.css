@@ -518,23 +518,25 @@ input[type=checkbox] {
 * #wrapper
 * - header
 *   - #ucla (UCLA logo)
-*   - (Directions, Examples, Disclaimer buttons)
 *   - #biocyb (Biocybernetics logo)
+*   - (Directions, Examples, Disclaimer buttons)
 *   - .bar-h-gold (Horizontal gold bar)
 *   - #non-ie-warn (Warning for non-IE browsers)
 * - #navbar (empty)
 * - main
-*   - .container (top)
-*     - section .panelL
+*   - #container-top
+*     - #container-top-left
 *       - #sidebar
 *         - (T3 inputs)
 *         - (T4 inputs)
 *       - #img-param
 *         - #parameters
-*     - section .panelR
+*         - (Hilites)
+*         - (Animations)
+*     - (Panel Right)
 *       - (Graphs)
 *   - .bar-h-gold (Horizontal gold bar)
-*   - .container (bot)
+*   - #container-bot
 *     - #input-panel
 *       - #input-manager
 *     - #control-panel
@@ -568,7 +570,7 @@ input[type=checkbox] {
 }
 header {
   background-color: #fafafa;
-  height: 4em;
+  height: 3.2em;
 }
 main {
 }
@@ -629,7 +631,7 @@ footer {
   margin: 2.3em 0 0 1em; /* margin-left same as .info-btn */
   padding: 0 1em 0 1em;
   position: absolute;
-  width: 31.25em;
+  width: 28.5em;
   z-index: 1; /* content does not block button */
 }
 .info-btn-c div {
@@ -660,7 +662,7 @@ footer {
   border-radius: 0.6em;
   box-shadow: 0.8em 0.8em 0.5em -0.4em rgba(0,0,0,0.5);
   vertical-align: top;
-  width: 12em;
+  width: 10.8em;
 }
 /* Non-IE warning */
 .non-ie-warn {
@@ -675,15 +677,11 @@ footer {
 *--------------------------------------------------*/
 
 /* Main layout */
-#container-top {
-  height: 32.5em;
-  margin-bottom: 1em;
-  padding: 0.625em 0.625em 0;
-}
 #container-top>div {
-  height: 100%;
+  padding: 0.625em;
 }
-#container-bot {
+#container-top-left {
+  height: 33.2em;
 }
 #container-bot>div {
   padding: 2em 1em;
@@ -715,6 +713,7 @@ footer {
   background-repeat: no-repeat;
   height: 100%;
   margin: 0 0 0 0.625em;
+  position: relative;
   width: 85%;
 }
 #parameters {
@@ -746,18 +745,18 @@ footer {
 }
 #hilite1, #hilite2, #hilite3, #hilite4 {
   display: none;
-  position: relative;
+  position: absolute;
 }
-#hilite1 { left: 15.45em ; top: -10.79em; }
-#hilite2 { left: 12.68em ; top: -17.45em; }
-#hilite3 { left: 16.72em ; top: -10.79em; }
-#hilite4 { left: 13.11em ; top: -17.91em; }
+#hilite1 { left: 11.56em ; top: 21.11em; }
+#hilite2 { left:  8.75em ; top: 14.45em; }
+#hilite3 { left: 12.83em ; top: 21.11em; }
+#hilite4 { left:  9.18em ; top: 13.95em; }
 .spill, .inject, .infuse {
-  position: relative;
+  position: absolute;
 }
-.spill  { left: 7.09em; top: -25.49em; }
-.inject { left: 4.49em; top: -18.13em; }
-.infuse { left: 4.89em; top: -14.93em; }
+.spill  { left: 3.19em; top:  6.41em; }
+.inject { left: 0.65em; top: 13.85em; }
+.infuse { left: 0.95em; top: 17.45em; }
 
 /* Container (top) - Panel Right - D3 customizations */
 .d3chart {
@@ -853,6 +852,14 @@ footer {
 }
 
 /*--------------------------------------------------
+* Responsive design
+*--------------------------------------------------*/
+@media screen and (max-width: 525px) { /* when viewport is <= the size */
+  #wrapper { width: 525px; }
+  .m-grid-1-1 { width: 100%; }
+  .m-grid-1-2 { width: calc(100% / 2); }
+}
+
+/*--------------------------------------------------
 * Temp
 *--------------------------------------------------*/
-
