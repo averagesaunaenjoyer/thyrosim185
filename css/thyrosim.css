@@ -336,7 +336,7 @@ input[type=checkbox] {
   background-color: transparent;
   border-radius: 0.3em;
   color: #818a91;
-  font-size: 0.7em;
+  font-size: 0.8em;
   margin: 0.2em;
   padding: 0.3em;
 }
@@ -437,13 +437,12 @@ input[type=checkbox] {
   width: 50%;
 }
 #overlay button {
-  margin-top: 0.4em;
-  margin-right: 1em
+  margin-top: -3em;
 }
 #overlay #overlay-content {
   border: 1px solid transparent;
   border-radius: 0.25em;
-  padding: 2em;
+  padding: 2em 0 4em;
 }
 .overlay-green {
   background-color: #d4edda;
@@ -684,26 +683,30 @@ footer {
   height: 33.2em;
 }
 #container-bot>div {
-  padding: 1.25em 0.625em;
+  padding: 1.25em;
 }
 
 /* Container (top) - Panel Left - Hormone menu sidebar */
 #sidebar {
-  width: 3em;
+  width: 4em;
 }
 .T-menu-head {
+  font-size: 1.2em;
   margin-bottom: 0.625em;
 }
 .T-menu-head button {
-  padding: 0.3em 0;
+  padding: 0.4em 0;
 }
 .T-menu {
   background-color: #fafafa;
-  margin: -0.625em 0 0.625em 0;
+  margin: -0.825em 0 0.625em 0;
   text-align: center;
 }
 .T-menu button {
   margin: 0.4em;
+}
+.T-menu button img {
+  height: 3em;
 }
 
 /* Container (top) - Panel Left - Diagram and parameters */
@@ -790,10 +793,10 @@ footer {
 .row1 { background-color: thistle; }
 .row0 { background-color: transparent; }
 .input-row {
-  border-left: 0.625em solid transparent;
-  border-right: 0.625em solid transparent;
+  border-left: 1.25em solid transparent;
+  border-right: 1.25em solid transparent;
   float: left;
-  margin: 0 -0.625em;
+  margin: 0 -1.25em;
   padding: 0.5em 0;
   width: 100%;
 }

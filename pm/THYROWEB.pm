@@ -382,11 +382,11 @@ $footer
   <!-- Overlay -->
   <div id="overlay">
     <div>
-      <button id="overlay-button" type="button" class="btn-anchor floatR"
-              onclick="toggle('overlay',100);">
-        Close
-      </button>
       <div id="overlay-content"></div>
+      <button id="overlay-button" class="btn btn-blue" type="button"
+              onclick="toggle('overlay',100);">
+      Continue
+    </button>
     </div>
   </div>
   <!-- Overlay end -->
@@ -818,7 +818,8 @@ sub getFooter {
 
         <ol>
           <li>
-            December 2019: Added parameter editor (Toggle: Parameters)
+            December 2019: Added parameter editor (Toggle: Parameters) for
+            advanced users. Function available upon request.
           </li>
           <li>
             January 2019: Added
