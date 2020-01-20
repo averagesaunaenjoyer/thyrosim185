@@ -233,6 +233,7 @@ sub initHormoneMenu {
     my ($self) = @_;
 
     $self->{hormoneMenu}->{T3} = {
+        num => '3',
         head_id => 'T3-menu-head',
         menu_id => 'T3-menu',
         button  => 'btn-icon-t3',
@@ -245,6 +246,7 @@ sub initHormoneMenu {
     };
 
     $self->{hormoneMenu}->{T4} = {
+        num => '4',
         head_id => 'T4-menu-head',
         menu_id => 'T4-menu',
         button  => 'btn-icon-t4',
@@ -1030,7 +1032,7 @@ sub getHormoneMenu {
     return <<EOF
 <div id="$s->{head_id}" class="T-menu-head">
   <button type="button" onclick="togHormoneMenu('$s->{menu_id}');">
-    T<span class="textsub">3</span><i class="arrow arrow-u"></i>Inputs
+    T<span class="textsub">$s->{num}</span><i class="arrow arrow-u"></i>Inputs
   </button>
 </div>
 <div id="$s->{menu_id}" class="T-menu show">

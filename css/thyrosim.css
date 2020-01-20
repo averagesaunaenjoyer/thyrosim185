@@ -684,7 +684,7 @@ footer {
   height: 33.2em;
 }
 #container-bot>div {
-  padding: 2em 1em;
+  padding: 1.25em 0.625em;
 }
 
 /* Container (top) - Panel Left - Hormone menu sidebar */
@@ -790,10 +790,10 @@ footer {
 .row1 { background-color: thistle; }
 .row0 { background-color: transparent; }
 .input-row {
-  border-left: 1em solid transparent;
-  border-right: 1em solid transparent;
+  border-left: 0.625em solid transparent;
+  border-right: 0.625em solid transparent;
   float: left;
-  margin: 0 -1em;
+  margin: 0 -0.625em;
   padding: 0.5em 0;
   width: 100%;
 }
