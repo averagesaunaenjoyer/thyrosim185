@@ -652,7 +652,7 @@ $paramEditor
       <div class="container button-row">
         Toggle:
         <button class="btn btn-teal" type="button" onclick="togFreeHormone();">
-          Free Hormone Values
+          Free/Total Hormone
         </button>
         <button class="btn btn-teal" type="button" id="togNormRange">
           Normal Range
@@ -1008,7 +1008,7 @@ sub _getInfoBtn {
   <div id="info-btn-c-$key" class="info-btn-c">
     <button type="button" class="btn-anchor floatR"
             onclick="togInfoBtn('$key');">
-      Close
+      CLOSE
     </button>
     <div>
 $content
