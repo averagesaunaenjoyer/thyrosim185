@@ -25,6 +25,13 @@ sub new {
     $self->{ts} = $params{THYROSIM};
     $self->{showParams} = $params{showParams} // 0;
 
+    #--------------------------------------------------
+    # Parameter display names
+    #--------------------------------------------------
+
+    $self->{param}->{p47} = "Vp";
+    $self->{param}->{p48} = "VTSH";
+
     bless $self, $class;
 
     #--------------------------------------------------
@@ -949,8 +956,9 @@ sub printParams {
 #====================================================================
 sub getParamInput {
     my ($self,$p,$v) = @_;
+    my $param = $self->{param}->{$p} // $p;
     return <<EOF
-<span>$p:</span>
+<span>$param:</span>
 <input type="text" id="$p" name="$p" value="$v">
 EOF
 }
