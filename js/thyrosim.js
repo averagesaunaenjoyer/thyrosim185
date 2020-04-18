@@ -590,19 +590,19 @@ function ThyrosimGraph() {
         FT4: {
             comp: 'ft4',
             unit: 'ng/L',
-            ymin: { Thyrosim: 17, ThyrosimJr: 17 },
+            ymin: { Thyrosim: 17, ThyrosimJr: 15 },
             bounds: {
-                Thyrosim:   { lo: 8, hi: 17 },
-                ThyrosimJr: { lo: 8, hi: 17 }
+                Thyrosim:   { lo: 8,  hi: 17 },
+                ThyrosimJr: { lo: 10, hi: 14 }
             }
         },
         FT3: {
             comp: 'ft3',
             unit: 'ng/L',
-            ymin: { Thyrosim: 4, ThyrosimJr: 4 },
+            ymin: { Thyrosim: 4, ThyrosimJr: 7 },
             bounds: {
-                Thyrosim:   { lo: 2.2, hi: 4.4 },
-                ThyrosimJr: { lo: 2.2, hi: 4.4 },
+                Thyrosim:   { lo: 2.2,  hi: 4.4  },
+                ThyrosimJr: { lo: 2.32, hi: 7.07 },
             }
         },
         T4: {
@@ -610,8 +610,8 @@ function ThyrosimGraph() {
             unit: '\u03BCg/L', // mcg
             ymin: { Thyrosim: 110, ThyrosimJr: 110 },
             bounds: {
-                Thyrosim:   { lo: 45, hi: 105 },
-                ThyrosimJr: { lo: 45, hi: 105 },
+                Thyrosim:   { lo: 45,   hi: 105 },
+                ThyrosimJr: { lo: 62.4, hi: 110 },
             }
         },
         T3: {
@@ -619,17 +619,17 @@ function ThyrosimGraph() {
             unit: '\u03BCg/L', // mcg
             ymin: { Thyrosim: 1, ThyrosimJr: 2 },
             bounds: {
-                Thyrosim:   { lo: 0.6, hi: 1.8 },
-                ThyrosimJr: { lo: 0.6, hi: 1.8 },
+                Thyrosim:   { lo: 0.6,  hi: 1.8  },
+                ThyrosimJr: { lo: 1.24, hi: 2.15 },
             }
         },
         TSH: {
             comp: '7',
             unit: 'mU/L',
-            ymin: { Thyrosim: 4, ThyrosimJr: 4 },
+            ymin: { Thyrosim: 4, ThyrosimJr: 3 },
             bounds: {
-                Thyrosim:   { lo: 0.4, hi: 4 },
-                ThyrosimJr: { lo: 0.4, hi: 4 },
+                Thyrosim:   { lo: 0.4,  hi: 4    },
+                ThyrosimJr: { lo: 0.72, hi: 3.31 },
             }
         },
     };
