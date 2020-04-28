@@ -76,19 +76,24 @@ html, body {
   font-size: 100%;
 }
 input[type=text] {
+  width: 65%;
+}
+textarea {
+  width: 100%;
+}
+input[type=text], textarea {
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 0.25em;
   padding: 0 0.1em;
-  width: 65%;
   -webkit-transition: 0.3s;
   transition: 0.3s;
 }
-input[type=text]:focus {
+input[type=text]:focus, textarea:focus {
   border: 1px solid #555;
   box-shadow: 0 0 0.4em rgba(102, 175, 233, .6);
 }
-input[type=text].error {
+input[type=text].error, textarea.error {
   border: 2px solid red;
 }
 input[type=checkbox] {
@@ -530,6 +535,7 @@ input[type=checkbox] {
 *         - (T4 inputs)
 *       - #img-param
 *         - #parameters
+*         - #paramtextarea
 *         - (Hilites)
 *         - (Animations)
 *     - (Panel Right)
@@ -745,6 +751,10 @@ footer {
   display: inline-block;
   text-align: right;
   width: 30%;
+}
+#paramtextarea {
+  font-size: 0.7em;
+  margin: 0.625em 0;
 }
 #hilite1, #hilite2, #hilite3, #hilite4 {
   display: none;

@@ -51,7 +51,7 @@ function ajax_getplot(exp) {
       .done(function( data ) {
 
         // Graph results from this run
-        var rdata = jQuery.parseJSON(data); // Run data
+        var rdata = JSON.parse(data); // Run data
         var color = $('input:radio[name=runRadio]:checked').val();
         ThyrosimGraph.setRun(color,rdata);
         graphAll();
@@ -1354,6 +1354,33 @@ function togFreeHormone() {
 }
 
 //===================================================================
+// DESC:    Function to convert parameters to JSON string.
+//===================================================================
+function saveParams() {
+    var obj = {};
+    $.each($("#parameters input[type=text]"), function(i, field) {
+        obj[field.name] = field.value;
+        console.log(field.name + ':' + field.value);
+    });
+    $("#paramtextarea").val(JSON.stringify(obj));
+}
+
+//===================================================================
+// DESC:    Function to update parameters from a JSON string.
+//===================================================================
+function loadParams() {
+    var val = $("#paramtextarea").val();
+    if (val) { // Ignore empty/null strings
+        var obj = JSON.parse(val);
+        if (obj && typeof obj === "object") {
+            $.each(obj, function(key, value) {
+                $("#parameters #"+key).val(value);
+            });
+        }
+    }
+}
+
+//===================================================================
 // DESC:    jQuery $(document).ready() functions.
 //===================================================================
 $(function() {
@@ -1411,7 +1438,7 @@ $(function() {
     // Initialize "Next Run" as Blue
     selectRunButton('Blue');
 
-});
+}); // jQuery $(document).ready() functions end
 
 //===================================================================
 // Section

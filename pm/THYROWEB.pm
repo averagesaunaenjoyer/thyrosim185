@@ -933,6 +933,7 @@ EOF
 #====================================================================
 sub printParams {
     my ($self) = @_;
+    my $pht = "Parameters here."; # Placeholder text
     my $snp = "";
     my $tmp = "";
     my $mod = 3; # Want kdelay to be in its own row
@@ -946,6 +947,14 @@ sub printParams {
         }
         $mod++;
     }
+    $snp .= <<EOF
+<textarea placeholder="$pht" id="paramtextarea" rows="9"></textarea>
+<div class="container button-row">
+  <button class='btn btn-teal' type='button' onclick='saveParams();'>Save Params</button>
+  <button class='btn btn-teal' type='button' onclick='loadParams();'>Load Params</button>
+</div>
+EOF
+;
     return $snp;
 }
 

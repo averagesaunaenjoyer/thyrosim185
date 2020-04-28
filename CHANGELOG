@@ -1,6 +1,9 @@
 Change log
+2020-04-28
+1. Parameter editor can now load/save using JSON
+
 2020-04-18
-1. Updated ThyrosimJr normal ranges.
+1. Updated ThyrosimJr normal ranges
 
 2019-12-13
 1. The UI (simtime, dials, inputs) now match the experiment run
