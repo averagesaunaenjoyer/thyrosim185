@@ -497,10 +497,10 @@ EOF
     my $sliders = <<EOF
 <div class="container slider-row"
      onmouseover="toggle('hilite1',1);" onmouseout="toggle('hilite1',1);">
-  <div class="grid-1-5">
+  <div class="grid-13-60">
     T<span class="textsub">4</span> Secretion
   </div>
-  <div class="grid-1-5 pad-l-uem">
+  <div class="grid-11-60">
     (0-200%):
   </div>
   <div class="grid-1-5">
@@ -513,10 +513,10 @@ EOF
 
 <div class="container slider-row"
      onmouseover="toggle('hilite2',1);" onmouseout="toggle('hilite2',1);">
-  <div class="grid-1-5">
+  <div class="grid-13-60">
     T<span class="textsub">4</span> Absorption
   </div>
-  <div class="grid-1-5 pad-l-uem">
+  <div class="grid-11-60">
     (0-100%):
   </div>
   <div class="grid-1-5">
@@ -529,10 +529,10 @@ EOF
 
 <div class="container slider-row"
      onmouseover="toggle('hilite3',1);" onmouseout="toggle('hilite3',1);">
-  <div class="grid-1-5">
+  <div class="grid-13-60">
     T<span class="textsub">3</span> Secretion
   </div>
-  <div class="grid-1-5 pad-l-uem">
+  <div class="grid-11-60">
     (0-200%):
   </div>
   <div class="grid-1-5">
@@ -545,10 +545,10 @@ EOF
 
 <div class="container slider-row"
      onmouseover="toggle('hilite4',1);" onmouseout="toggle('hilite4',1);">
-  <div class="grid-1-5">
+  <div class="grid-13-60">
     T<span class="textsub">3</span> Absorption
   </div>
-  <div class="grid-1-5 pad-l-uem">
+  <div class="grid-11-60">
     (0-100%):
   </div>
   <div class="grid-1-5">

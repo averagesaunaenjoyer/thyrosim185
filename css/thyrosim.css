@@ -118,7 +118,6 @@ input[type=checkbox] {
 .pad-t-2em { padding-top: 2em; }
 .pad-b-1em { padding-bottom: 1em; }
 .pad-b-2em { padding-bottom: 2em; }
-.pad-l-uem { padding-left: 0.625em; } /* u for unit */
 .textcenter { text-align: center; }
 .title { font-size: 1.2em; }
 .width-100 { width: 100%; }
@@ -137,10 +136,13 @@ input[type=checkbox] {
 .grid-3-5 { width: calc(100% * 3 / 5); }
 .grid-1-10 { width: calc(100% * 1 / 10); }
 .grid-9-10 { width: calc(100% * 9 / 10); }
+.grid-11-60 { width: calc(100% * 11 / 60); }
+.grid-13-60 { width: calc(100% * 13 / 60); }
 .grid-1-2,
 .grid-1-3, .grid-2-3,
 .grid-1-5, .grid-2-5, .grid-3-5,
-.grid-1-10, .grid-9-10 {
+.grid-1-10, .grid-9-10,
+.grid-11-60, .grid-13-60 {
   box-sizing: border-box;
   float: left;
 }
