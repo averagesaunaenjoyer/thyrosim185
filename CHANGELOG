@@ -1,93 +1,96 @@
 Change log
+2020-04-29
+1. Changed ThyrosimJr p48/VTSH to 2.3.
+
 2020-04-28
-1. Parameter editor can now load/save using JSON
+1. Parameter editor can now load/save using JSON.
 
 2020-04-18
-1. Updated ThyrosimJr normal ranges
+1. Updated ThyrosimJr normal ranges.
 
 2019-12-13
-1. The UI (simtime, dials, inputs) now match the experiment run
+1. The UI (simtime, dials, inputs) now match the experiment run.
 
 2019-12-12
-1. Added parameter editor to the UI
-2. Original html links now redirect to cgi versions
-3. Thyrosim set to version 2.1
+1. Added parameter editor to the UI.
+2. Original html links now redirect to cgi versions.
+3. Thyrosim set to version 2.1.
 
 2019-11-24
-1. Added additional examples with images
-2. Updated d3, jquery, and jquery-ui libraries
-3. Fixed issue with animation not aligning
-4. Fixed issue where free hormone values were not calculating correctly
+1. Added additional examples with images.
+2. Updated d3, jquery, and jquery-ui libraries.
+3. Fixed issue with animation not aligning.
+4. Fixed issue where free hormone values were not calculating correctly.
 
 2019-11-23
-1. Deprecated Octave solvers
-2. Consolidated Getinit.java and Thyrosim.java into Thyrosim.java
+1. Deprecated Octave solvers.
+2. Consolidated Getinit.java and Thyrosim.java into Thyrosim.java.
 
 2019-11-19
-1. Added ThyrosimJr html
-2. Removed solvers for just ThyrosimJr
+1. Added ThyrosimJr html.
+2. Removed solvers for just ThyrosimJr.
 3. Created a system where the same solver can be used for any simulation model
-   (e.g., ThyrosimJr)
-4. Added configuration files and UI changes so #3 is possible
+   (e.g., ThyrosimJr).
+4. Added configuration files and UI changes so #3 is possible.
 
 2019-01-22
-1. "Example" pane automatically closes after a run
-2. Thyrosim set to version 2.0
+1. "Example" pane automatically closes after a run.
+2. Thyrosim set to version 2.0.
 
 2018-12-31
-1. Added temporary multiplicative factor for free hormone values
+1. Added temporary multiplicative factor for free hormone values.
 
 2018-04-25
-1. Changed FT4 normal range to 8 - 17 ng/L
-2. Changed FT3 normal range to 2.2 - 4.4 ng/L
+1. Changed FT4 normal range to 8 - 17 ng/L.
+2. Changed FT3 normal range to 2.2 - 4.4 ng/L.
 
 2018-04-19
-1. Added free T4 and free T3 graphs, with button to toggle them
-2. Enlarged graph area and other minor formatting changes
+1. Added free T4 and free T3 graphs, with button to toggle them.
+2. Enlarged graph area and other minor formatting changes.
 
 2018-04-18
-1. Added free T4 and free T3 values to return from the solver
+1. Added free T4 and free T3 values to return from the solver.
 
 2018-02-04
-1. Added .gitignore file
+1. Added .gitignore file.
 
 2017-03-28
-1. Added stand alone Matlab m file for repeated oral dosing
+1. Added stand alone Matlab m file for repeated oral dosing.
 
 2016-12-12
-1. Updated version number
-2. Switched default solver to Java ODE solver
+1. Updated version number.
+2. Switched default solver to Java ODE solver.
 
 2016-12-04
-1. Added Java ODE solver
+1. Added Java ODE solver.
 
 2016-03-28
-1. Added 2016 Thyrosim paper to references
-2. Changed order of references
-3. Removed some hardcoded path
+1. Added 2016 Thyrosim paper to references.
+2. Changed order of references.
+3. Removed some hardcoded pathes.
 
 2015-12-01
-1. Added License.docx
-2. Minor formatting changes
+1. Added License.docx.
+2. Minor formatting changes.
 
 2015-11-23
-1. Added THYROSIM stand alone Matlab/Octave m files
-2. Added disclaimer
-3. Bit more documentation and general maintenance
+1. Added THYROSIM stand alone Matlab/Octave m files.
+2. Added disclaimer.
+3. Bit more documentation and general maintenance.
 
 2015-11-20
-1. Added link to DiStefano Lab page
-2. Added link to code repository
-3. Updated parameter values in the SBML code
+1. Added link to DiStefano Lab page.
+2. Added link to code repository.
+3. Updated parameter values in the SBML code.
 
 2015-10-19
-1. Removed password protection
-2. Added Google Analytics to index
+1. Removed password protection.
+2. Added Google Analytics to index.
 
 2015-06-01:
 1. Set Y-axis minimums so the default range is always visible:
-   T4 = 120, T3 = 2, TSH = 5
-2. Updated version number to 1.2
+   T4 = 120, T3 = 2, TSH = 5.
+2. Updated version number to 1.2.
 
 2015-05-25:
 1. Extended default T4 Y-axis to 120.
@@ -112,9 +115,9 @@ Change log
 2. Added a "close" button within "About" and "Example".
 
 2014-02-23:
-1. VTSH to 4.3
-2. Tooltip now shows hormone values more prominently
-3. Added button to toggle normal range of each hormone
+1. Changed p48/VTSH to 4.3.
+2. Tooltip now shows hormone values more prominently.
+3. Added button to toggle normal range of each hormone.
 
 2013-11-09:
 1. Updated graphing util from protovis to d3, for IE9+ support.
@@ -123,15 +126,15 @@ Change log
 4. Hovered point is made more visible with a highlighting circle.
 5. Simplified the object handling server responses and made it more
    general.
-6. y-axis uses SI units for large numbers, ie 1,200 -> 1.2k
+6. y-axis uses SI units for large numbers, ie 1,200 -> 1.2k.
 
 2013-07-25:
-1. Next run color is automatically changed
+1. Next run color is automatically changed.
 
 2013-07-22:
-1. "DIRECTIONS" and "EXAMPLE" now work with touch devices
-2. "DIRECTIONS" and "EXAMPLE" are now unselectable
-3. Changed "DIRECTIONS" and "EXAMPLE" to be buttons
+1. "DIRECTIONS" and "EXAMPLE" now work with touch devices.
+2. "DIRECTIONS" and "EXAMPLE" are now unselectable.
+3. Changed "DIRECTIONS" and "EXAMPLE" to be buttons.
 
 2013-07-11:
 1. Added sbml file to sbml/thyrosim.xml.
@@ -152,17 +155,17 @@ Change log
 1. Added an option to (re)calculate initial conditions when making a run.
 
 2013-05-12:
-1. Checks userAgent for 'msie' and display not-for-IE message
+1. Checks userAgent for 'msie' and display not-for-IE message.
 
 2013-04-30:
 1. The hack where body onload makes an ajax call to cgi-bin/getplot.cgi
    to get the bare minimum JSON skeleton to graph an empty graph is gone.
-   Ability to graph an empty graph is now done in js/ajaxfun.js
+   Ability to graph an empty graph is now done in js/ajaxfun.js.
 2. Overlay ability: User can choose to graph as Blue or Green line
    (Default is Blue line). This is so the user can compare two simulations.
 
 2013-04-18:
-1. p47 was changed again to 3.2
+1. p47 was changed again to 3.2.
 
 2013-03-07:
 1. getinit2.m and thysim2.m now only handles units in mols. Conversion to
@@ -174,7 +177,7 @@ Change log
    in getinit2.m and thysim2.m. These changes allowed steady state T4, T3, and
    TSH values to be closer to the expected average.
 2. Protovis changes:
- a. Loads an empty graph onload
+ a. Loads an empty graph onload.
  b. Hovering over the graph shows the y-value. For very large datasets, this 
     can lag the browser. Perhaps looking in limiting resolution, as in, the
     number of points sent back from the server to the browser. If this can be
