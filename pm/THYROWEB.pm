@@ -23,7 +23,7 @@ sub new {
     my $self = {};
 
     $self->{ts} = $params{THYROSIM};
-    $self->{showParams} = $params{showParams} // 0;
+    $self->{advanced} = $params{advanced} // 0;
 
     #--------------------------------------------------
     # Parameter display names
@@ -70,6 +70,8 @@ sub initDisplay {
         $self->{examples} = ['experiment-default-jr'];
     }
 
+    # Advanced
+    $self->{thysimD} .= " Advanced" if $self->{advanced};
 }
 
 #====================================================================
@@ -214,6 +216,39 @@ EOF
         key     => 'Example',
         val     => 'EXAMPLES',
         content => $self->insertExamples()
+    };
+
+    $self->{infoBtns}->{Projects} = {
+        key     => 'Project',
+        val     => 'PROJECTS',
+        content => <<EOF
+
+The main Thyroid Simulator.
+<ul>
+  <li>
+    <a href="Thyrosim.cgi"><b>Thyrosim</b></a>
+  </li>
+</ul>
+
+Thyroid Simulator Junior is optimized for babies.
+<ul>
+  <li>
+    <a href="ThyrosimJr.cgi"><b>Thyrosim Junior</b></a>
+  </li>
+</ul>
+
+Advanced simulators contain parameter editors for fine-tuning.
+<ul>
+  <li>
+    <a href="ThyrosimAdvanced.cgi"><b>Thyrosim Advanced</b></a>
+  </li>
+  <li>
+    <a href="ThyrosimJrAdvanced.cgi"><b>Thyrosim Junior Advanced</b></a>
+  </li>
+</ul>
+
+Junior and Advanced simulators are available upon request.
+EOF
     };
 
     $self->{infoBtns}->{Disclaimer} = {
@@ -417,6 +452,7 @@ sub getHeader {
     # Generate info buttons
     my $infoBtn_About = $self->getInfoBtn('About');
     my $infoBtn_Examp = $self->getInfoBtn('Example');
+    my $infoBtn_Proje = $self->getInfoBtn('Projects');
     my $infoBtn_Discl = $self->getInfoBtn('Disclaimer');
 
     return <<EOF
@@ -431,6 +467,7 @@ sub getHeader {
   </div>
 $infoBtn_About
 $infoBtn_Examp
+$infoBtn_Proje
 $infoBtn_Discl
   <!-- Logos and Info end -->
 
@@ -469,7 +506,7 @@ sub getMain {
     # Parameter list only for advanced
     my $paramList = "";
     my $paramTogg = "";
-    if ($self->{showParams}) {
+    if ($self->{advanced}) {
         $paramList = $self->printParams();
         $paramTogg = <<EOF
 Toggle:

@@ -43,7 +43,7 @@ my $ts = THYROSIM->new(setshow => 'default',
                        thysim  => 'Thyrosim',
                        loadParams => 1);
 my $tw = THYROWEB->new(THYROSIM => $ts,
-                       showParams => 1);
+                       advanced => 1);
 
 my $q = new CGI();
 

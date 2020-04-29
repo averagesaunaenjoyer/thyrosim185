@@ -1369,7 +1369,6 @@ function saveParams() {
     var obj = {};
     $.each($("#parameters input[type=text]"), function(i, field) {
         obj[field.name] = field.value;
-        console.log(field.name + ':' + field.value);
     });
     $("#paramtextarea").val(JSON.stringify(obj));
 }
