@@ -526,7 +526,7 @@ input[type=checkbox] {
 * - header
 *   - #ucla (UCLA logo)
 *   - #biocyb (Biocybernetics logo)
-*   - (Directions, Examples, Disclaimer buttons)
+*   - (Directions, Examples, Projects, Disclaimer buttons)
 *   - .bar-h-gold (Horizontal gold bar)
 *   - #non-ie-warn (Warning for non-IE browsers)
 * - #navbar (empty)
@@ -624,6 +624,9 @@ footer {
 }
 .info-btn:hover {
   background-color: #0273ac;
+}
+#info-btn-Disclaimer { /* Only for last info button */
+  margin-bottom: 0.5em;
 }
 .info-btn-a, .info-btn-a:hover { /* a for active */
   background-color: #696969;
