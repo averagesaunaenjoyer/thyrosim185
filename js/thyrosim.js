@@ -1332,11 +1332,20 @@ function togHormoneMenu(id) {
 // DESC:    Function to show/hide header info.
 //===================================================================
 function togInfoBtn(id) {
-    if ($('#info-btn-c-'+id).css('display') == 'none') {
+    if ($('#info-btn-c-'+id).css('display') == 'none') { // Open
+        // Close any open info buttons
+        $.each($('.info-btn-c'), function() {
+            if ($(this).css('display') !== 'none') {
+                $(this).toggle('blind',200,function() {
+                    $(this).siblings('button').toggleClass('info-btn-a',0);
+                });
+            }
+        });
+        // Open the clicked one
         $('#info-btn-'+id).toggleClass('info-btn-a',0,function() {
             $('#info-btn-c-'+id).toggle('blind',200);
         });
-    } else {
+    } else { // Close
         $('#info-btn-c-'+id).toggle('blind',200,function() {
             $('#info-btn-'+id).toggleClass('info-btn-a',0);
         });
