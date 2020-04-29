@@ -252,13 +252,13 @@ input[type=checkbox] {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-.btn-group>label>input[type="radio"] { /* hide radio button */
+.btn-group>label>input[type="radio"] { /* Hide radio button */
   opacity: 0;
   position: absolute;
   height: 0;
   width: 0;
 }
-.btn-group>.active { z-index: 1 } /* set active button higher to show borders */
+.btn-group>.active { z-index: 1 } /* Set active button higher to show borders */
 .btn-group>.btn-blue.active  {box-shadow: 0 0 0 0.2rem rgba(  0,123,255,.5);}
 .btn-group>.btn-gray.active  {box-shadow: 0 0 0 0.2rem rgba(108,117,125,.5);}
 .btn-group>.btn-green.active {box-shadow: 0 0 0 0.2rem rgba( 40,167, 69,.5);}
@@ -429,8 +429,8 @@ input[type=checkbox] {
   background-color: rgb(0,0,0); /* black background */
   background-color: rgba(0,0,0,0.75); /* add opacity */
   display: none;
-  overflow-x: hidden; /* Disable horizontal scroll */
-  overflow-y: hidden; /* Disable vertical scroll */
+  overflow-x: hidden; /* disable horizontal scroll */
+  overflow-y: hidden; /* disable vertical scroll */
   padding-top: 20em;
   position: fixed;
   text-align: center;
@@ -872,7 +872,7 @@ footer {
 /*--------------------------------------------------
 * Responsive design
 *--------------------------------------------------*/
-@media screen and (max-width: 525px) { /* when viewport is <= the size */
+@media screen and (max-width: 525px) { /* When viewport is <= the size */
   #wrapper { width: 525px; }
   .m-grid-1-1 { width: 100%; }
   .m-grid-1-2 { width: calc(100% / 2); }

@@ -1066,7 +1066,7 @@ sub _getInfoBtn {
     my ($self,$key,$val,$content) = @_;
 
     return <<EOF
-<div class="floatL m-grid-1-1">
+<div class="info-btn-div floatL m-grid-1-1">
   <button id="info-btn-$key" type="button" class="info-btn floatL"
           onclick="togInfoBtn('$key');">
     $val
