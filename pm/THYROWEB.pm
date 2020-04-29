@@ -497,8 +497,11 @@ EOF
     my $sliders = <<EOF
 <div class="container slider-row"
      onmouseover="toggle('hilite1',1);" onmouseout="toggle('hilite1',1);">
-  <div class="grid-2-5">
-    T<span class="textsub">4</span> Secretion (0-200%):
+  <div class="grid-1-5">
+    T<span class="textsub">4</span> Secretion
+  </div>
+  <div class="grid-1-5 pad-l-uem">
+    (0-200%):
   </div>
   <div class="grid-1-5">
     <input type="text" id="dialinput1" name="dialinput1"> %
@@ -510,8 +513,11 @@ EOF
 
 <div class="container slider-row"
      onmouseover="toggle('hilite2',1);" onmouseout="toggle('hilite2',1);">
-  <div class="grid-2-5">
-    T<span class="textsub">4</span> Absorption (0-100%):
+  <div class="grid-1-5">
+    T<span class="textsub">4</span> Absorption
+  </div>
+  <div class="grid-1-5 pad-l-uem">
+    (0-100%):
   </div>
   <div class="grid-1-5">
     <input type="text" id="dialinput2" name="dialinput2"> %
@@ -523,8 +529,11 @@ EOF
 
 <div class="container slider-row"
      onmouseover="toggle('hilite3',1);" onmouseout="toggle('hilite3',1);">
-  <div class="grid-2-5">
-    T<span class="textsub">3</span> Secretion (0-200%):
+  <div class="grid-1-5">
+    T<span class="textsub">3</span> Secretion
+  </div>
+  <div class="grid-1-5 pad-l-uem">
+    (0-200%):
   </div>
   <div class="grid-1-5">
     <input type="text" id="dialinput3" name="dialinput3"> %
@@ -536,8 +545,11 @@ EOF
 
 <div class="container slider-row"
      onmouseover="toggle('hilite4',1);" onmouseout="toggle('hilite4',1);">
-  <div class="grid-2-5">
-    T<span class="textsub">3</span> Absorption (0-100%):
+  <div class="grid-1-5">
+    T<span class="textsub">3</span> Absorption
+  </div>
+  <div class="grid-1-5 pad-l-uem">
+    (0-100%):
   </div>
   <div class="grid-1-5">
     <input type="text" id="dialinput4" name="dialinput4"> %

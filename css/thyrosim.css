@@ -118,6 +118,7 @@ input[type=checkbox] {
 .pad-t-2em { padding-top: 2em; }
 .pad-b-1em { padding-bottom: 1em; }
 .pad-b-2em { padding-bottom: 2em; }
+.pad-l-uem { padding-left: 0.625em; } /* u for unit */
 .textcenter { text-align: center; }
 .title { font-size: 1.2em; }
 .width-100 { width: 100%; }
