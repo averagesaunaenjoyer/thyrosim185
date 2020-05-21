@@ -35,6 +35,13 @@ sub new {
     bless $self, $class;
 
     #--------------------------------------------------
+    # Commonly used variables
+    #--------------------------------------------------
+
+    $self->{T3} = $self->supsub("T","","3");
+    $self->{T4} = $self->supsub("T","","4");
+
+    #--------------------------------------------------
     # Post-bless initializations
     #--------------------------------------------------
 
@@ -106,11 +113,10 @@ sub initExamples {
     $self->{experiments}->{'experiment-DiJo19-1'} = {
         name    => 'experiment-DiJo19-1',
         bold    => 'The DiStefano-Jonklaas 2019 Example-1',
-        text    => 'reproduces Figure 1 of the DiStefano-Jonklaas 2019 paper.
+        text    => "reproduces Figure 1 of the DiStefano-Jonklaas 2019 paper.
                     Specifically, the simulated hypothyroidic individual (25%
-                    thyroid function) is given 123 &micro;g
-                    T<span class="textsub">4</span> and 6.5 &micro;g
-                    T<span class="textsub">3</span> daily for 30 days.',
+                    thyroid function) is given 123 &micro;g $self->{T4} and 6.5
+                    &micro;g $self->{T3} daily for 30 days.",
         img     => '../img/experiment-DiJo19-1.png',
         alt     => 'DiStefano-Jonklass Example 1',
     };
@@ -152,14 +158,10 @@ Minimum Usage:
     To see normal thyroid hormone behavior: click "Simulate".
   </li>
   <li>
-    To simulate hypo/hyperthyroidism: change
-    T<span class="textsub">3</span>/T<span class="textsub">4</span>
-    secretion.
+    To simulate hypo/hyperthyroidism: change $self->{T3}/$self->{T4} secretion.
   </li>
   <li>
-    To modify oral input absorption: change
-    T<span class="textsub">3</span>/T<span class="textsub">4</span>
-    absorption.
+    To modify oral input absorption: change $self->{T3}/$self->{T4} absorption.
   </li>
   <li>
     Simulate treatment options:
@@ -534,12 +536,8 @@ EOF
     my $sliders = <<EOF
 <div class="container slider-row"
      onmouseover="toggle('hilite1',1);" onmouseout="toggle('hilite1',1);">
-  <div class="grid-13-60">
-    T<span class="textsub">4</span> Secretion
-  </div>
-  <div class="grid-11-60">
-    (0-200%):
-  </div>
+  <div class="grid-13-60">$self->{T4} Secretion</div>
+  <div class="grid-11-60">(0-200%):</div>
   <div class="grid-1-5">
     <input type="text" id="dialinput1" name="dialinput1"> %
   </div>
@@ -550,12 +548,8 @@ EOF
 
 <div class="container slider-row"
      onmouseover="toggle('hilite2',1);" onmouseout="toggle('hilite2',1);">
-  <div class="grid-13-60">
-    T<span class="textsub">4</span> Absorption
-  </div>
-  <div class="grid-11-60">
-    (0-100%):
-  </div>
+  <div class="grid-13-60">$self->{T4} Absorption</div>
+  <div class="grid-11-60">(0-100%):</div>
   <div class="grid-1-5">
     <input type="text" id="dialinput2" name="dialinput2"> %
   </div>
@@ -566,12 +560,8 @@ EOF
 
 <div class="container slider-row"
      onmouseover="toggle('hilite3',1);" onmouseout="toggle('hilite3',1);">
-  <div class="grid-13-60">
-    T<span class="textsub">3</span> Secretion
-  </div>
-  <div class="grid-11-60">
-    (0-200%):
-  </div>
+  <div class="grid-13-60">$self->{T3} Secretion</div>
+  <div class="grid-11-60">(0-200%):</div>
   <div class="grid-1-5">
     <input type="text" id="dialinput3" name="dialinput3"> %
   </div>
@@ -582,12 +572,8 @@ EOF
 
 <div class="container slider-row"
      onmouseover="toggle('hilite4',1);" onmouseout="toggle('hilite4',1);">
-  <div class="grid-13-60">
-    T<span class="textsub">3</span> Absorption
-  </div>
-  <div class="grid-11-60">
-    (0-100%):
-  </div>
+  <div class="grid-13-60">$self->{T3} Absorption</div>
+  <div class="grid-11-60">(0-100%):</div>
   <div class="grid-1-5">
     <input type="text" id="dialinput4" name="dialinput4"> %
   </div>
@@ -745,10 +731,7 @@ $paramEditor
       </div>
 
       <div class="container textcenter pad-t-1em">
-        Add
-        T<span class="textsub">3</span> and
-        T<span class="textsub">4</span> inputs
-        to adjust quantity and frequency:
+        Add $self->{T3} and $self->{T4} inputs to adjust quantity and frequency:
       </div>
 
       <div id="input-manager" class="container pad-t-1em"></div>
@@ -878,12 +861,8 @@ sub getFooter {
             advanced users. Function available upon request.
           </li>
           <li>
-            January 2019: Added
-            Free T<span class="textsub">4</span> and
-            Free T<span class="textsub">3</span> alternatives to Total
-            T<span class="textsub">4</span> and
-            T<span class="textsub">3</span>
-            (Toggle: Free Hormone Values)
+            January 2019: Added Free $self->{T4} and $self->{T3} alternatives to
+            Total $self->{T4} and $self->{T3} (Toggle: Free/Total Hormone).
           </li>
         </ol>
 
@@ -1095,11 +1074,12 @@ sub getHormoneMenu {
     my ($self,$h) = @_;
 
     my $s = $self->{hormoneMenu}->{$h}; # Shorthand
+    my $H = $self->supsub("T","",$s->{num}); # Hormone
 
     return <<EOF
 <div id="$s->{head_id}" class="T-menu-head">
   <button type="button" onclick="togHormoneMenu('$s->{menu_id}');">
-    T<span class="textsub">$s->{num}</span><i class="arrow arrow-u"></i>Inputs
+    $H<i class="arrow arrow-u"></i>Inputs
   </button>
 </div>
 <div id="$s->{menu_id}" class="T-menu show">
@@ -1117,6 +1097,24 @@ sub getHormoneMenu {
   </button>
 </div>
 EOF
+}
+
+#====================================================================
+# SUBROUTINE:   supsub
+# DESCRIPTION:
+#   Generate html for both superscript and subscript. We use a hidden span to
+#   guarantee spacing because supsub uses position: relative.
+#====================================================================
+sub supsub {
+    my ($self,$var,$sup,$sub) = @_;
+    $sup = "" if !$sup;
+    $sub = "" if !$sub;
+    my $hid = length($sup) > length($sub) ? $sup : $sub;
+    return "<span class=\"supsub\">$var"
+        .  "  <sup>$sup</sup>"
+        .  "  <sub>$sub</sub>"
+        .  "  <span class=\"hidden\">$hid</span>"
+        .  "</span>";
 }
 
 #====================================================================

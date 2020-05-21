@@ -1,4 +1,7 @@
 Change log
+2020-05-21
+1. Added method to display variables that have both superscript and subscript.
+
 2020-04-29
 1. Changed ThyrosimJr p48/VTSH to 2.3.
 

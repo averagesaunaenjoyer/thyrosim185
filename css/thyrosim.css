@@ -463,6 +463,25 @@ input[type=checkbox] {
   color: #721c24;
 }
 
+/* Superscript and subscript */
+.supsub {
+  display: inline-block;
+  margin-right: -0.1em;
+  position: relative;
+}
+.supsub sup, .supsub sub, .supsub .hidden {
+  font-size: 0.7em;
+}
+.supsub .hidden { /* Hidden span to keep width */
+  visibility: hidden;
+}
+.supsub sup, .supsub sub {
+  left: 0.85em;
+  position: absolute;
+}
+.supsub sup { top:    -0.2em; }
+.supsub sub { bottom: -0.1em; }
+
 /* Miscellaneous */
 .follow { /* Display a waiting message box */
   background-color: #d6d8d9;
@@ -481,11 +500,6 @@ input[type=checkbox] {
 }
 .follow span {
   margin: 0.6em 0 0 0.45em;
-}
-.textsub { /* Subscript */
-  font-size: 0.7em;
-  position: relative;
-  top: 0.2em;
 }
 .button-row {
   height: 2.125em;
