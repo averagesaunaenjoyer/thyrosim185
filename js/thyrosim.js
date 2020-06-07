@@ -608,10 +608,10 @@ function ThyrosimGraph() {
         T4: {
             comp: '1',
             unit: '\u03BCg/L', // mcg
-            ymin: { Thyrosim: 110, ThyrosimJr: 110 },
+            ymin: { Thyrosim: 110, ThyrosimJr: 120 },
             bounds: {
-                Thyrosim:   { lo: 45,   hi: 105 },
-                ThyrosimJr: { lo: 62.4, hi: 110 },
+                Thyrosim:   { lo: 45, hi: 105 },
+                ThyrosimJr: { lo: 59, hi: 119 },
             }
         },
         T3: {
@@ -619,17 +619,17 @@ function ThyrosimGraph() {
             unit: '\u03BCg/L', // mcg
             ymin: { Thyrosim: 1, ThyrosimJr: 2 },
             bounds: {
-                Thyrosim:   { lo: 0.6,  hi: 1.8  },
-                ThyrosimJr: { lo: 1.24, hi: 2.15 },
+                Thyrosim:   { lo: 0.6, hi: 1.8  },
+                ThyrosimJr: { lo: 1,   hi: 2.15 },
             }
         },
         TSH: {
             comp: '7',
             unit: 'mU/L',
-            ymin: { Thyrosim: 4, ThyrosimJr: 3 },
+            ymin: { Thyrosim: 4, ThyrosimJr: 4 },
             bounds: {
-                Thyrosim:   { lo: 0.4,  hi: 4    },
-                ThyrosimJr: { lo: 0.72, hi: 3.31 },
+                Thyrosim:   { lo: 0.4, hi: 4 },
+                ThyrosimJr: { lo: 0.6, hi: 4 },
             }
         },
     };

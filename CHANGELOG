@@ -1,4 +1,9 @@
 Change log
+2020-06-07
+1. Changed ThyrosimJr T4 normal range to 59-119.
+2. Changed ThyrosimJr T3 normal range to 1-2.15.
+3. Changed ThyrosimJr TSH normal range to 0.6-4.
+
 2020-05-21
 1. Added method to display variables that have both superscript and subscript.
 
