@@ -76,7 +76,7 @@ html, body {
   font-size: 100%;
 }
 input[type=text] {
-  width: 65%;
+  width: 62%;
 }
 textarea {
   width: 100%;
@@ -766,13 +766,13 @@ footer {
 }
 .paramcol {
   float: left;
-  font-size: 0.7em;
+  font-size: 0.8em;
   width: 33%;
 }
-.paramcol span {
+.paramcol .paramval {
   display: inline-block;
   text-align: right;
-  width: 30%;
+  width: 33%;
 }
 #paramtextarea {
   font-size: 0.7em;

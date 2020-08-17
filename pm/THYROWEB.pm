@@ -25,13 +25,6 @@ sub new {
     $self->{ts} = $params{THYROSIM};
     $self->{advanced} = $params{advanced} // 0;
 
-    #--------------------------------------------------
-    # Parameter display names
-    #--------------------------------------------------
-
-    $self->{param}->{p47} = "Vp";
-    $self->{param}->{p48} = "VTSH";
-
     bless $self, $class;
 
     #--------------------------------------------------
@@ -40,6 +33,45 @@ sub new {
 
     $self->{T3} = $self->supsub("T","","3");
     $self->{T4} = $self->supsub("T","","4");
+
+    #--------------------------------------------------
+    # Parameter display names
+    #--------------------------------------------------
+
+    $self->{param}->{kdelay} = $self->supsub("k","","delay");
+#--------------------------------------------------
+#     $self->{param}->{p1}  = $self->supsub("S","","4");
+#     $self->{param}->{p2}  = '&tau;';
+#     $self->{param}->{p3}  = $self->supsub("k","","12");
+#     $self->{param}->{p4}  = $self->supsub("k","","13");
+#     $self->{param}->{p5}  = $self->supsub("k","free","31");
+#     $self->{param}->{p6}  = $self->supsub("k","free","21");
+#     $self->{param}->{p7}  = 'A';
+#     $self->{param}->{p8}  = 'B';
+#     $self->{param}->{p9}  = 'C';
+#     $self->{param}->{p10} = 'D';
+#     $self->{param}->{p11} = $self->supsub("k","absorb","4");
+#     $self->{param}->{p12} = $self->supsub("k","","02");
+#     $self->{param}->{p13} = $self->supsub("v","D1fast","max");
+#     $self->{param}->{p14} = $self->supsub("K","D1fast","m");
+#     $self->{param}->{p15} = $self->supsub("v","D1slow","max");
+#     $self->{param}->{p16} = $self->supsub("K","D1slow","m");
+#     $self->{param}->{p17} = $self->supsub("v","D2slow","max");
+#     $self->{param}->{p18} = $self->supsub("K","D2slow","m");
+#     $self->{param}->{p19} = $self->supsub("S","","3");
+#     $self->{param}->{p20} = $self->supsub("k","","45");
+#     $self->{param}->{p21} = $self->supsub("k","","46");
+#     $self->{param}->{p22} = $self->supsub("k","free","64");
+#     $self->{param}->{p23} = $self->supsub("k","free","54");
+#     $self->{param}->{p24} = 'a';
+#     $self->{param}->{p25} = 'b';
+#     $self->{param}->{p26} = 'c';
+#     $self->{param}->{p27} = 'd';
+#     $self->{param}->{p28} = $self->supsub("k","absorb","3");
+#-------------------------------------------------- 
+
+    $self->{param}->{p47} = $self->supsub("V","","p");
+    $self->{param}->{p48} = $self->supsub("V","","TSH");
 
     #--------------------------------------------------
     # Post-bless initializations
@@ -976,7 +1008,7 @@ sub printParams {
         $mod++;
     }
     $snp .= <<EOF
-<textarea placeholder="$pht" id="paramtextarea" rows="9"></textarea>
+<textarea placeholder="$pht" id="paramtextarea" rows="5"></textarea>
 <div class="container button-row">
   <button class='btn btn-teal' type='button' onclick='saveParams();'>Save Params</button>
   <button class='btn btn-teal' type='button' onclick='loadParams();'>Load Params</button>
@@ -995,7 +1027,7 @@ sub getParamInput {
     my ($self,$p,$v) = @_;
     my $param = $self->{param}->{$p} // $p;
     return <<EOF
-<span>$param:</span>
+<span class="paramval">$param:</span>
 <input type="text" id="$p" name="$p" value="$v">
 EOF
 }
