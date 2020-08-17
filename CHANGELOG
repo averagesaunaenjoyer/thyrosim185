@@ -1,4 +1,7 @@
 Change log
+2020-08-17
+1. Changed T4 and T3 maximum secretion from 200% to 125%.
+
 2020-06-07
 1. Changed ThyrosimJr T4 normal range to 59-119.
 2. Changed ThyrosimJr T3 normal range to 1-2.15.
@@ -15,6 +18,9 @@ Change log
 
 2020-04-18
 1. Updated ThyrosimJr normal ranges.
+
+2020-01-08
+1. Thyrosim set to version 3.0.
 
 2019-12-13
 1. The UI (simtime, dials, inputs) now match the experiment run.

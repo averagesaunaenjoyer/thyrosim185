@@ -1306,9 +1306,9 @@ function animation() {
 //          4: T3 Absorption
 //===================================================================
 var sliderObj = {
-    '1':{'min':0,'max':200,'value':100,'range':'min','animate':'fast'},
+    '1':{'min':0,'max':125,'value':100,'range':'min','animate':'fast'},
     '2':{'min':0,'max':100,'value':88, 'range':'min','animate':'fast'},
-    '3':{'min':0,'max':200,'value':100,'range':'min','animate':'fast'},
+    '3':{'min':0,'max':125,'value':100,'range':'min','animate':'fast'},
     '4':{'min':0,'max':100,'value':88, 'range':'min','animate':'fast'}
 };
 

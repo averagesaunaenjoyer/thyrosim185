@@ -569,7 +569,7 @@ EOF
 <div class="container slider-row"
      onmouseover="toggle('hilite1',1);" onmouseout="toggle('hilite1',1);">
   <div class="grid-13-60">$self->{T4} Secretion</div>
-  <div class="grid-11-60">(0-200%):</div>
+  <div class="grid-11-60">(0-125%):</div>
   <div class="grid-1-5">
     <input type="text" id="dialinput1" name="dialinput1"> %
   </div>
@@ -593,7 +593,7 @@ EOF
 <div class="container slider-row"
      onmouseover="toggle('hilite3',1);" onmouseout="toggle('hilite3',1);">
   <div class="grid-13-60">$self->{T3} Secretion</div>
-  <div class="grid-11-60">(0-200%):</div>
+  <div class="grid-11-60">(0-125%):</div>
   <div class="grid-1-5">
     <input type="text" id="dialinput3" name="dialinput3"> %
   </div>
