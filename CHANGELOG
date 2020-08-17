@@ -12,6 +12,7 @@ Change log
 
 2020-04-29
 1. Changed ThyrosimJr p48/VTSH to 2.3.
+2. Added PROJECTS info button.
 
 2020-04-28
 1. Parameter editor can now load/save using JSON.
