@@ -296,6 +296,13 @@ Information provided is not a substitute for medical advice and you should
 contact your doctor regarding any medical conditions or medical questions that
 you have.
 
+<br>
+<br>
+
+$self->{T4} and $self->{T3} secretion are capped at 125% because the model is
+not validated for hyperthyroid conditions.
+
+
 EOF
     };
 }
