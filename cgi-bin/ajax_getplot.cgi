@@ -141,6 +141,11 @@ print JSON::Syck::Dump($browserObj);
 # $thsim->printCompResults($reslog,"t","1","4","7","ft4","ft3");
 #-------------------------------------------------- 
 
+#--------------------------------------------------
+# my $reslog = $ENV{DOCUMENT_ROOT}."/$F_ROOT/tmp/reslog";
+# $thsim->printInitialConditions($reslog);
+#-------------------------------------------------- 
+
 # Print objects to log
 #--------------------------------------------------
 # my $log = $ENV{DOCUMENT_ROOT}."/$F_ROOT/tmp/log";

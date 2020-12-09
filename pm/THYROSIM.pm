@@ -113,26 +113,26 @@ sub new {
     $self->{ICKey}->{Thyrosim}->{1000088010000880}->{19} = 3.55364471589659;
 
     # Thysim: ThyrosimJr
-    # Calculated by Simon Han using Thyrosim's SS
-    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{1}  = 0.09374997165528334;
-    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{2}  = 0.12327377103697522;
-    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{3}  = 0.13076884496615795;
-    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{4}  = 0.003737105895366619;
-    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{5}  = 0.005647605690886433;
-    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{6}  = 0.0381258296681322;
-    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{7}  = 0.6854188695057679;
-    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{8}  = 7.50672575320393;
-    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{9}  = 7.5062287694075875;
+    # Calculated by Simon Han using updated parameters from Aaron et al.
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{1}  = 0.11211606146665616;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{2}  = 0.14951877955459614;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{3}  = 0.16047235104602794;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{4}  = 0.0025330855721189993;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{5}  = 0.0048376677790169294;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{6}  = 0.03491873001264855;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{7}  = 1.6238788774804438;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{8}  = 6.662618845399546;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{9}  = 6.662539424598554;
     $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{10} = 0;
     $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{11} = 0;
     $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{12} = 0;
     $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{13} = 0;
-    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{14} = 1.3188108472954458;
-    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{15} = 1.4914848785095203;
-    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{16} = 1.5965449597371968;
-    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{17} = 1.629073258562129;
-    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{18} = 1.5956853645161484;
-    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{19} = 1.5115673448144067;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{14} = 3.1361522331058156;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{15} = 3.55890144328925;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{16} = 3.8203390098846306;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{17} = 3.906321897554962;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{18} = 3.8312641499591105;
+    $self->{ICKey}->{ThyrosimJr}->{1000088010000880}->{19} = 3.6311814309761647;
 
     #--------------------------------------------------
     # Define input types and hormones
@@ -1241,6 +1241,30 @@ sub printCompResults {
             push(@row,$v);
         }
         say $fh join("\t",@row);
+    }
+
+    close $fh;
+}
+
+#====================================================================
+# SUBROUTINE:   printInitialConditions
+# DESCRIPTION:
+#   Print initial conditions to $file.
+# NOTES:
+#   The last ICs are also the end values of the run. If t is long enough and
+#   divisible by 24 hours, then these are the SS values.
+#====================================================================
+sub printInitialConditions {
+    my ($self,$file) = @_;
+
+    open my $fh, '>', $file;
+
+    # Iterate over all i runs and all compartments
+    foreach my $i (sort {$a <=> $b} keys %{$self->{IC}}) {
+        say $fh "Current iteration: $i";
+        foreach my $q (sort {$a <=> $b} keys %{$self->{IC}->{$i}}) {
+            say $fh "    Comp $q:\t".$self->{IC}->{$i}->{$q};
+        }
     }
 
     close $fh;
