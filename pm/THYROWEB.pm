@@ -167,7 +167,6 @@ sub initInfoBtns {
         key     => 'About',
         val     => 'DIRECTIONS',
         content => <<EOF
-
 <span style="color:red">$self->{thysimD}</span> is a tool for simulating a
 well-validated human thyroid hormone (TH) feedback regulation system model*.
 
@@ -242,7 +241,6 @@ Features:
     icon: hover mouse over to see additional info.
   </li>
 </ol>
-
 EOF
     };
 
@@ -256,7 +254,6 @@ EOF
         key     => 'Project',
         val     => 'PROJECTS',
         content => <<EOF
-
 The main Thyroid Simulator.
 <ul>
   <li>
@@ -302,7 +299,11 @@ you have.
 $self->{T4} and $self->{T3} secretion are capped at 125% because the model is
 not validated for hyperthyroid conditions.
 
+<br>
+<br>
 
+The full implemented Thyrosim model (ver. Dec 2015) is described
+<a target="_blank" href="../resource/Thyrosim-20151206.pdf">here</a>.
 EOF
     };
 }
