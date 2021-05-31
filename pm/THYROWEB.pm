@@ -31,47 +31,62 @@ sub new {
     # Commonly used variables
     #--------------------------------------------------
 
-    $self->{T3} = $self->supsub("T","","3");
-    $self->{T4} = $self->supsub("T","","4");
+    $self->{T3} = $self->supsub('T','','3');
+    $self->{T4} = $self->supsub('T','','4');
 
     #--------------------------------------------------
     # Parameter display names
     #--------------------------------------------------
 
-    $self->{param}->{kdelay} = $self->supsub("k","","delay");
-#--------------------------------------------------
-#     $self->{param}->{p1}  = $self->supsub("S","","4");
-#     $self->{param}->{p2}  = '&tau;';
-#     $self->{param}->{p3}  = $self->supsub("k","","12");
-#     $self->{param}->{p4}  = $self->supsub("k","","13");
-#     $self->{param}->{p5}  = $self->supsub("k","free","31");
-#     $self->{param}->{p6}  = $self->supsub("k","free","21");
-#     $self->{param}->{p7}  = 'A';
-#     $self->{param}->{p8}  = 'B';
-#     $self->{param}->{p9}  = 'C';
-#     $self->{param}->{p10} = 'D';
-#     $self->{param}->{p11} = $self->supsub("k","absorb","4");
-#     $self->{param}->{p12} = $self->supsub("k","","02");
-#     $self->{param}->{p13} = $self->supsub("v","D1fast","max");
-#     $self->{param}->{p14} = $self->supsub("K","D1fast","m");
-#     $self->{param}->{p15} = $self->supsub("v","D1slow","max");
-#     $self->{param}->{p16} = $self->supsub("K","D1slow","m");
-#     $self->{param}->{p17} = $self->supsub("v","D2slow","max");
-#     $self->{param}->{p18} = $self->supsub("K","D2slow","m");
-#     $self->{param}->{p19} = $self->supsub("S","","3");
-#     $self->{param}->{p20} = $self->supsub("k","","45");
-#     $self->{param}->{p21} = $self->supsub("k","","46");
-#     $self->{param}->{p22} = $self->supsub("k","free","64");
-#     $self->{param}->{p23} = $self->supsub("k","free","54");
-#     $self->{param}->{p24} = 'a';
-#     $self->{param}->{p25} = 'b';
-#     $self->{param}->{p26} = 'c';
-#     $self->{param}->{p27} = 'd';
-#     $self->{param}->{p28} = $self->supsub("k","absorb","3");
-#-------------------------------------------------- 
-
-    $self->{param}->{p47} = $self->supsub("V","","p");
-    $self->{param}->{p48} = $self->supsub("V","","TSH");
+    $self->{param}->{kdelay} = $self->supsub('k','','delay');
+    $self->{param}->{p1}  = $self->supsub('S','','4');
+    $self->{param}->{p2}  = '&#120591;'; # math italic tau
+    $self->{param}->{p3}  = $self->supsub('k','','12');
+    $self->{param}->{p4}  = $self->supsub('k','','13');
+    $self->{param}->{p5}  = $self->supsub('k','free','31');
+    $self->{param}->{p6}  = $self->supsub('k','free','21');
+    $self->{param}->{p7}  = $self->supsub('A','','&#8201;');
+    $self->{param}->{p8}  = $self->supsub('B','','&#8201;');
+    $self->{param}->{p9}  = $self->supsub('C','','&#8201;');
+    $self->{param}->{p10} = $self->supsub('D','','&#8201;');
+    $self->{param}->{p11} = $self->supsub('k','absorb','4');
+    $self->{param}->{p12} = $self->supsub('k','','02');
+    $self->{param}->{p13} = $self->supsub('v','D1fast','max');
+    $self->{param}->{p14} = $self->supsub('K','D1fast','m');
+    $self->{param}->{p15} = $self->supsub('v','D1slow','max');
+    $self->{param}->{p16} = $self->supsub('K','D1slow','m');
+    $self->{param}->{p17} = $self->supsub('v','D2slow','max');
+    $self->{param}->{p18} = $self->supsub('K','D2slow','m');
+    $self->{param}->{p19} = $self->supsub('S','','3');
+    $self->{param}->{p20} = $self->supsub('k','','45');
+    $self->{param}->{p21} = $self->supsub('k','','46');
+    $self->{param}->{p22} = $self->supsub('k','free','64');
+    $self->{param}->{p23} = $self->supsub('k','free','54');
+    $self->{param}->{p24} = $self->supsub('a','','&#8201;');
+    $self->{param}->{p25} = $self->supsub('b','','&#8201;');
+    $self->{param}->{p26} = $self->supsub('c','','&#8201;');
+    $self->{param}->{p27} = $self->supsub('d','','&#8201;');
+    $self->{param}->{p28} = $self->supsub('k','absorb','3');
+    $self->{param}->{p29} = $self->supsub('k','','05');
+    $self->{param}->{p30} = $self->supsub('B','','0');
+    $self->{param}->{p31} = $self->supsub('A','','0');
+    $self->{param}->{p32} = $self->supsub('A','','max');
+    $self->{param}->{p33} = '&#120601;'; # math italic phi
+    $self->{param}->{p34} = $self->supsub('k','HYPO','degTSH');
+    $self->{param}->{p35} = $self->supsub('V','TSH','max');
+    $self->{param}->{p36} = $self->supsub('K','TSH','50');
+    $self->{param}->{p37} = $self->supsub('k','','3');
+    $self->{param}->{p38} = $self->supsub('T','EU','4P');
+    $self->{param}->{p39} = $self->supsub('T','EU','3P');
+    $self->{param}->{p40} = $self->supsub('k','T3B','deg');
+    $self->{param}->{p41} = $self->supsub('k','HYPO','LAG');
+    $self->{param}->{p42} = $self->supsub('K','','LAG');
+    $self->{param}->{p43} = $self->supsub('k','dissolve','4');
+    $self->{param}->{p44} = $self->supsub('k','excrete','4');
+    $self->{param}->{p45} = $self->supsub('k','dissolve','3');
+    $self->{param}->{p46} = $self->supsub('k','excrete','3');
+    $self->{param}->{p47} = $self->supsub('V','','p');
+    $self->{param}->{p48} = $self->supsub('V','','TSH');
 
     #--------------------------------------------------
     # Post-bless initializations
@@ -94,23 +109,23 @@ sub initDisplay {
     my ($self) = @_;
 
     # Thyrosim
-    if ($self->{ts}->{thysim} eq "Thyrosim") {
-        $self->{thysim}  = "Thyrosim";
-        $self->{thysimD} = "THYROSIM";
-        $self->{headerstyle} = "";
+    if ($self->{ts}->{thysim} eq 'Thyrosim') {
+        $self->{thysim}  = 'Thyrosim';
+        $self->{thysimD} = 'THYROSIM';
+        $self->{headerstyle} = '';
         $self->{examples} = ['experiment-default','experiment-DiJo19-1'];
     }
 
     # ThyrosimJr
-    if ($self->{ts}->{thysim} eq "ThyrosimJr") {
-        $self->{thysim}  = "ThyrosimJr";
-        $self->{thysimD} = "THYROSIM Jr";
-        $self->{headerstyle} = "background-color: #CCFFE5";
+    if ($self->{ts}->{thysim} eq 'ThyrosimJr') {
+        $self->{thysim}  = 'ThyrosimJr';
+        $self->{thysimD} = 'THYROSIM Jr';
+        $self->{headerstyle} = 'background-color: #CCFFE5';
         $self->{examples} = ['experiment-default-jr'];
     }
 
     # Advanced
-    $self->{thysimD} .= " Advanced" if $self->{advanced};
+    $self->{thysimD} .= ' Advanced' if $self->{advanced};
 }
 
 #====================================================================
@@ -546,8 +561,8 @@ sub getMain {
     my $menuT4 = $self->getHormoneMenu('T4');
 
     # Parameter list only for advanced
-    my $paramList = "";
-    my $paramTogg = "";
+    my $paramList = '';
+    my $paramTogg = '';
     if ($self->{advanced}) {
         $paramList = $self->printParams();
         $paramTogg = <<EOF
@@ -961,7 +976,7 @@ EOF
 #====================================================================
 sub insertExamples {
     my ($self) = @_;
-    my $snp = "";
+    my $snp = '';
     foreach my $key (@{$self->{examples}}) {
         $snp .= $self->insertExample($self->{experiments}->{$key});
     }
@@ -1001,17 +1016,17 @@ EOF
 #====================================================================
 sub printParams {
     my ($self) = @_;
-    my $pht = "Parameters here."; # Placeholder text
-    my $snp = "";
-    my $tmp = "";
+    my $pht = 'Parameters here.'; # Placeholder text
+    my $snp = '';
+    my $tmp = '';
     my $mod = 3; # Want kdelay to be in its own row
     foreach my $p (@{$self->{ts}->sortParams()}) {
-        $tmp .= "<div class=\"paramcol\">"
+        $tmp .= '<div class="paramcol">'
              .  $self->getParamInput($p,$self->{ts}->{params}->{$p})
-             .  "</div>";
+             .  '</div>';
         if ($mod % 3 == 0) { # 3 per row
             $snp .= "<div class=\"paramrow\">$tmp</div>";
-            $tmp = "";
+            $tmp = '';
         }
         $mod++;
     }
@@ -1048,13 +1063,13 @@ EOF
 #====================================================================
 sub juniorAcknowledge {
     my ($self) = @_;
-    if ($self->{thysim} eq "ThyrosimJr") {
-        return "<li>"
-             . "  Junior Model by Doug Dang, Aaron Hui, Sandy Kim,"
-             . "  and Amanda Tsao"
-             . "</li>";
+    if ($self->{thysim} eq 'ThyrosimJr') {
+        return '<li>'
+             . '  Junior Model by Doug Dang, Aaron Hui, Sandy Kim,'
+             . '  and Amanda Tsao'
+             . '</li>';
     }
-    return "";
+    return '';
 }
 
 #====================================================================
@@ -1114,7 +1129,7 @@ sub getHormoneMenu {
     my ($self,$h) = @_;
 
     my $s = $self->{hormoneMenu}->{$h}; # Shorthand
-    my $H = $self->supsub("T","",$s->{num}); # Hormone
+    my $H = $self->supsub('T','',$s->{num}); # Hormone
 
     return <<EOF
 <div id="$s->{head_id}" class="T-menu-head">
@@ -1147,14 +1162,14 @@ EOF
 #====================================================================
 sub supsub {
     my ($self,$var,$sup,$sub) = @_;
-    $sup = "" if !$sup;
-    $sub = "" if !$sub;
+    $sup = '' if !defined $sup;
+    $sub = '' if !defined $sub;
     my $hid = length($sup) > length($sub) ? $sup : $sub;
     return "<span class=\"supsub\">$var"
         .  "  <sup>$sup</sup>"
         .  "  <sub>$sub</sub>"
         .  "  <span class=\"hidden\">$hid</span>"
-        .  "</span>";
+        .  '</span>';
 }
 
 #====================================================================

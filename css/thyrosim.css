@@ -466,6 +466,7 @@ input[type=checkbox] {
 /* Superscript and subscript */
 .supsub {
   display: inline-block;
+  font-style: italic;
   margin-right: -0.1em;
   position: relative;
 }
