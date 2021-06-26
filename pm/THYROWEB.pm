@@ -361,7 +361,11 @@ sub initHormoneMenu {
 #====================================================================
 # SUBROUTINE:   ga
 # DESCRIPTION:
-#   Google Analytics code.
+#   Google Analytics (ga) code.
+#
+#   ga:         Old ga code.
+#   ga1:        New ga code part 1. Unable to add 'async' with Perl CGI.
+#   ga2:        New ga code part 2.
 #====================================================================
 sub ga {
     return <<END
@@ -372,6 +376,30 @@ sub ga {
 
   ga('create', 'UA-69059862-1', 'auto');
   ga('send', 'pageview');
+END
+}
+# Google Analytics code we are trying to produce:
+#--------------------------------------------------
+# <!-- Global site tag (gtag.js) - Google Analytics -->
+# <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69059862-1"></script>
+# <script>
+#   window.dataLayer = window.dataLayer || [];
+#   function gtag(){dataLayer.push(arguments);}
+#   gtag('js', new Date());
+# 
+#   gtag('config', 'UA-69059862-1');
+# </script>
+#-------------------------------------------------- 
+sub ga1 {
+    return 'https://www.googletagmanager.com/gtag/js?id=UA-69059862-1'
+}
+sub ga2 {
+    return <<END
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-69059862-1');
 END
 }
 
@@ -397,7 +425,7 @@ sub getHead {
     -href => '../favicon.ico'
 }),
 -style => {
-    'src'           => [
+    'src' => [
         '../css/ui-lightness/jquery-ui.min.css',
         '../css/thyrosim.css',
     ]
@@ -426,7 +454,11 @@ sub getHead {
     },
     {
         -type => 'text/javascript',
-        -code => $self->ga()
+        -src  => $self->ga1()
+    },
+    {
+        -type => 'text/javascript',
+        -code => $self->ga2()
     },
 ],
 -onload => '',
