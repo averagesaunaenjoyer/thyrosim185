@@ -152,4 +152,5 @@ print JSON::Syck::Dump($browserObj);
 # $thsim->printToLog($log,$thsim->{input},$thsim->{inputTime});
 # $thsim->printToLog($log,\%ENV);
 # $thsim->printToLog($log,$thsim->{params});
+# $thsim->printToLog($log,$thsim->{CF});
 #-------------------------------------------------- 
