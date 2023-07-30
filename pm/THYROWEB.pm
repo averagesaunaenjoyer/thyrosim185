@@ -874,7 +874,7 @@ sub getFooter {
 
   <!-- Container (top) -->
   <div class="container textcenter pad-t-1em">
-    <b>$self->{thysimD} 3.0</b> &copy; 2013 by
+    <b>$self->{thysimD} 3.1</b> &copy; 2013 by
     <a href="http://biocyb0.cs.ucla.edu/wp/"
        target="_blank">UCLA Biocybernetics Laboratory</a>
   </div>

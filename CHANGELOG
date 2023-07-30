@@ -1,4 +1,9 @@
 Change log
+2023-07-29
+1. Changed Thyrosim FT3 normal range to 2.22 - 3.83 ng/L.
+2. Changed Thyrosim TSH normal range to 0.3 - 4 mU/L.
+3. Thyrosim set to version 3.1.
+
 2021-10-08
 1. Fixed parameters column width for Firefox.
 

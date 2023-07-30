@@ -601,7 +601,7 @@ function ThyrosimGraph() {
             unit: 'ng/L',
             ymin: { Thyrosim: 4, ThyrosimJr: 7 },
             bounds: {
-                Thyrosim:   { lo: 2.2,  hi: 4.4  },
+                Thyrosim:   { lo: 2.22, hi: 3.83 },
                 ThyrosimJr: { lo: 2.32, hi: 7.07 },
             }
         },
@@ -628,7 +628,7 @@ function ThyrosimGraph() {
             unit: 'mU/L',
             ymin: { Thyrosim: 4, ThyrosimJr: 4 },
             bounds: {
-                Thyrosim:   { lo: 0.4, hi: 4 },
+                Thyrosim:   { lo: 0.3, hi: 4 },
                 ThyrosimJr: { lo: 0.6, hi: 4 },
             }
         },
