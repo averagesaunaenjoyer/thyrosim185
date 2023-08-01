@@ -944,6 +944,9 @@ sub getFooter {
 
         <ol>
           <li>
+            July 2023: Updated the hormone normal ranges.
+          </li>
+          <li>
             December 2019: Added parameter editor (Toggle: Parameters) for
             advanced users. Function available upon request.
           </li>
